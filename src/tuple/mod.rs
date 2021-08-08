@@ -59,6 +59,19 @@ impl Tuple {
         }
     }
 
+    pub fn sub(&self, other: &Tuple) -> Tuple {
+        if self.is_vector() && other.is_point() {
+            panic!("Can't subtract a point from a vector");
+        }
+
+        Tuple {
+            x: self.x() - other.x(),
+            y: self.y() - other.y(),
+            z: self.z() - other.z(),
+            w: self.w() - other.w()
+        }
+    }
+
     pub fn equals(&self, other: &Tuple) -> bool {
         FloatingPoint::equals(self.x(), other.x()) &&
         FloatingPoint::equals(self.y(), other.y()) &&
