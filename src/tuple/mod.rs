@@ -17,11 +17,20 @@ pub struct Tuple {
 
 impl Tuple {
     pub fn point(x: f64, y: f64, z: f64) -> Self {
-        Tuple::new(x, y, z, false)
+        Tuple::new(x, y, z, POINT_W)
     }
 
     pub fn vector(x: f64, y: f64, z: f64) -> Self {
-        Tuple::new(x, y, z, true)
+        Tuple::new(x, y, z, VECTOR_W)
+    }
+
+    pub fn new(x: f64, y: f64, z: f64, w: f64) -> Self {
+        Tuple {
+            x,
+            y,
+            z,
+            w
+        }
     }
 
     pub fn x(&self) -> f64 {
@@ -83,20 +92,28 @@ impl Tuple {
         }
     }
 
+    pub fn multiply(&self, scalar: f64) -> Tuple {
+        Tuple {
+            x: self.x() * scalar,
+            y: self.y() * scalar,
+            z: self.z() * scalar,
+            w: self.w() * scalar
+        }
+    }
+
+    pub fn divide(&self, scalar: f64) -> Tuple {
+        Tuple {
+            x: self.x() / scalar,
+            y: self.y() / scalar,
+            z: self.z() / scalar,
+            w: self.w() / scalar
+        }
+    }
+
     pub fn equals(&self, other: &Tuple) -> bool {
         FloatingPoint::equals(self.x(), other.x()) &&
         FloatingPoint::equals(self.y(), other.y()) &&
         FloatingPoint::equals(self.z(), other.z()) &&
         FloatingPoint::equals(self.w(), other.w())
-    }
-
-    fn new(x: f64, y: f64, z: f64, is_vector: bool) -> Self {
-        let w = if is_vector { VECTOR_W } else { POINT_W };
-        Tuple {
-            x,
-            y,
-            z,
-            w
-        }
     }
 }

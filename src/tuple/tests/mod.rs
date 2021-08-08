@@ -5,11 +5,12 @@ fn new_test() {
     let x = 4.3;
     let y = -4.2;
     let z = 3.1;
-    let point = Tuple::new(x, y, z, true);
+    let w = 5.2;
+    let tuple = Tuple::new(x, y, z, w);
 
-    assert_eq!(x, point.x());
-    assert_eq!(y, point.y());
-    assert_eq!(z, point.z());
+    assert_eq!(x, tuple.x());
+    assert_eq!(y, tuple.y());
+    assert_eq!(z, tuple.z());
 }
 
 #[test]
@@ -110,6 +111,30 @@ fn negate_test() {
     assert_eq!(2.0, negated.y());
     assert_eq!(-3.0, negated.z());
     assert_eq!(-POINT_W, negated.w());
+}
+
+#[test]
+fn scalar_multiply_test() {
+    let tuple = Tuple::new(1.0, -2.0, 3.0, -4.0);
+    let multiplied = tuple.multiply(3.5);
+
+    assert_eq!(true, multiplied.equals(&Tuple::new(3.5, -7.0, 10.5, -14.0)));
+}
+
+#[test]
+fn fraction_multiply_test() {
+    let tuple = Tuple::new(1.0, -2.0, 3.0, -4.0);
+    let multiplied = tuple.multiply(0.5);
+
+    assert_eq!(true, multiplied.equals(&Tuple::new(0.5, -1.0, 1.5, -2.0)));
+}
+
+#[test]
+fn scalar_divide_test() {
+    let tuple = Tuple::new(1.0, -2.0, 3.0, -4.0);
+    let divided = tuple.divide(2.0);
+
+    assert_eq!(true, divided.equals(&Tuple::new(0.5, -1.0, 1.5, -2.0)));
 }
 
 #[test]
