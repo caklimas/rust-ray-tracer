@@ -1,3 +1,5 @@
+use crate::floating_point::FloatingPoint;
+
 #[cfg(test)]
 mod tests;
 
@@ -37,7 +39,31 @@ impl Tuple {
     }
 
     pub fn is_vector(&self) -> bool {
-        return self.w == 1.0;
+        self.w == VECTOR_W
+    }
+
+    pub fn is_point(&self) -> bool {
+        !self.is_vector()
+    }
+
+    pub fn add(&self, other: &Tuple) -> Tuple {
+        if self.is_point() && other.is_point() {
+            panic!("Can't add two points together");
+        }
+
+        Tuple {
+            x: self.x() + other.x(),
+            y: self.y() + other.y(),
+            z: self.z() + other.z(),
+            w: self.w() + other.w()
+        }
+    }
+
+    pub fn equals(&self, other: &Tuple) -> bool {
+        FloatingPoint::equals(self.x(), other.x()) &&
+        FloatingPoint::equals(self.y(), other.y()) &&
+        FloatingPoint::equals(self.z(), other.z()) &&
+        FloatingPoint::equals(self.w(), other.w())
     }
 
     fn new(x: f64, y: f64, z: f64, is_vector: bool) -> Self {

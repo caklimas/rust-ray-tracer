@@ -16,10 +16,84 @@ fn new_test() {
 fn point_test() {
     let point = Tuple::point(0.0, 0.0, 0.0);
     assert_eq!(POINT_W, point.w());
+    assert_eq!(true, point.is_point());
 }
 
 #[test]
 fn vector_test() {
     let point = Tuple::vector(0.0, 0.0, 0.0);
     assert_eq!(VECTOR_W, point.w());
+    assert_eq!(true, point.is_vector());
+}
+
+#[test]
+fn add_point_vector_test() {
+    let tuple = Tuple::point(1.0, 1.0, 1.0);
+    let other = Tuple::vector(1.0, 1.0, 1.0);
+    let added = tuple.add(&other);
+
+    assert_eq!(2.0, added.x());
+    assert_eq!(2.0, added.y());
+    assert_eq!(2.0, added.z());
+    assert_eq!(POINT_W, added.w());
+}
+
+#[test]
+fn add_vectors_test() {
+    let tuple = Tuple::vector(1.0, 1.0, 1.0);
+    let other = Tuple::vector(1.0, 1.0, 1.0);
+    let added = tuple.add(&other);
+
+    assert_eq!(2.0, added.x());
+    assert_eq!(2.0, added.y());
+    assert_eq!(2.0, added.z());
+    assert_eq!(VECTOR_W, added.w());
+}
+
+#[test]
+#[should_panic]
+fn add_points_panic_test() {
+    let tuple = Tuple::point(1.0, 1.0, 1.0);
+    let other = Tuple::point(1.0, 1.0, 1.0);
+    let added = tuple.add(&other);
+
+    assert_eq!(2.0, added.x());
+    assert_eq!(2.0, added.y());
+    assert_eq!(2.0, added.z());
+    assert_eq!(1.0, added.w());
+}
+
+#[test]
+fn equals_true_test() {
+    let x = 1.0;
+    let y = 1.1;
+    let z = 1.2;
+
+    let mut tuple = Tuple::point(x, y, z);
+    let mut other = Tuple::point(x, y, z);
+    assert_eq!(true, tuple.equals(&other));
+
+    tuple = Tuple::vector(x, y, z);
+    other = Tuple::vector(x, y, z);
+    assert_eq!(true, tuple.equals(&other));
+}
+
+#[test]
+fn equals_fail_test() {
+    let x = 1.0;
+    let y = 1.1;
+    let z = 1.2;
+    let tuple = Tuple::point(x, y, z);
+
+    let mut other = Tuple::point(x + 1.0, y, z);
+    assert_eq!(false, tuple.equals(&other));
+
+    other = Tuple::point(x, y + 1.0, z);
+    assert_eq!(false, tuple.equals(&other));
+
+    other = Tuple::point(x, y, z + 1.0);
+    assert_eq!(false, tuple.equals(&other));
+
+    other = Tuple::vector(x, y, z);
+    assert_eq!(false, tuple.equals(&other));
 }
