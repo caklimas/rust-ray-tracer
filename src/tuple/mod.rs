@@ -1,3 +1,5 @@
+use std::ops::Neg;
+
 use crate::floating_point::FloatingPoint;
 
 #[cfg(test)]
@@ -69,6 +71,15 @@ impl Tuple {
             y: self.y() - other.y(),
             z: self.z() - other.z(),
             w: self.w() - other.w()
+        }
+    }
+
+    pub fn negate(&self) -> Tuple {
+        Tuple {
+            x: self.x().neg(),
+            y: self.y().neg(),
+            z: self.z().neg(),
+            w: self.w().neg()
         }
     }
 

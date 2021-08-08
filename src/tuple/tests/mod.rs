@@ -103,6 +103,16 @@ fn sub_point_from_vector_panic() {
 }
 
 #[test]
+fn negate_test() {
+    let tuple = Tuple::point(1.0, -2.0, 3.0);
+    let negated = tuple.negate();
+    assert_eq!(-1.0, negated.x());
+    assert_eq!(2.0, negated.y());
+    assert_eq!(-3.0, negated.z());
+    assert_eq!(-POINT_W, negated.w());
+}
+
+#[test]
 fn equals_true_test() {
     let x = 1.0;
     let y = 1.1;
