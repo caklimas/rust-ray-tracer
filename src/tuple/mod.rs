@@ -110,6 +110,16 @@ impl Tuple {
         }
     }
 
+    pub fn magnitude(&self) -> f64 {
+        let sum =
+            self.x().powi(2) +
+            self.y().powi(2) +
+            self.z().powi(2) +
+            self.w().powi(2);
+
+        sum.sqrt()
+    }
+
     pub fn equals(&self, other: &Tuple) -> bool {
         FloatingPoint::equals(self.x(), other.x()) &&
         FloatingPoint::equals(self.y(), other.y()) &&

@@ -138,6 +138,29 @@ fn scalar_divide_test() {
 }
 
 #[test]
+fn magnitude_test() {
+    let mut tuple = Tuple::vector(1.0, 0.0, 0.0);
+    let mut magnitude = tuple.magnitude();
+    assert_eq!(1.0, magnitude);
+
+    tuple = Tuple::vector(0.0, 1.0, 0.0);
+    magnitude = tuple.magnitude();
+    assert_eq!(1.0, magnitude);
+
+    tuple = Tuple::vector(0.0, 0.0, 1.0);
+    magnitude = tuple.magnitude();
+    assert_eq!(1.0, magnitude);
+
+    tuple = Tuple::vector(1.0, 2.0, 3.0);
+    magnitude = tuple.magnitude();
+    assert_eq!((14.0_f64).sqrt(), magnitude);
+
+    tuple = Tuple::vector(-1.0, -2.0, -3.0);
+    magnitude = tuple.magnitude();
+    assert_eq!((14.0_f64).sqrt(), magnitude);
+}
+
+#[test]
 fn equals_true_test() {
     let x = 1.0;
     let y = 1.1;
