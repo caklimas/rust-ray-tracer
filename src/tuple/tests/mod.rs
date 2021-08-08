@@ -174,6 +174,29 @@ fn normalize_test() {
 }
 
 #[test]
+#[should_panic]
+fn normalize_panic_test() {
+    let point = Tuple::point(0.0, 0.0, 0.0);
+    point.normalize();
+}
+
+#[test]
+fn dot_test() {
+    let tuple = Tuple::vector(1.0, 2.0, 3.0);
+    let dot = tuple.dot(&Tuple::vector(2.0, 3.0, 4.0));
+    assert_eq!(20.0, dot);
+    
+}
+
+#[test]
+#[should_panic]
+fn dot_panic_test() {
+    let vector = Tuple::vector(0.0, 0.0, 0.0);
+    let point = Tuple::point(0.0, 0.0, 0.0);
+    vector.dot(&point);
+}
+
+#[test]
 fn equals_true_test() {
     let x = 1.0;
     let y = 1.1;

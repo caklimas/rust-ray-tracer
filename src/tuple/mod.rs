@@ -121,6 +121,10 @@ impl Tuple {
     }
 
     pub fn normalize(&self) -> Tuple {
+        if !self.is_vector() {
+            panic!("Normalize can only be done on vectors");
+        }
+
         let magnitude = self.magnitude();
         Tuple {
             x: self.x() / magnitude,
@@ -128,6 +132,17 @@ impl Tuple {
             z: self.z() / magnitude,
             w: self.w() / magnitude
         }
+    }
+
+    pub fn dot(&self, other: &Tuple) -> f64 {
+        if !self.is_vector() || !other.is_vector() {
+            panic!("Dot product can only be done on vectors");
+        }
+
+        (self.x() * other.x()) +
+        (self.y() * other.y()) +
+        (self.z() * other.z()) +
+        (self.w() * other.w())
     }
 
     pub fn equals(&self, other: &Tuple) -> bool {
