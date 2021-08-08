@@ -145,6 +145,18 @@ impl Tuple {
         (self.w() * other.w())
     }
 
+    pub fn cross(&self, other: &Tuple) -> Tuple {
+        if !self.is_vector() || !other.is_vector() {
+            panic!("Cross product can only be done on vectors");
+        }
+
+        Tuple::vector(
+            (self.y() * other.z()) - (self.z() * other.y()),
+            (self.z() * other.x()) - (self.x() * other.z()),
+            (self.x() * other.y()) - (self.y() * other.x())
+        )
+    }
+
     pub fn equals(&self, other: &Tuple) -> bool {
         FloatingPoint::equals(self.x(), other.x()) &&
         FloatingPoint::equals(self.y(), other.y()) &&

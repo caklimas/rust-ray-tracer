@@ -197,6 +197,26 @@ fn dot_panic_test() {
 }
 
 #[test]
+fn cross_test() {
+    let tuple = Tuple::vector(1.0, 2.0, 3.0);
+    let other = Tuple::vector(2.0, 3.0, 4.0);
+    
+    let mut cross = tuple.cross(&other);
+    assert_eq!(true, cross.equals(&Tuple::vector(-1.0, 2.0, -1.0)));
+
+    cross = other.cross(&tuple);
+    assert_eq!(true, cross.equals(&Tuple::vector(1.0, -2.0, 1.0)));
+}
+
+#[test]
+#[should_panic]
+fn cross_panic_test() {
+    let vector = Tuple::vector(0.0, 0.0, 0.0);
+    let point = Tuple::point(0.0, 0.0, 0.0);
+    vector.cross(&point);
+}
+
+#[test]
 fn equals_true_test() {
     let x = 1.0;
     let y = 1.1;
