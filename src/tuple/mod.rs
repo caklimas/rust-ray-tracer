@@ -120,6 +120,16 @@ impl Tuple {
         sum.sqrt()
     }
 
+    pub fn normalize(&self) -> Tuple {
+        let magnitude = self.magnitude();
+        Tuple {
+            x: self.x() / magnitude,
+            y: self.y() / magnitude,
+            z: self.z() / magnitude,
+            w: self.w() / magnitude
+        }
+    }
+
     pub fn equals(&self, other: &Tuple) -> bool {
         FloatingPoint::equals(self.x(), other.x()) &&
         FloatingPoint::equals(self.y(), other.y()) &&

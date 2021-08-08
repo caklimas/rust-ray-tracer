@@ -161,6 +161,19 @@ fn magnitude_test() {
 }
 
 #[test]
+fn normalize_test() {
+    let sqrt = 14.0_f64.sqrt();
+    let mut tuple = Tuple::vector(4.0, 0.0, 0.0);
+    let mut normalize = tuple.normalize();
+    assert_eq!(true, normalize.equals(&Tuple::vector(1.0, 0.0, 0.0)));
+
+    tuple = Tuple::vector(1.0, 2.0, 3.0);
+    normalize = tuple.normalize();
+    assert_eq!(true, normalize.equals(&Tuple::vector(1.0 / sqrt, 2.0 / sqrt, 3.0 / sqrt)));
+    assert_eq!(1.0, normalize.magnitude());
+}
+
+#[test]
 fn equals_true_test() {
     let x = 1.0;
     let y = 1.1;
