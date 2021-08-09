@@ -20,11 +20,29 @@ fn new_test() {
 
 #[test]
 fn write_pixel_test() {
+    let x = 2;
+    let y = 3;
     let mut canvas = Canvas::new(10, 20);
     let red = Color::new(1.0, 0.0, 0.0);
     let red_result = red.clone();
 
-    canvas.write_pixel(2, 3, red);
+    canvas.write_pixel(x, y, red);
 
-    assert_eq!(true, canvas.pixels[3][2].equals(&red_result));
+    assert_eq!(true, canvas.pixels[y][x].equals(&red_result));
+}
+
+#[test]
+fn to_ppm_test() {
+    let mut canvas = Canvas::new(5, 3);
+    let c1 = Color::new(1.5, 0.0, 0.0);
+    let c2 = Color::new(0.0, 0.5, 0.0);
+    let c3 = Color::new(-0.5, 0.0, 1.0);
+    canvas.write_pixel(0, 0, c1);
+    canvas.write_pixel(2, 1, c2);
+    canvas.write_pixel(4, 2, c3);
+
+    let ppm_string = canvas.to_ppm();
+    let expected = "P3\n5 3\n255\n255 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 128 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0 0 0 0 0 255";
+
+    assert_eq!(expected, ppm_string.as_str());
 }
