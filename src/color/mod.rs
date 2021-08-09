@@ -41,6 +41,14 @@ impl Color {
         Color::from_tuple(&multiplied)
     }
 
+    pub fn multiply_color(&self, other: &Color) -> Color {
+        Color {
+            red: self.red() * other.red(),
+            green: self.green() * other.green(),
+            blue: self.blue() * other.blue()
+        }
+    }
+
     fn to_tuple(&self) -> Tuple {
         Tuple::new(self.red(), self.green(), self.blue(), 0.0)
     }

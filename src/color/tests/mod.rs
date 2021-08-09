@@ -45,3 +45,14 @@ fn multiply_test() {
     assert_eq!(true, FloatingPoint::equals(0.6, result.green()));
     assert_eq!(true, FloatingPoint::equals(0.8, result.blue()));
 }
+
+#[test]
+fn multiply_color_test() {
+    let color = Color::new(1.0, 0.2, 0.4);
+    let other = Color::new(0.9, 1.0, 0.1);
+
+    let result = color.multiply_color(&other);
+    assert_eq!(true, FloatingPoint::equals(0.9, result.red()));
+    assert_eq!(true, FloatingPoint::equals(0.2, result.green()));
+    assert_eq!(true, FloatingPoint::equals(0.04, result.blue()));
+}
