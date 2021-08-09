@@ -1,4 +1,5 @@
 use crate::tuple::Tuple;
+use self::projectile::Projectile;
 
 pub mod projectile;
 
@@ -19,6 +20,13 @@ impl Environment {
         Environment {
             gravity,
             wind
+        }
+    }
+
+    pub fn tick(&self, projectile: &Projectile) -> Projectile {
+        Projectile {
+            position: projectile.position.add(&projectile.velocity),
+            velocity: projectile.velocity.add(&self.gravity).add(&self.wind)
         }
     }
 }
