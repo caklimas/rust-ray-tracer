@@ -44,16 +44,21 @@ impl Canvas {
             let mut row_string = String::new();
             for x in 0..self.width {
                 let pixel = row[x];
-                row_string.push_str(Self::get_rounded_ppm_color(&pixel).as_str());
+                let rounded_color = Self::get_rounded_ppm_color(&pixel);
+                if row_string.len() + rounded_color.len() > 69 {
+                    ppm_string.push_str(format!("{}\n", row_string.trim_end()).as_str());
+                    row_string.clear();
+                }
+
+                row_string.push_str(rounded_color.as_str());
+                
                 if x < self.width - 1 {
                     row_string.push_str(" ");
                 }
             }
 
             ppm_string.push_str(row_string.as_str());
-            if y < self.height - 1 {
-                ppm_string.push('\n');
-            }
+            ppm_string.push('\n');
             
         }
 
