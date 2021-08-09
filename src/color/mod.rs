@@ -14,6 +14,10 @@ impl Color {
         Color { red, green, blue }
     }
 
+    pub fn black() -> Self {
+        Color::new(0.0, 0.0, 0.0)
+    }
+
     pub fn red(&self) -> f64 {
         self.red
     }
@@ -47,6 +51,10 @@ impl Color {
             green: self.green() * other.green(),
             blue: self.blue() * other.blue()
         }
+    }
+
+    pub fn equals(&self, other: &Color) -> bool {
+        self.to_tuple().equals(&other.to_tuple())
     }
 
     fn to_tuple(&self) -> Tuple {
