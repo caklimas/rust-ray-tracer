@@ -4,6 +4,7 @@ use crate::color::Color;
 mod tests;
 
 pub const MAX_COLOR_VALUE: f64 = 255.0;
+pub const PLAIN_PPM_LINE_LENGTH: usize = 69;
 
 pub struct Canvas {
     pub pixels: Vec<Vec<Color>>,
@@ -45,7 +46,7 @@ impl Canvas {
             for x in 0..self.width {
                 let pixel = row[x];
                 let rounded_color = Self::get_rounded_ppm_color(&pixel);
-                if row_string.len() + rounded_color.len() > 69 {
+                if row_string.len() + rounded_color.len() > PLAIN_PPM_LINE_LENGTH {
                     ppm_string.push_str(format!("{}\n", row_string.trim_end()).as_str());
                     row_string.clear();
                 }
