@@ -1,3 +1,5 @@
+use std::fs;
+
 use crate::color::Color;
 use super::Canvas;
 

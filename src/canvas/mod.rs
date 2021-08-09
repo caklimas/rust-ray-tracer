@@ -31,6 +31,10 @@ impl Canvas {
     }
 
     pub fn write_pixel(&mut self, x: usize, y: usize, color: Color) {
+        if x >= self.width || y >= self.height {
+            return;
+        }
+
         self.pixels[y][x] = color;
     }
 
