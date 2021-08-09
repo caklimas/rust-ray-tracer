@@ -3,6 +3,7 @@ use crate::tuple::Tuple;
 #[cfg(test)]
 mod tests;
 
+#[derive(Clone, Copy)]
 pub struct Color {
     red: f64,
     green: f64,

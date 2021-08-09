@@ -17,3 +17,14 @@ fn new_test() {
         }
     }
 }
+
+#[test]
+fn write_pixel_test() {
+    let mut canvas = Canvas::new(10, 20);
+    let red = Color::new(1.0, 0.0, 0.0);
+    let red_result = red.clone();
+
+    canvas.write_pixel(2, 3, red);
+
+    assert_eq!(true, canvas.pixels[3][2].equals(&red_result));
+}
