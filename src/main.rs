@@ -4,6 +4,7 @@ pub mod canvas;
 pub mod color;
 pub mod environment;
 pub mod floating_point;
+pub mod matrix;
 pub mod tuple;
 
 fn main() {
