@@ -4,6 +4,8 @@ use crate::floating_point::FloatingPoint;
 mod tests;
 
 pub struct Matrix {
+    pub rows: usize,
+    pub columns: usize,
     pub elements: Vec<Vec<f64>>
 }
 
@@ -16,6 +18,8 @@ impl Matrix {
             }
 
             return Matrix {
+                rows,
+                columns,
                 elements: matrix_elements
             };
         }
@@ -30,6 +34,8 @@ impl Matrix {
         }
 
         Matrix {
+            rows,
+            columns,
             elements
         }
     }
@@ -39,17 +45,13 @@ impl Matrix {
     }
 
     pub fn equals(&self, other: &Matrix) -> bool {
-        if self.elements.len() != other.elements.len() {
+        if self.rows != other.rows || self.columns != other.columns {
             return false;
         }
 
         for i in 0..self.elements.len() {
             let row = &self.elements[i];
             let other_row = &other.elements[i];
-
-            if row.len() != other_row.len() {
-                return false;
-            }
 
             for j in 0..row.len() {
                 if !FloatingPoint::equals(row[j], other_row[j]) {
@@ -59,6 +61,26 @@ impl Matrix {
         }
 
         true
+    }
+
+    pub fn multiply(&self, other: &Matrix) -> Matrix {
+        if self.columns != other.rows {
+            panic!("Matrices cannot be multiplied");
+        }
+
+        let mut matrix = Matrix::new(self.rows, self.columns, Option::None);
+        for row in 0..self.rows {
+            for column in 0..self.columns {
+                let mut result = 0.0;
+                for i in 0..self.columns {
+                    result += self.elements[row][i] * other.elements[i][column]
+                }
+
+                matrix.elements[row][column] = result;
+            }
+        }
+
+        matrix
     }
 
     fn validate_elements(rows: usize, columns: usize, elements: &Vec<Vec<f64>>) -> bool {
