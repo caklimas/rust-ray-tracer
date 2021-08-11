@@ -135,10 +135,6 @@ impl Tuple {
     }
 
     pub fn dot(&self, other: &Tuple) -> f64 {
-        if !self.is_vector() || !other.is_vector() {
-            panic!("Dot product can only be done on vectors");
-        }
-
         (self.x() * other.x()) +
         (self.y() * other.y()) +
         (self.z() * other.z()) +

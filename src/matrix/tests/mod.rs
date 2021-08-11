@@ -1,4 +1,4 @@
-use crate::floating_point::FloatingPoint;
+use crate::{floating_point::FloatingPoint, tuple::Tuple};
 use super::Matrix;
 
 #[test]
@@ -141,4 +141,19 @@ fn multiply_fail_test() {
     let other = Matrix::new(2, 2, Option::Some(other_elements));
 
     matrix.multiply(&other);
+}
+
+#[test]
+fn multiply_tuple_test() {
+    let mut elements = Vec::new();
+    elements.push(vec![1.0, 2.0, 3.0, 4.0]);
+    elements.push(vec![2.0, 4.0, 4.0, 2.0]);
+    elements.push(vec![8.0, 6.0, 4.0, 1.0]);
+    elements.push(vec![0.0, 0.0, 0.0, 1.0]);
+
+    let matrix = Matrix::new(4, 4, Option::Some(elements));
+    let tuple = Tuple::new(1.0, 2.0, 3.0, 1.0);
+    let actual = matrix.multiply_tuple(&tuple);
+
+    assert_eq!(true, actual.equals(&Tuple::new(18.0, 24.0, 33.0, 1.0)));
 }

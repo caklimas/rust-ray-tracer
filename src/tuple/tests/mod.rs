@@ -190,14 +190,6 @@ fn dot_test() {
 }
 
 #[test]
-#[should_panic]
-fn dot_panic_test() {
-    let vector = Tuple::vector(0.0, 0.0, 0.0);
-    let point = Tuple::point(0.0, 0.0, 0.0);
-    vector.dot(&point);
-}
-
-#[test]
 fn cross_test() {
     let tuple = Tuple::vector(1.0, 2.0, 3.0);
     let other = Tuple::vector(2.0, 3.0, 4.0);
