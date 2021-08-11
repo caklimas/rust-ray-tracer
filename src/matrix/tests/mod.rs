@@ -42,3 +42,43 @@ fn new_column_panic_test() {
 
     Matrix::new(4, 4, Option::Some(elements));
 }
+
+#[test]
+fn equals_test() {
+    let mut elements = Vec::new();
+    elements.push(vec![1.0, 2.0, 3.0, 4.0]);
+    elements.push(vec![5.5, 6.5, 7.5, 8.5]);
+    elements.push(vec![9.0, 10.0, 11.0, 12.0]);
+    elements.push(vec![13.5, 14.5, 15.5, 16.5]);
+
+    let mut other_elements = Vec::new();
+    other_elements.push(vec![1.0, 2.0, 3.0, 4.0]);
+    other_elements.push(vec![5.5, 6.5, 7.5, 8.5]);
+    other_elements.push(vec![9.0, 10.0, 11.0, 12.0]);
+    other_elements.push(vec![13.5, 14.5, 15.5, 16.5]);
+
+    let matrix = Matrix::new(4, 4, Option::Some(elements));
+    let other = Matrix::new(4, 4, Option::Some(other_elements));
+
+    assert_eq!(true, matrix.equals(&other));
+}
+
+#[test]
+fn not_equals_test() {
+    let mut elements = Vec::new();
+    elements.push(vec![1.0, 2.0, 3.0, 4.0]);
+    elements.push(vec![5.5, 6.5, 7.5, 8.5]);
+    elements.push(vec![9.0, 10.0, 11.0, 12.0]);
+    elements.push(vec![13.5, 14.5, 15.5, 16.5]);
+
+    let mut other_elements = Vec::new();
+    other_elements.push(vec![1.0, 2.0, 3.0, 4.0]);
+    other_elements.push(vec![5.5, 6.5, 7.5, 8.5]);
+    other_elements.push(vec![13.5, 14.5, 15.5, 16.5]);
+    other_elements.push(vec![9.0, 10.0, 11.0, 12.0]);
+
+    let matrix = Matrix::new(4, 4, Option::Some(elements));
+    let other = Matrix::new(4, 4, Option::Some(other_elements));
+
+    assert_eq!(false, matrix.equals(&other));
+}
