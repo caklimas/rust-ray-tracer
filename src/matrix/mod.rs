@@ -111,6 +111,19 @@ impl Matrix {
 
         Tuple::new(elements[0], elements[1], elements[2], elements[3])
     }
+    
+    pub fn transpose(&self) -> Matrix {
+        let mut elements = Vec::new();
+        for i in 0..self.columns {
+            let mut row = Vec::new();
+            for j in 0..self.rows {
+                row.push(self.elements[j][i]);
+            }
+            elements.push(row);
+        }
+
+        Matrix::new(self.columns, self.rows, Option::Some(elements))
+    }
 
     fn validate_elements(rows: usize, columns: usize, elements: &Vec<Vec<f64>>) -> bool {
         if elements.len() != rows {

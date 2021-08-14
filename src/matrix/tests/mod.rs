@@ -183,3 +183,33 @@ fn multiply_tuple_test() {
 
     assert_eq!(true, actual.equals(&Tuple::new(18.0, 24.0, 33.0, 1.0)));
 }
+
+#[test]
+fn transpose_test() {
+    let mut elements = Vec::new();
+    elements.push(vec![0.0, 9.0, 3.0, 0.0]);
+    elements.push(vec![9.0, 8.0, 0.0, 8.0]);
+    elements.push(vec![1.0, 8.0, 5.0, 3.0]);
+    elements.push(vec![0.0, 0.0, 5.0, 8.0]);
+
+    let matrix = Matrix::new(4, 4, Option::Some(elements));
+
+    let mut expected_elements = Vec::new();
+    expected_elements.push(vec![0.0, 9.0, 1.0, 0.0]);
+    expected_elements.push(vec![9.0, 8.0, 8.0, 0.0]);
+    expected_elements.push(vec![3.0, 0.0, 5.0, 5.0]);
+    expected_elements.push(vec![0.0, 8.0, 3.0, 8.0]);
+
+    let expected = Matrix::new(4, 4, Option::Some(expected_elements));
+    let actual = matrix.transpose();
+
+    assert_eq!(true, expected.equals(&actual));
+}
+
+#[test]
+fn transpose_identity_test() {
+    let identity = Matrix::identity(4);
+    let actual = identity.transpose();
+
+    assert_eq!(true, identity.equals(&actual));
+}
