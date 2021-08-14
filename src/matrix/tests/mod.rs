@@ -56,6 +56,32 @@ fn new_column_panic_test() {
 }
 
 #[test]
+fn identity_test() {
+    let identity = Matrix::identity(4);
+    let mut elements = Vec::new();
+    elements.push(vec![0.0, 1.0, 2.0, 4.0]);
+    elements.push(vec![1.0, 2.0, 4.0, 8.0]);
+    elements.push(vec![2.0, 4.0, 8.0, 16.0]);
+    elements.push(vec![4.0, 8.0, 16.0, 32.0]);
+
+    let matrix = Matrix::new(4, 4, Option::Some(elements));
+
+    let result = matrix.multiply(&identity);
+
+    assert_eq!(true, result.equals(&matrix));
+}
+
+#[test]
+fn identity_tuple_test() {
+    let identity = Matrix::identity(4);
+    let tuple = Tuple::new(1.0, 2.0, 3.0, 4.0);
+
+    let result = identity.multiply_tuple(&tuple);
+
+    assert_eq!(true, result.equals(&tuple));
+}
+
+#[test]
 fn equals_test() {
     let mut elements = Vec::new();
     elements.push(vec![1.0, 2.0, 3.0, 4.0]);

@@ -40,6 +40,20 @@ impl Matrix {
         }
     }
 
+    pub fn identity(size: usize) -> Self {
+        let mut elements = Vec::new();
+        for s in 0..size {
+            let mut row = Vec::new();
+            for s2 in 0..size {
+                row.push(if s == s2 { 1.0 } else { 0.0 });
+            }
+
+            elements.push(row);
+        }
+
+        Matrix::new(size, size, Option::Some(elements))
+    }
+
     pub fn get(&self, y: usize, x: usize) -> f64 {
         self.elements[y][x]
     }
