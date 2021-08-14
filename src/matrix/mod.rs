@@ -1,8 +1,11 @@
+use std::fmt::Debug;
+
 use crate::{floating_point::FloatingPoint, tuple::Tuple};
 
 #[cfg(test)]
 mod tests;
 
+#[derive(Debug)]
 pub struct Matrix {
     pub rows: usize,
     pub columns: usize,
@@ -58,25 +61,6 @@ impl Matrix {
         self.elements[y][x]
     }
 
-    pub fn equals(&self, other: &Matrix) -> bool {
-        if self.rows != other.rows || self.columns != other.columns {
-            return false;
-        }
-
-        for i in 0..self.elements.len() {
-            let row = &self.elements[i];
-            let other_row = &other.elements[i];
-
-            for j in 0..row.len() {
-                if !FloatingPoint::equals(row[j], other_row[j]) {
-                    return false;
-                }
-            }
-        }
-
-        true
-    }
-
     pub fn multiply(&self, other: &Matrix) -> Matrix {
         if self.columns != other.rows {
             panic!("Matrices cannot be multiplied");
@@ -125,6 +109,40 @@ impl Matrix {
         Matrix::new(self.columns, self.rows, Option::Some(elements))
     }
 
+    pub fn determinant(&self) -> f64 {
+        if self.rows != 2 && self.columns != 2 {
+            panic!("Only supports 2x2 matrices");
+        }
+
+        (self.elements[0][0] * self.elements[1][1]) - (self.elements[0][1] * self.elements[1][0])
+    }
+
+    pub fn submatrix(&self, row_index: usize, column_index: usize) -> Matrix {
+        if row_index >= self.rows || column_index >= self.columns {
+            panic!("Row or column exceeds index");
+        }
+
+        let mut submatrix_elements = Vec::new();
+        for r in 0..self.rows {
+            if r == row_index {
+                continue;
+            }
+
+            let row = &self.elements[r];
+            let mut sub_elements = Vec::new();
+            for column in 0..row.len() {
+                if column == column_index {
+                    continue;
+                }
+
+                sub_elements.push(row[column]);
+            }
+            submatrix_elements.push(sub_elements);
+        }
+
+        Matrix::new(self.rows - 1, self.columns - 1, Option::Some(submatrix_elements))
+    }
+
     fn validate_elements(rows: usize, columns: usize, elements: &Vec<Vec<f64>>) -> bool {
         if elements.len() != rows {
             return false;
@@ -134,6 +152,27 @@ impl Matrix {
             let row = &elements[r];
             if row.len() != columns {
                 return false;
+            }
+        }
+
+        true
+    }
+}
+
+impl PartialEq for Matrix {
+    fn eq(&self, other: &Self) -> bool {
+        if self.rows != other.rows || self.columns != other.columns {
+            return false;
+        }
+
+        for i in 0..self.elements.len() {
+            let row = &self.elements[i];
+            let other_row = &other.elements[i];
+
+            for j in 0..row.len() {
+                if !FloatingPoint::equals(row[j], other_row[j]) {
+                    return false;
+                }
             }
         }
 

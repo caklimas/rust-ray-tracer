@@ -68,7 +68,7 @@ fn identity_test() {
 
     let result = matrix.multiply(&identity);
 
-    assert_eq!(true, result.equals(&matrix));
+    assert_eq!(result, matrix);
 }
 
 #[test]
@@ -98,7 +98,7 @@ fn equals_test() {
     let matrix = Matrix::new(4, 4, Option::Some(elements));
     let other = Matrix::new(4, 4, Option::Some(other_elements));
 
-    assert_eq!(true, matrix.equals(&other));
+    assert_eq!(matrix, other);
 }
 
 #[test]
@@ -118,7 +118,7 @@ fn not_equals_test() {
     let matrix = Matrix::new(4, 4, Option::Some(elements));
     let other = Matrix::new(4, 4, Option::Some(other_elements));
 
-    assert_eq!(false, matrix.equals(&other));
+    assert_ne!(matrix, other);
 }
 
 #[test]
@@ -147,7 +147,7 @@ fn multiply_test() {
 
     let expected = Matrix::new(4, 4, Option::Some(expected_elements));
 
-    assert_eq!(true, actual.equals(&expected));
+    assert_eq!(actual, expected);
 }
 
 #[test]
@@ -203,7 +203,7 @@ fn transpose_test() {
     let expected = Matrix::new(4, 4, Option::Some(expected_elements));
     let actual = matrix.transpose();
 
-    assert_eq!(true, expected.equals(&actual));
+    assert_eq!(expected, actual);
 }
 
 #[test]
@@ -211,5 +211,49 @@ fn transpose_identity_test() {
     let identity = Matrix::identity(4);
     let actual = identity.transpose();
 
-    assert_eq!(true, identity.equals(&actual));
+    assert_eq!(identity, actual);
+}
+
+#[test]
+fn determinant_test() {
+    let elements = vec![
+        vec![1.0, 5.0],
+        vec![-3.0, 2.0]
+    ];
+
+    let matrix = Matrix::new(2, 2, Option::Some(elements));
+    let determinant = matrix.determinant();
+
+    assert_eq!(17.0, determinant);
+}
+
+#[test]
+fn submatrix_test() {
+    let matrix = Matrix::new(3, 3, Option::Some(vec![
+        vec![1.0, 5.0, 0.0],
+        vec![-3.0, 2.0, 7.0],
+        vec![0.0, 6.0, -3.0]
+    ]));
+    let actual = matrix.submatrix(0, 2);
+    let expected = Matrix::new(2, 2, Option::Some(vec![
+        vec![-3.0, 2.0],
+        vec![0.0, 6.0]
+    ]));
+
+    assert_eq!(actual, expected);
+
+    let matrix = Matrix::new(4, 4, Option::Some(vec![
+        vec![-6.0, 1.0, 1.0, 6.0],
+        vec![-8.0, 5.0, 8.0, 6.0],
+        vec![-1.0, 0.0, 8.0, 2.0],
+        vec![-7.0, 1.0, -1.0, 1.0]
+    ]));
+    let actual = matrix.submatrix(2, 1);
+    let expected = Matrix::new(3, 3, Option::Some(vec![
+        vec![-6.0, 1.0, 6.0],
+        vec![-8.0, 8.0, 6.0],
+        vec![-7.0, -1.0, 1.0]
+    ]));
+
+    assert_eq!(actual, expected);
 }
