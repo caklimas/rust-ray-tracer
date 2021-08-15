@@ -359,6 +359,28 @@ fn inverse_test() {
 }
 
 #[test]
+fn inverse_full_test() {
+    let a = Matrix::new(4, 4, Option::Some(vec![
+        vec![ 3.0, -9.0,  7.0,  3.0],
+        vec![ 3.0, -8.0,  2.0, -9.0],
+        vec![-4.0,  4.0,  4.0,  1.0],
+        vec![-6.0,  5.0, -1.0,  1.0]
+    ]));
+
+    let b = Matrix::new(4, 4, Option::Some(vec![
+        vec![8.0,  2.0, 2.0, 2.0],
+        vec![3.0, -1.0, 7.0, 0.0],
+        vec![7.0,  0.0, 5.0, 4.0],
+        vec![6.0, -2.0, 0.0, 5.0]
+    ]));
+
+    let c = a.multiply(&b);
+    let actual = c.multiply(&b.inverse());
+
+    assert_eq!(a, actual);
+}
+
+#[test]
 #[should_panic]
 fn inverse_panic_test() {
     let matrix = Matrix::new(4, 4, Option::Some(vec![
