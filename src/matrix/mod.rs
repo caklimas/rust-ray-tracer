@@ -12,8 +12,7 @@ pub struct Matrix {
 
 impl Matrix {
     pub fn new(rows: usize, columns: usize, elements: Option<Vec<Vec<f64>>>) -> Self {
-        if elements.is_some() {
-            let matrix_elements = elements.unwrap();
+        if let Some(matrix_elements) = elements {
             if !Matrix::validate_elements(rows, columns, &matrix_elements) {
                 panic!("Incorrect number of rows or columns.");
             }
@@ -85,8 +84,7 @@ impl Matrix {
         }
 
         let mut elements = [0.0; 4];
-        for r in 0..4 {
-            let row = &self.elements[r];
+        for (r, row) in self.elements.iter().enumerate() {
             let row_tuple = Tuple::new(row[0], row[1], row[2], row[3]);
             elements[r] = row_tuple.dot(tuple);
         }
@@ -133,12 +131,12 @@ impl Matrix {
 
             let row = &self.elements[r];
             let mut sub_elements = Vec::new();
-            for column in 0..row.len() {
+            for (column, item) in row.iter().enumerate() {
                 if column == column_index {
                     continue;
                 }
 
-                sub_elements.push(row[column]);
+                sub_elements.push(*item);
             }
             submatrix_elements.push(sub_elements);
         }
@@ -173,13 +171,12 @@ impl Matrix {
         matrix
     }
 
-    fn validate_elements(rows: usize, columns: usize, elements: &Vec<Vec<f64>>) -> bool {
+    fn validate_elements(rows: usize, columns: usize, elements: &[Vec<f64>]) -> bool {
         if elements.len() != rows {
             return false;
         }
 
-        for r in 0..rows {
-            let row = &elements[r];
+        for row in elements.iter() {
             if row.len() != columns {
                 return false;
             }
