@@ -8,6 +8,7 @@ mod tests;
 pub const POINT_W: f64 = 1.0;
 pub const VECTOR_W: f64 = 0.0;
 
+#[derive(Debug)]
 pub struct Tuple {
     x: f64,
     y: f64,
@@ -152,8 +153,10 @@ impl Tuple {
             (self.x() * other.y()) - (self.y() * other.x())
         )
     }
+}
 
-    pub fn equals(&self, other: &Tuple) -> bool {
+impl PartialEq for Tuple {
+    fn eq(&self, other: &Self) -> bool {
         FloatingPoint::equals(self.x(), other.x()) &&
         FloatingPoint::equals(self.y(), other.y()) &&
         FloatingPoint::equals(self.z(), other.z()) &&

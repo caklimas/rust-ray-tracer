@@ -9,11 +9,11 @@ fn new_test() {
 
     assert_eq!(height, canvas.pixels.len());
     
-    for row in &canvas.pixels {
+    for row in canvas.pixels {
         assert_eq!(width, row.len());
         
         for color in row {
-            assert_eq!(true, color.equals(&Color::black()));
+            assert_eq!(color, Color::black());
         }
     }
 }
@@ -28,7 +28,7 @@ fn write_pixel_test() {
 
     canvas.write_pixel(x, y, red);
 
-    assert_eq!(true, canvas.pixels[y][x].equals(&red_result));
+    assert_eq!(canvas.pixels[y][x], red_result);
 }
 
 #[test]

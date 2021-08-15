@@ -5,6 +5,6 @@ pub struct FloatingPoint {}
 
 impl FloatingPoint {
     pub fn equals(left: f64, right: f64) -> bool {
-        (left - right).abs() < f64::EPSILON
+        (left - right).abs() < 0.00001
     }
 }

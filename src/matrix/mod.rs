@@ -1,5 +1,3 @@
-use std::fmt::Debug;
-
 use crate::{floating_point::FloatingPoint, tuple::Tuple};
 
 #[cfg(test)]
@@ -156,6 +154,23 @@ impl Matrix {
     pub fn cofactor(&self, row: usize, column: usize) -> f64 {
         let minor = self.minor(row, column);
         if (row + column) % 2 == 0 { minor } else { minor * -1.0 }
+    }
+
+    pub fn inverse(&self) -> Matrix {
+        if FloatingPoint::equals(self.determinant(), 0.0) {
+            panic!("Matrix is not invertible");
+        }
+
+        let mut matrix = Matrix::new(self.rows, self.columns, Option::None);
+        let determinant = self.determinant();
+        for r in 0..self.rows {
+            for c in 0..self.columns {
+                let cofactor = self.cofactor(r, c);
+                matrix.elements[c][r] = cofactor / determinant;
+            }
+        }
+
+        matrix
     }
 
     fn validate_elements(rows: usize, columns: usize, elements: &Vec<Vec<f64>>) -> bool {
