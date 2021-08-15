@@ -47,7 +47,7 @@ impl Canvas {
         for y in 0..self.height {
             let mut row_string = String::new();
             for (x, pixel) in self.pixels[y].iter().enumerate() {
-                let rounded_color = Self::get_rounded_ppm_color(&pixel);
+                let rounded_color = Self::get_rounded_ppm_color(pixel);
                 if row_string.len() + rounded_color.len() > PLAIN_PPM_LINE_LENGTH {
                     ppm_string.push_str(format!("{}\n", row_string.trim_end()).as_str());
                     row_string.clear();
