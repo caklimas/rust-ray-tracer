@@ -3,7 +3,7 @@ use crate::tuple::Tuple;
 #[cfg(test)]
 mod tests;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct Color {
     red: f64,
     green: f64,
@@ -54,10 +54,6 @@ impl Color {
         }
     }
 
-    pub fn equals(&self, other: &Color) -> bool {
-        self.to_tuple().equals(&other.to_tuple())
-    }
-
     fn to_tuple(&self) -> Tuple {
         Tuple::new(self.red(), self.green(), self.blue(), 0.0)
     }
@@ -68,5 +64,11 @@ impl Color {
             green: tuple.y(),
             blue: tuple.z()
         }
+    }
+}
+
+impl PartialEq for Color {
+    fn eq(&self, other: &Self) -> bool {
+        self.to_tuple() == other.to_tuple()
     }
 }

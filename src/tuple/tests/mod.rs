@@ -119,7 +119,7 @@ fn scalar_multiply_test() {
     let tuple = Tuple::new(1.0, -2.0, 3.0, -4.0);
     let multiplied = tuple.multiply(3.5);
 
-    assert_eq!(true, multiplied.equals(&Tuple::new(3.5, -7.0, 10.5, -14.0)));
+    assert_eq!(multiplied, Tuple::new(3.5, -7.0, 10.5, -14.0));
 }
 
 #[test]
@@ -127,7 +127,7 @@ fn fraction_multiply_test() {
     let tuple = Tuple::new(1.0, -2.0, 3.0, -4.0);
     let multiplied = tuple.multiply(0.5);
 
-    assert_eq!(true, multiplied.equals(&Tuple::new(0.5, -1.0, 1.5, -2.0)));
+    assert_eq!(multiplied, Tuple::new(0.5, -1.0, 1.5, -2.0));
 }
 
 #[test]
@@ -135,7 +135,7 @@ fn scalar_divide_test() {
     let tuple = Tuple::new(1.0, -2.0, 3.0, -4.0);
     let divided = tuple.divide(2.0);
 
-    assert_eq!(true, divided.equals(&Tuple::new(0.5, -1.0, 1.5, -2.0)));
+    assert_eq!(divided, Tuple::new(0.5, -1.0, 1.5, -2.0));
 }
 
 #[test]
@@ -166,11 +166,11 @@ fn normalize_test() {
     let sqrt = 14.0_f64.sqrt();
     let mut tuple = Tuple::vector(4.0, 0.0, 0.0);
     let mut normalize = tuple.normalize();
-    assert_eq!(true, normalize.equals(&Tuple::vector(1.0, 0.0, 0.0)));
+    assert_eq!(normalize, Tuple::vector(1.0, 0.0, 0.0));
 
     tuple = Tuple::vector(1.0, 2.0, 3.0);
     normalize = tuple.normalize();
-    assert_eq!(true, normalize.equals(&Tuple::vector(1.0 / sqrt, 2.0 / sqrt, 3.0 / sqrt)));
+    assert_eq!(normalize, Tuple::vector(1.0 / sqrt, 2.0 / sqrt, 3.0 / sqrt));
     assert_eq!(true, FloatingPoint::equals(1.0, normalize.magnitude()));
 }
 
@@ -190,23 +190,15 @@ fn dot_test() {
 }
 
 #[test]
-#[should_panic]
-fn dot_panic_test() {
-    let vector = Tuple::vector(0.0, 0.0, 0.0);
-    let point = Tuple::point(0.0, 0.0, 0.0);
-    vector.dot(&point);
-}
-
-#[test]
 fn cross_test() {
     let tuple = Tuple::vector(1.0, 2.0, 3.0);
     let other = Tuple::vector(2.0, 3.0, 4.0);
     
     let mut cross = tuple.cross(&other);
-    assert_eq!(true, cross.equals(&Tuple::vector(-1.0, 2.0, -1.0)));
+    assert_eq!(cross, Tuple::vector(-1.0, 2.0, -1.0));
 
     cross = other.cross(&tuple);
-    assert_eq!(true, cross.equals(&Tuple::vector(1.0, -2.0, 1.0)));
+    assert_eq!(cross, Tuple::vector(1.0, -2.0, 1.0));
 }
 
 #[test]
@@ -225,11 +217,11 @@ fn equals_true_test() {
 
     let mut tuple = Tuple::point(x, y, z);
     let mut other = Tuple::point(x, y, z);
-    assert_eq!(true, tuple.equals(&other));
+    assert_eq!(tuple, other);
 
     tuple = Tuple::vector(x, y, z);
     other = Tuple::vector(x, y, z);
-    assert_eq!(true, tuple.equals(&other));
+    assert_eq!(tuple, other);
 }
 
 #[test]
@@ -240,14 +232,14 @@ fn equals_fail_test() {
     let tuple = Tuple::point(x, y, z);
 
     let mut other = Tuple::point(x + 1.0, y, z);
-    assert_eq!(false, tuple.equals(&other));
+    assert_ne!(tuple, other);
 
     other = Tuple::point(x, y + 1.0, z);
-    assert_eq!(false, tuple.equals(&other));
+    assert_ne!(tuple, other);
 
     other = Tuple::point(x, y, z + 1.0);
-    assert_eq!(false, tuple.equals(&other));
+    assert_ne!(tuple, other);
 
     other = Tuple::vector(x, y, z);
-    assert_eq!(false, tuple.equals(&other));
+    assert_ne!(tuple, other);
 }
