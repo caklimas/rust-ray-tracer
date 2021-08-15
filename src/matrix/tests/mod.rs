@@ -257,3 +257,15 @@ fn submatrix_test() {
 
     assert_eq!(actual, expected);
 }
+
+#[test]
+fn minor_test() {
+    let matrix = Matrix::new(3, 3, Option::Some(vec![
+        vec![3.0, 5.0, 0.0],
+        vec![2.0, -1.0, -7.0],
+        vec![6.0, -1.0, 5.0]
+    ]));
+
+    let actual = matrix.minor(1, 0);
+    assert_eq!(actual, 25.0);
+}

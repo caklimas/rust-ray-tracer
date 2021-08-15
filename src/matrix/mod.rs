@@ -143,6 +143,11 @@ impl Matrix {
         Matrix::new(self.rows - 1, self.columns - 1, Option::Some(submatrix_elements))
     }
 
+    pub fn minor(&self, i: usize, j: usize) -> f64 {
+        let submatrix = self.submatrix(i, j);
+        submatrix.determinant()
+    }
+
     fn validate_elements(rows: usize, columns: usize, elements: &Vec<Vec<f64>>) -> bool {
         if elements.len() != rows {
             return false;
