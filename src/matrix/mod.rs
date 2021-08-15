@@ -110,11 +110,16 @@ impl Matrix {
     }
 
     pub fn determinant(&self) -> f64 {
-        if self.rows != 2 && self.columns != 2 {
-            panic!("Only supports 2x2 matrices");
+        if self.rows == 2 && self.columns == 2 {
+            return (self.elements[0][0] * self.elements[1][1]) - (self.elements[0][1] * self.elements[1][0]);
         }
 
-        (self.elements[0][0] * self.elements[1][1]) - (self.elements[0][1] * self.elements[1][0])
+        let mut determinant = 0.0;
+        for column in 0..self.columns {
+            determinant += self.elements[0][column] * self.cofactor(0, column)
+        }
+
+        determinant
     }
 
     pub fn submatrix(&self, row_index: usize, column_index: usize) -> Matrix {
@@ -143,9 +148,14 @@ impl Matrix {
         Matrix::new(self.rows - 1, self.columns - 1, Option::Some(submatrix_elements))
     }
 
-    pub fn minor(&self, i: usize, j: usize) -> f64 {
-        let submatrix = self.submatrix(i, j);
+    pub fn minor(&self, row: usize, column: usize) -> f64 {
+        let submatrix = self.submatrix(row, column);
         submatrix.determinant()
+    }
+
+    pub fn cofactor(&self, row: usize, column: usize) -> f64 {
+        let minor = self.minor(row, column);
+        if (row + column) % 2 == 0 { minor } else { minor * -1.0 }
     }
 
     fn validate_elements(rows: usize, columns: usize, elements: &Vec<Vec<f64>>) -> bool {

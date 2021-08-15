@@ -222,9 +222,28 @@ fn determinant_test() {
     ];
 
     let matrix = Matrix::new(2, 2, Option::Some(elements));
-    let determinant = matrix.determinant();
+    let actual = matrix.determinant();
 
-    assert_eq!(17.0, determinant);
+    assert_eq!(17.0, actual);
+
+    let matrix = Matrix::new(3, 3, Option::Some(vec![
+        vec![1.0, 2.0, 6.0],
+        vec![-5.0, 8.0, -4.0],
+        vec![2.0, 6.0, 4.0]
+    ]));
+
+    let actual = matrix.determinant();
+    assert_eq!(-196.0, actual);
+
+    let matrix = Matrix::new(4, 4, Option::Some(vec![
+        vec![-2.0, -8.0, 3.0, 5.0],
+        vec![-3.0, 1.0, 7.0, 3.0],
+        vec![1.0, 2.0, -9.0, 6.0],
+        vec![-6.0, 7.0, 7.0, -9.0]
+    ]));
+
+    let actual = matrix.determinant();
+    assert_eq!(-4071.0, actual);
 }
 
 #[test]
@@ -268,4 +287,19 @@ fn minor_test() {
 
     let actual = matrix.minor(1, 0);
     assert_eq!(actual, 25.0);
+}
+
+#[test]
+fn cofactor_test() {
+    let matrix = Matrix::new(3, 3, Option::Some(vec![
+        vec![3.0, 5.0, 0.0],
+        vec![2.0, -1.0, -7.0],
+        vec![6.0, -1.0, 5.0]
+    ]));
+
+    let actual = matrix.cofactor(0, 0);
+    assert_eq!(actual, -12.0);
+
+    let actual = matrix.cofactor(1, 0);
+    assert_eq!(actual, -25.0);
 }
