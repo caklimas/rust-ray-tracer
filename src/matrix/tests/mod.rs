@@ -11,13 +11,13 @@ fn new_test() {
 
     let matrix = Matrix::new(4, 4, Option::Some(elements));
 
-    assert_eq!(true, FloatingPoint::equals(1.0, matrix.get(0, 0)));
-    assert_eq!(true, FloatingPoint::equals(4.0, matrix.get(0, 3)));
-    assert_eq!(true, FloatingPoint::equals(5.5, matrix.get(1, 0)));
-    assert_eq!(true, FloatingPoint::equals(7.5, matrix.get(1, 2)));
-    assert_eq!(true, FloatingPoint::equals(11.0, matrix.get(2, 2)));
-    assert_eq!(true, FloatingPoint::equals(13.5, matrix.get(3, 0)));
-    assert_eq!(true, FloatingPoint::equals(15.5, matrix.get(3, 2)));
+    assert_eq!(true, FloatingPoint::equals(1.0, matrix.elements[0][0]));
+    assert_eq!(true, FloatingPoint::equals(4.0, matrix.elements[0][3]));
+    assert_eq!(true, FloatingPoint::equals(5.5, matrix.elements[1][0]));
+    assert_eq!(true, FloatingPoint::equals(7.5, matrix.elements[1][2]));
+    assert_eq!(true, FloatingPoint::equals(11.0, matrix.elements[2][2]));
+    assert_eq!(true, FloatingPoint::equals(13.5, matrix.elements[3][0]));
+    assert_eq!(true, FloatingPoint::equals(15.5, matrix.elements[3][2]));
 }
 
 #[test]
@@ -79,6 +79,18 @@ fn identity_tuple_test() {
     let result = identity.multiply_tuple(&tuple);
 
     assert_eq!(result, tuple);
+}
+
+#[test]
+fn translation_test() {
+    let translation = Matrix::translation(5.0, -3.0, 2.0);
+    let point = Tuple::point(-3.0, 4.0, 5.0);
+    let vector = Tuple::vector(-3.0, 4.0, 5.0);
+    let inverse = translation.inverse();
+
+    assert_eq!(Tuple::point(2.0, 1.0, 7.0), translation.multiply_tuple(&point));
+    assert_eq!(Tuple::point(-8.0, 7.0, 3.0), inverse.multiply_tuple(&point));
+    assert_eq!(vector, translation.multiply_tuple(&vector));
 }
 
 #[test]

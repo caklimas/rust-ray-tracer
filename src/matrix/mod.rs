@@ -54,8 +54,13 @@ impl Matrix {
         Matrix::new(size, size, Option::Some(elements))
     }
 
-    pub fn get(&self, y: usize, x: usize) -> f64 {
-        self.elements[y][x]
+    pub fn translation(x: f64, y: f64, z: f64) -> Self {
+        let mut identity = Matrix::identity(4);
+        identity.elements[0][3] = x;
+        identity.elements[1][3] = y;
+        identity.elements[2][3] = z;
+
+        identity
     }
 
     pub fn multiply(&self, other: &Matrix) -> Matrix {
