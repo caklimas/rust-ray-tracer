@@ -1,3 +1,5 @@
+use std::f64::consts::PI;
+
 use crate::{matrix::{Matrix, axis::Axis}, tuple::Tuple};
 
 #[test]
@@ -41,4 +43,19 @@ fn reflect_test() {
     let actual = transform.multiply_tuple(&point);
 
     assert_eq!(Tuple::point(-2.0, 3.0, 4.0), actual);
+}
+
+#[test]
+fn rotate_x_test() {
+    let point = Tuple::point(0.0, 1.0, 0.0);
+    let half_quarter = Matrix::rotate_x(PI / 4.0);
+    let full_quarter = Matrix::rotate_x(PI / 2.0);
+    let half_quarter_actual = half_quarter.multiply_tuple(&point);
+    let full_quarter_actual = full_quarter.multiply_tuple(&point);
+    let half_quarter_result = (2.0f64).sqrt() / 2.0;
+    let inverse = half_quarter.inverse();
+
+    assert_eq!(Tuple::point(0.0, half_quarter_result, half_quarter_result), half_quarter_actual);
+    assert_eq!(Tuple::point(0.0, 0.0, 1.0), full_quarter_actual);
+    assert_eq!(Tuple::point(0.0, half_quarter_result, -half_quarter_result), inverse.multiply_tuple(&point));
 }
