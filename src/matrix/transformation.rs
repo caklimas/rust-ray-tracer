@@ -52,4 +52,17 @@ impl Matrix {
         rotation
 
     }
+
+    pub fn rotate_z(radians: f64) -> Self {
+        let mut rotation = Matrix::identity(4);
+        let cos = radians.cos();
+        let sin = radians.sin();
+        rotation.elements[0][0] = cos;
+        rotation.elements[0][1] = -sin;
+        rotation.elements[1][0] = sin;
+        rotation.elements[1][1] = cos;
+
+        rotation
+
+    }
 }

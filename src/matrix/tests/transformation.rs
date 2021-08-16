@@ -72,3 +72,16 @@ fn rotate_y_test() {
     assert_eq!(Tuple::point(half_quarter_result, 0.0, half_quarter_result), half_quarter_actual);
     assert_eq!(Tuple::point(1.0, 0.0, 0.0), full_quarter_actual);
 }
+
+#[test]
+fn rotate_z_test() {
+    let point = Tuple::point(0.0, 1.0, 0.0);
+    let half_quarter = Matrix::rotate_z(PI / 4.0);
+    let full_quarter = Matrix::rotate_z(PI / 2.0);
+    let half_quarter_actual = half_quarter.multiply_tuple(&point);
+    let full_quarter_actual = full_quarter.multiply_tuple(&point);
+    let half_quarter_result = (2.0f64).sqrt() / 2.0;
+
+    assert_eq!(Tuple::point(-half_quarter_result, half_quarter_result, 0.0), half_quarter_actual);
+    assert_eq!(Tuple::point(-1.0, 0.0, 0.0), full_quarter_actual);
+}
