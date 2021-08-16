@@ -94,6 +94,35 @@ fn translation_test() {
 }
 
 #[test]
+fn scaling_test() {
+    let transform = Matrix::scaling(2.0, 3.0, 4.0);
+    let point = Tuple::point(-4.0, 6.0, 8.0);
+    let actual = transform.multiply_tuple(&point);
+
+    assert_eq!(Tuple::point(-8.0, 18.0, 32.0), actual);
+
+    let transform = Matrix::scaling(2.0, 3.0, 4.0);
+    let vector = Tuple::vector(-4.0, 6.0, 8.0);
+    let actual = transform.multiply_tuple(&vector);
+
+    assert_eq!(Tuple::vector(-8.0, 18.0, 32.0), actual);
+
+    let transform = Matrix::scaling(2.0, 3.0, 4.0);
+    let inverse = transform.inverse();
+    let vector = Tuple::vector(-4.0, 6.0, 8.0);
+    let actual = inverse.multiply_tuple(&vector);
+
+    assert_eq!(Tuple::vector(-2.0, 2.0, 2.0), actual);
+
+
+    /*
+    Given​ transform ← scaling(2, 3, 4) ​  ​And​ inv ← inverse(transform) ​  ​And​ v ← vector(-4, 6, 8) ​  ​Then​ inv * v = vector(-2, 2, 2)
+
+Buck, Jamis. The Ray Tracer Challenge (Pragmatic Bookshelf) (p. 94). Pragmatic Bookshelf. Kindle Edition. 
+    */
+}
+
+#[test]
 fn equals_test() {
     let mut elements = Vec::new();
     elements.push(vec![1.0, 2.0, 3.0, 4.0]);
