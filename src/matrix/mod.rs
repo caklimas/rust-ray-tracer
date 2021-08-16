@@ -1,4 +1,7 @@
 use crate::{floating_point::FloatingPoint, tuple::Tuple};
+use axis::Axis;
+
+pub mod axis;
 
 #[cfg(test)]
 mod tests;
@@ -70,6 +73,14 @@ impl Matrix {
         scaling.elements[2][2] = z;
 
         scaling
+    }
+
+    pub fn reflect(axis: Axis) -> Self {
+        return match axis {
+            Axis::X => Matrix::scaling(-1.0, 1.0, 1.0),
+            Axis::Y => Matrix::scaling(1.0, -1.0, 1.0),
+            Axis::Z => Matrix::scaling(1.0, 1.0, -1.0)
+        };
     }
 
     pub fn multiply(&self, other: &Matrix) -> Matrix {

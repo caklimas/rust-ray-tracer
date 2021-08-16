@@ -1,5 +1,5 @@
 use crate::{floating_point::FloatingPoint, tuple::Tuple};
-use super::Matrix;
+use super::{Matrix, axis::Axis};
 
 #[test]
 fn new_test() {
@@ -113,13 +113,6 @@ fn scaling_test() {
     let actual = inverse.multiply_tuple(&vector);
 
     assert_eq!(Tuple::vector(-2.0, 2.0, 2.0), actual);
-
-
-    /*
-    Given​ transform ← scaling(2, 3, 4) ​  ​And​ inv ← inverse(transform) ​  ​And​ v ← vector(-4, 6, 8) ​  ​Then​ inv * v = vector(-2, 2, 2)
-
-Buck, Jamis. The Ray Tracer Challenge (Pragmatic Bookshelf) (p. 94). Pragmatic Bookshelf. Kindle Edition. 
-    */
 }
 
 #[test]
@@ -432,4 +425,13 @@ fn inverse_panic_test() {
     ]));
 
     matrix.inverse();
+}
+
+#[test]
+fn reflect_test() {
+    let transform = Matrix::reflect(Axis::X);
+    let point = Tuple::point(2.0, 3.0, 4.0);
+    let actual = transform.multiply_tuple(&point);
+
+    assert_eq!(Tuple::point(-2.0, 3.0, 4.0), actual);
 }
