@@ -39,4 +39,17 @@ impl Matrix {
         rotation
 
     }
+
+    pub fn rotate_y(radians: f64) -> Self {
+        let mut rotation = Matrix::identity(4);
+        let cos = radians.cos();
+        let sin = radians.sin();
+        rotation.elements[0][0] = cos;
+        rotation.elements[0][2] = sin;
+        rotation.elements[2][0] = -sin;
+        rotation.elements[2][2] = cos;
+
+        rotation
+
+    }
 }
