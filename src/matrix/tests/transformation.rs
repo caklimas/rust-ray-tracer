@@ -85,3 +85,36 @@ fn rotate_z_test() {
     assert_eq!(Tuple::point(-half_quarter_result, half_quarter_result, 0.0), half_quarter_actual);
     assert_eq!(Tuple::point(-1.0, 0.0, 0.0), full_quarter_actual);
 }
+
+#[test]
+fn shearing_test() {
+    let shearing = Matrix::shearing(1.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    let point = Tuple::point(2.0, 3.0, 4.0);
+    
+    assert_eq!(Tuple::point(5.0, 3.0, 4.0), shearing.multiply_tuple(&point));
+
+    let shearing = Matrix::shearing(0.0, 1.0, 0.0, 0.0, 0.0, 0.0);
+    let point = Tuple::point(2.0, 3.0, 4.0);
+    
+    assert_eq!(Tuple::point(6.0, 3.0, 4.0), shearing.multiply_tuple(&point));
+
+    let shearing = Matrix::shearing(0.0, 0.0, 1.0, 0.0, 0.0, 0.0);
+    let point = Tuple::point(2.0, 3.0, 4.0);
+    
+    assert_eq!(Tuple::point(2.0, 5.0, 4.0), shearing.multiply_tuple(&point));
+
+    let shearing = Matrix::shearing(0.0, 0.0, 0.0, 1.0, 0.0, 0.0);
+    let point = Tuple::point(2.0, 3.0, 4.0);
+    
+    assert_eq!(Tuple::point(2.0, 7.0, 4.0), shearing.multiply_tuple(&point));
+
+    let shearing = Matrix::shearing(0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    let point = Tuple::point(2.0, 3.0, 4.0);
+    
+    assert_eq!(Tuple::point(2.0, 3.0, 6.0), shearing.multiply_tuple(&point));
+
+    let shearing = Matrix::shearing(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+    let point = Tuple::point(2.0, 3.0, 4.0);
+    
+    assert_eq!(Tuple::point(2.0, 3.0, 7.0), shearing.multiply_tuple(&point));
+}
