@@ -19,11 +19,11 @@ pub fn scale(x: f64, y: f64, z: f64) -> Matrix {
 }
 
 pub fn reflect(axis: Axis) -> Matrix {
-    return match axis {
+    match axis {
         Axis::X => scale(-1.0, 1.0, 1.0),
         Axis::Y => scale(1.0, -1.0, 1.0),
         Axis::Z => scale(1.0, 1.0, -1.0)
-    };
+    }
 }
 
 pub fn rotate_x(radians: f64) -> Matrix {
