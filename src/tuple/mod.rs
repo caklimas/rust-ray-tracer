@@ -58,12 +58,12 @@ impl Tuple {
         !self.is_vector()
     }
 
-    pub fn add(&self, other: &Tuple) -> Tuple {
+    pub fn add(&self, other: &Self) -> Self {
         if self.is_point() && other.is_point() {
             panic!("Can't add two points together");
         }
 
-        Tuple {
+        Self {
             x: self.x() + other.x(),
             y: self.y() + other.y(),
             z: self.z() + other.z(),
@@ -71,12 +71,12 @@ impl Tuple {
         }
     }
 
-    pub fn sub(&self, other: &Tuple) -> Tuple {
+    pub fn sub(&self, other: &Self) -> Self {
         if self.is_vector() && other.is_point() {
             panic!("Can't subtract a point from a vector");
         }
 
-        Tuple {
+        Self {
             x: self.x() - other.x(),
             y: self.y() - other.y(),
             z: self.z() - other.z(),
@@ -84,8 +84,8 @@ impl Tuple {
         }
     }
 
-    pub fn negate(&self) -> Tuple {
-        Tuple {
+    pub fn negate(&self) -> Self {
+        Self {
             x: self.x().neg(),
             y: self.y().neg(),
             z: self.z().neg(),
@@ -93,8 +93,8 @@ impl Tuple {
         }
     }
 
-    pub fn multiply(&self, scalar: f64) -> Tuple {
-        Tuple {
+    pub fn multiply(&self, scalar: f64) -> Self {
+        Self {
             x: self.x() * scalar,
             y: self.y() * scalar,
             z: self.z() * scalar,
@@ -102,8 +102,8 @@ impl Tuple {
         }
     }
 
-    pub fn divide(&self, scalar: f64) -> Tuple {
-        Tuple {
+    pub fn divide(&self, scalar: f64) -> Self {
+        Self {
             x: self.x() / scalar,
             y: self.y() / scalar,
             z: self.z() / scalar,
@@ -121,13 +121,13 @@ impl Tuple {
         sum.sqrt()
     }
 
-    pub fn normalize(&self) -> Tuple {
+    pub fn normalize(&self) -> Self {
         if !self.is_vector() {
             panic!("Normalize can only be done on vectors");
         }
 
         let magnitude = self.magnitude();
-        Tuple {
+        Self {
             x: self.x() / magnitude,
             y: self.y() / magnitude,
             z: self.z() / magnitude,
@@ -135,19 +135,19 @@ impl Tuple {
         }
     }
 
-    pub fn dot(&self, other: &Tuple) -> f64 {
+    pub fn dot(&self, other: &Self) -> f64 {
         (self.x() * other.x()) +
         (self.y() * other.y()) +
         (self.z() * other.z()) +
         (self.w() * other.w())
     }
 
-    pub fn cross(&self, other: &Tuple) -> Tuple {
+    pub fn cross(&self, other: &Self) -> Self {
         if !self.is_vector() || !other.is_vector() {
             panic!("Cross product can only be done on vectors");
         }
 
-        Tuple::vector(
+        Self::vector(
             (self.y() * other.z()) - (self.z() * other.y()),
             (self.z() * other.x()) - (self.x() * other.z()),
             (self.x() * other.y()) - (self.y() * other.x())

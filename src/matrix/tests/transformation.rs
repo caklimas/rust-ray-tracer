@@ -118,3 +118,32 @@ fn shearing_test() {
     
     assert_eq!(Tuple::point(2.0, 3.0, 7.0), shearing.multiply_tuple(&point));
 }
+
+#[test]
+fn chaining_transformations() {
+    let p = Tuple::point(1.0, 0.0, 1.0);
+    let a = Matrix::rotate_x(PI / 2.0);
+    let b = Matrix::scaling(5.0, 5.0, 5.0);
+    let c = Matrix::translation(10.0, 5.0, 7.0);
+
+    let p2 = a.multiply_tuple(&p);
+    assert_eq!(Tuple::point(1.0, -1.0, 0.0), p2);
+
+    let p3 = b.multiply_tuple(&p2);
+    assert_eq!(Tuple::point(5.0, -5.0, 0.0), p3);
+
+    let p4 = c.multiply_tuple(&p3);
+    assert_eq!(Tuple::point(15.0, 0.0, 7.0), p4);
+}
+
+#[test]
+fn chained_transformation_reverse_order() {
+    let p = Tuple::point(1.0, 0.0, 1.0);
+    let a = Matrix::rotate_x(PI / 2.0);
+    let b = Matrix::scaling(5.0, 5.0, 5.0);
+    let c = Matrix::translation(10.0, 5.0, 7.0);
+
+    let t = c.multiply(&b.multiply(&a));
+    
+    assert_eq!(Tuple::point(15.0, 0.0, 7.0), t.multiply_tuple(&p));
+}
