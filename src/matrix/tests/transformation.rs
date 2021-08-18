@@ -88,35 +88,35 @@ fn rotate_z_test() {
 
 #[test]
 fn shearing_test() {
-    let shear = shear(1.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    let sheared = shear(1.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     let point = Tuple::point(2.0, 3.0, 4.0);
     
-    assert_eq!(Tuple::point(5.0, 3.0, 4.0), shear.multiply_tuple(&point));
+    assert_eq!(Tuple::point(5.0, 3.0, 4.0), sheared.multiply_tuple(&point));
 
-    let shear = shear(0.0, 1.0, 0.0, 0.0, 0.0, 0.0);
+    let sheared = shear(0.0, 1.0, 0.0, 0.0, 0.0, 0.0);
     let point = Tuple::point(2.0, 3.0, 4.0);
     
-    assert_eq!(Tuple::point(6.0, 3.0, 4.0), shear.multiply_tuple(&point));
+    assert_eq!(Tuple::point(6.0, 3.0, 4.0), sheared.multiply_tuple(&point));
 
-    let shear = shear(0.0, 0.0, 1.0, 0.0, 0.0, 0.0);
+    let sheared = shear(0.0, 0.0, 1.0, 0.0, 0.0, 0.0);
     let point = Tuple::point(2.0, 3.0, 4.0);
     
-    assert_eq!(Tuple::point(2.0, 5.0, 4.0), shear.multiply_tuple(&point));
+    assert_eq!(Tuple::point(2.0, 5.0, 4.0), sheared.multiply_tuple(&point));
 
-    let shear = shear(0.0, 0.0, 0.0, 1.0, 0.0, 0.0);
+    let sheared = shear(0.0, 0.0, 0.0, 1.0, 0.0, 0.0);
     let point = Tuple::point(2.0, 3.0, 4.0);
     
-    assert_eq!(Tuple::point(2.0, 7.0, 4.0), shear.multiply_tuple(&point));
+    assert_eq!(Tuple::point(2.0, 7.0, 4.0), sheared.multiply_tuple(&point));
 
-    let shear = shear(0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    let sheared = shear(0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
     let point = Tuple::point(2.0, 3.0, 4.0);
     
-    assert_eq!(Tuple::point(2.0, 3.0, 6.0), shear.multiply_tuple(&point));
+    assert_eq!(Tuple::point(2.0, 3.0, 6.0), sheared.multiply_tuple(&point));
 
-    let shear = shear(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+    let sheared = shear(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
     let point = Tuple::point(2.0, 3.0, 4.0);
     
-    assert_eq!(Tuple::point(2.0, 3.0, 7.0), shear.multiply_tuple(&point));
+    assert_eq!(Tuple::point(2.0, 3.0, 7.0), sheared.multiply_tuple(&point));
 }
 
 #[test]
