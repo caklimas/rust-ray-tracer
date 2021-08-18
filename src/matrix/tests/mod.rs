@@ -1,5 +1,7 @@
 use crate::{floating_point::FloatingPoint, tuple::Tuple};
-use super::Matrix;
+use super::{Matrix};
+
+pub mod transformation;
 
 #[test]
 fn new_test() {
@@ -11,13 +13,13 @@ fn new_test() {
 
     let matrix = Matrix::new(4, 4, Option::Some(elements));
 
-    assert_eq!(true, FloatingPoint::equals(1.0, matrix.get(0, 0)));
-    assert_eq!(true, FloatingPoint::equals(4.0, matrix.get(0, 3)));
-    assert_eq!(true, FloatingPoint::equals(5.5, matrix.get(1, 0)));
-    assert_eq!(true, FloatingPoint::equals(7.5, matrix.get(1, 2)));
-    assert_eq!(true, FloatingPoint::equals(11.0, matrix.get(2, 2)));
-    assert_eq!(true, FloatingPoint::equals(13.5, matrix.get(3, 0)));
-    assert_eq!(true, FloatingPoint::equals(15.5, matrix.get(3, 2)));
+    assert_eq!(true, FloatingPoint::equals(1.0, matrix.elements[0][0]));
+    assert_eq!(true, FloatingPoint::equals(4.0, matrix.elements[0][3]));
+    assert_eq!(true, FloatingPoint::equals(5.5, matrix.elements[1][0]));
+    assert_eq!(true, FloatingPoint::equals(7.5, matrix.elements[1][2]));
+    assert_eq!(true, FloatingPoint::equals(11.0, matrix.elements[2][2]));
+    assert_eq!(true, FloatingPoint::equals(13.5, matrix.elements[3][0]));
+    assert_eq!(true, FloatingPoint::equals(15.5, matrix.elements[3][2]));
 }
 
 #[test]

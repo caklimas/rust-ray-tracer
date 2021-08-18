@@ -54,7 +54,7 @@ impl Color {
         }
     }
 
-    fn to_tuple(&self) -> Tuple {
+    fn to_tuple(self) -> Tuple {
         Tuple::new(self.red(), self.green(), self.blue(), 0.0)
     }
 

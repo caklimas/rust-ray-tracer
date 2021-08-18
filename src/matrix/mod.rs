@@ -1,5 +1,8 @@
 use crate::{floating_point::FloatingPoint, tuple::Tuple};
 
+pub mod axis;
+pub mod transformation;
+
 #[cfg(test)]
 mod tests;
 
@@ -52,10 +55,6 @@ impl Matrix {
         }
 
         Matrix::new(size, size, Option::Some(elements))
-    }
-
-    pub fn get(&self, y: usize, x: usize) -> f64 {
-        self.elements[y][x]
     }
 
     pub fn multiply(&self, other: &Matrix) -> Matrix {
