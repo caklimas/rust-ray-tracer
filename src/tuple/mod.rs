@@ -8,7 +8,7 @@ mod tests;
 pub const POINT_W: f64 = 1.0;
 pub const VECTOR_W: f64 = 0.0;
 
-#[derive(Debug)]
+#[derive(Copy, Clone, Debug)]
 pub struct Tuple {
     x: f64,
     y: f64,
