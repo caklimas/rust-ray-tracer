@@ -23,4 +23,8 @@ impl Ray {
             direction
         }
     }
+
+    pub fn position(&self, t: f64) -> Tuple {
+        self.origin.add(&self.direction.multiply(t))
+    }
 }
