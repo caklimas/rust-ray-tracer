@@ -57,14 +57,14 @@ fn add_vectors_test() {
 fn add_points_panic_test() {
     let tuple = Tuple::point(1.0, 1.0, 1.0);
     let other = Tuple::point(1.0, 1.0, 1.0);
-    let _result = tuple + other;
+    let _ = tuple + other;
 }
 
 #[test]
 fn sub_points_test() {
     let tuple = Tuple::point(3.0, 2.0, 1.0);
     let other = Tuple::point(5.0, 6.0, 7.0);
-    let subtracted = tuple.sub(&other);
+    let subtracted = tuple - other;
 
     assert_eq!(true, FloatingPoint::equals(-2.0, subtracted.x()));
     assert_eq!(true, FloatingPoint::equals(-4.0, subtracted.y()));
@@ -76,7 +76,7 @@ fn sub_points_test() {
 fn sub_vector_from_point_test() {
     let tuple = Tuple::point(3.0, 2.0, 1.0);
     let other = Tuple::vector(5.0, 6.0, 7.0);
-    let subtracted = tuple.sub(&other);
+    let subtracted = tuple - other;
 
     assert_eq!(true, FloatingPoint::equals(-2.0, subtracted.x()));
     assert_eq!(true, FloatingPoint::equals(-4.0, subtracted.y()));
@@ -88,7 +88,7 @@ fn sub_vector_from_point_test() {
 fn sub_vectors_test() {
     let tuple = Tuple::vector(3.0, 2.0, 1.0);
     let other = Tuple::vector(5.0, 6.0, 7.0);
-    let subtracted = tuple.sub(&other);
+    let subtracted = tuple - other;
 
     assert_eq!(true, FloatingPoint::equals(-2.0, subtracted.x()));
     assert_eq!(true, FloatingPoint::equals(-4.0, subtracted.y()));
@@ -101,7 +101,7 @@ fn sub_vectors_test() {
 fn sub_point_from_vector_panic() {
     let tuple = Tuple::vector(3.0, 2.0, 1.0);
     let other = Tuple::point(5.0, 6.0, 7.0);
-    tuple.sub(&other);
+    let _ = tuple - other;
 }
 
 #[test]

@@ -1,4 +1,4 @@
-use std::ops::Add;
+use std::ops::{Add, Sub};
 
 use crate::tuple::Tuple;
 
@@ -31,11 +31,6 @@ impl Color {
 
     pub fn blue(&self) -> f64 {
         self.blue
-    }
-
-    pub fn sub(&self, other: &Color) -> Color {
-        let subtracted = self.to_tuple().sub(&other.to_tuple());
-        Color::from_tuple(&subtracted)
     }
 
     pub fn multiply(&self, scalar: f64) -> Color {
@@ -76,5 +71,14 @@ impl Add for Color {
     fn add(self, rhs: Self) -> Self {
         let added = self.to_tuple() + rhs.to_tuple();
         Color::from_tuple(&added)
+    }
+}
+
+impl Sub for Color {
+    type Output = Self;
+
+    fn sub(self, rhs: Self) -> Self {
+        let subtracted = self.to_tuple() - rhs.to_tuple();
+        Color::from_tuple(&subtracted)
     }
 }

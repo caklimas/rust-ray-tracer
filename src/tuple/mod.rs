@@ -1,4 +1,4 @@
-use std::ops::{Add, Neg};
+use std::ops::{Add, Neg, Sub};
 
 use crate::floating_point::FloatingPoint;
 
@@ -56,19 +56,6 @@ impl Tuple {
 
     pub fn is_point(&self) -> bool {
         !self.is_vector()
-    }
-
-    pub fn sub(&self, other: &Self) -> Self {
-        if self.is_vector() && other.is_point() {
-            panic!("Can't subtract a point from a vector");
-        }
-
-        Self {
-            x: self.x() - other.x(),
-            y: self.y() - other.y(),
-            z: self.z() - other.z(),
-            w: self.w() - other.w()
-        }
     }
 
     pub fn negate(&self) -> Self {
@@ -164,6 +151,23 @@ impl Add for Tuple {
             y: self.y() + rhs.y(),
             z: self.z() + rhs.z(),
             w: self.w() + rhs.w()
+        }
+    }
+}
+
+impl Sub for Tuple {
+    type Output = Self;
+
+    fn sub(self, rhs: Self) -> Self {
+        if self.is_vector() && rhs.is_point() {
+            panic!("Can't subtract a point from a vector");
+        }
+
+        Self {
+            x: self.x() - rhs.x(),
+            y: self.y() - rhs.y(),
+            z: self.z() - rhs.z(),
+            w: self.w() - rhs.w()
         }
     }
 }
