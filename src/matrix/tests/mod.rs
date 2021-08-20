@@ -60,17 +60,18 @@ fn new_column_panic_test() {
 #[test]
 fn identity_test() {
     let identity = Matrix::identity(4);
-    let mut elements = Vec::new();
-    elements.push(vec![0.0, 1.0, 2.0, 4.0]);
-    elements.push(vec![1.0, 2.0, 4.0, 8.0]);
-    elements.push(vec![2.0, 4.0, 8.0, 16.0]);
-    elements.push(vec![4.0, 8.0, 16.0, 32.0]);
+    let elements = vec![
+        vec![0.0, 1.0, 2.0, 4.0],
+        vec![1.0, 2.0, 4.0, 8.0],
+        vec![2.0, 4.0, 8.0, 16.0],
+        vec![4.0, 8.0, 16.0, 32.0]
+    ];
+    let matrix = Matrix::new(4, 4, Option::Some(elements.clone()));
+    let expected = Matrix::new(4, 4, Option::Some(elements.clone()));
 
-    let matrix = Matrix::new(4, 4, Option::Some(elements));
+    let actual = matrix * identity;
 
-    let result = matrix.multiply(&identity);
-
-    assert_eq!(result, matrix);
+    assert_eq!(expected, actual);
 }
 
 #[test]
@@ -78,7 +79,7 @@ fn identity_tuple_test() {
     let identity = Matrix::identity(4);
     let tuple = Tuple::new(1.0, 2.0, 3.0, 4.0);
 
-    let result = identity.multiply_tuple(&tuple);
+    let result = identity * tuple;
 
     assert_eq!(result, tuple);
 }
@@ -140,7 +141,7 @@ fn multiply_test() {
     let matrix = Matrix::new(4, 4, Option::Some(elements));
     let other = Matrix::new(4, 4, Option::Some(other_elements));
 
-    let actual = matrix.multiply(&other);
+    let actual = matrix * other;
     let mut expected_elements = Vec::new();
     expected_elements.push(vec![20.0, 22.0, 50.0, 48.0]);
     expected_elements.push(vec![44.0, 54.0, 114.0, 108.0]);
@@ -168,7 +169,7 @@ fn multiply_fail_test() {
     let matrix = Matrix::new(4, 4, Option::Some(elements));
     let other = Matrix::new(2, 2, Option::Some(other_elements));
 
-    matrix.multiply(&other);
+    let _ = matrix * other;
 }
 
 #[test]
@@ -181,7 +182,7 @@ fn multiply_tuple_test() {
 
     let matrix = Matrix::new(4, 4, Option::Some(elements));
     let tuple = Tuple::new(1.0, 2.0, 3.0, 1.0);
-    let actual = matrix.multiply_tuple(&tuple);
+    let actual = matrix * tuple;
 
     assert_eq!(actual, Tuple::new(18.0, 24.0, 33.0, 1.0));
 }
@@ -362,13 +363,14 @@ fn inverse_test() {
 
 #[test]
 fn inverse_full_test() {
-    let a = Matrix::new(4, 4, Option::Some(vec![
+    let elements = vec![
         vec![ 3.0, -9.0,  7.0,  3.0],
         vec![ 3.0, -8.0,  2.0, -9.0],
         vec![-4.0,  4.0,  4.0,  1.0],
         vec![-6.0,  5.0, -1.0,  1.0]
-    ]));
+    ];
 
+    let a = Matrix::new(4, 4, Option::Some(elements.clone()));
     let b = Matrix::new(4, 4, Option::Some(vec![
         vec![8.0,  2.0, 2.0, 2.0],
         vec![3.0, -1.0, 7.0, 0.0],
@@ -376,10 +378,12 @@ fn inverse_full_test() {
         vec![6.0, -2.0, 0.0, 5.0]
     ]));
 
-    let c = a.multiply(&b);
-    let actual = c.multiply(&b.inverse());
+    let b_inverse = b.inverse();
+    let c = a * b;
+    let actual = c * b_inverse;
+    let expected = Matrix::new(4, 4, Option::Some(elements.clone()));
 
-    assert_eq!(a, actual);
+    assert_eq!(expected, actual);
 }
 
 #[test]

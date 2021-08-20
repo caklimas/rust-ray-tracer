@@ -25,8 +25,8 @@ impl Environment {
 
     pub fn tick(&self, projectile: &Projectile) -> Projectile {
         Projectile {
-            position: projectile.position.add(&projectile.velocity),
-            velocity: projectile.velocity.add(&self.gravity).add(&self.wind)
+            position: projectile.position + projectile.velocity,
+            velocity: projectile.velocity + self.gravity + self.wind
         }
     }
 }
