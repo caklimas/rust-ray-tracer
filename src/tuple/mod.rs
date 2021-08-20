@@ -1,4 +1,4 @@
-use std::ops::{Add, Mul, Neg, Sub};
+use std::ops::{Add, Div, Mul, Sub};
 
 use crate::floating_point::FloatingPoint;
 
@@ -60,19 +60,10 @@ impl Tuple {
 
     pub fn negate(&self) -> Self {
         Self {
-            x: self.x().neg(),
-            y: self.y().neg(),
-            z: self.z().neg(),
-            w: self.w().neg()
-        }
-    }
-
-    pub fn divide(&self, scalar: f64) -> Self {
-        Self {
-            x: self.x() / scalar,
-            y: self.y() / scalar,
-            z: self.z() / scalar,
-            w: self.w() / scalar
+            x: -self.x(),
+            y: -self.y(),
+            z: -self.z(),
+            w: -self.w()
         }
     }
 
@@ -172,6 +163,19 @@ impl Mul<f64> for Tuple {
             y: self.y() * rhs,
             z: self.z() * rhs,
             w: self.w() * rhs
+        }
+    }
+}
+
+impl Div<f64> for Tuple {
+    type Output = Self;
+
+    fn div(self, rhs: f64) -> Self {
+        Self {
+            x: self.x() / rhs,
+            y: self.y() / rhs,
+            z: self.z() / rhs,
+            w: self.w() / rhs
         }
     }
 }

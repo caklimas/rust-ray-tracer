@@ -133,7 +133,7 @@ fn fraction_multiply_test() {
 #[test]
 fn scalar_divide_test() {
     let tuple = Tuple::new(1.0, -2.0, 3.0, -4.0);
-    let divided = tuple.divide(2.0);
+    let divided = tuple / 2.0;
 
     assert_eq!(divided, Tuple::new(0.5, -1.0, 1.5, -2.0));
 }
