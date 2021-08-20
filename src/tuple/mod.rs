@@ -1,6 +1,4 @@
-use std::ops::Neg;
-
-use crate::floating_point::FloatingPoint;
+pub mod ops;
 
 #[cfg(test)]
 mod tests;
@@ -8,7 +6,7 @@ mod tests;
 pub const POINT_W: f64 = 1.0;
 pub const VECTOR_W: f64 = 0.0;
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct Tuple {
     x: f64,
     y: f64,
@@ -58,56 +56,12 @@ impl Tuple {
         !self.is_vector()
     }
 
-    pub fn add(&self, other: &Self) -> Self {
-        if self.is_point() && other.is_point() {
-            panic!("Can't add two points together");
-        }
-
-        Self {
-            x: self.x() + other.x(),
-            y: self.y() + other.y(),
-            z: self.z() + other.z(),
-            w: self.w() + other.w()
-        }
-    }
-
-    pub fn sub(&self, other: &Self) -> Self {
-        if self.is_vector() && other.is_point() {
-            panic!("Can't subtract a point from a vector");
-        }
-
-        Self {
-            x: self.x() - other.x(),
-            y: self.y() - other.y(),
-            z: self.z() - other.z(),
-            w: self.w() - other.w()
-        }
-    }
-
     pub fn negate(&self) -> Self {
         Self {
-            x: self.x().neg(),
-            y: self.y().neg(),
-            z: self.z().neg(),
-            w: self.w().neg()
-        }
-    }
-
-    pub fn multiply(&self, scalar: f64) -> Self {
-        Self {
-            x: self.x() * scalar,
-            y: self.y() * scalar,
-            z: self.z() * scalar,
-            w: self.w() * scalar
-        }
-    }
-
-    pub fn divide(&self, scalar: f64) -> Self {
-        Self {
-            x: self.x() / scalar,
-            y: self.y() / scalar,
-            z: self.z() / scalar,
-            w: self.w() / scalar
+            x: -self.x(),
+            y: -self.y(),
+            z: -self.z(),
+            w: -self.w()
         }
     }
 
@@ -152,14 +106,5 @@ impl Tuple {
             (self.z() * other.x()) - (self.x() * other.z()),
             (self.x() * other.y()) - (self.y() * other.x())
         )
-    }
-}
-
-impl PartialEq for Tuple {
-    fn eq(&self, other: &Self) -> bool {
-        FloatingPoint::equals(self.x(), other.x()) &&
-        FloatingPoint::equals(self.y(), other.y()) &&
-        FloatingPoint::equals(self.z(), other.z()) &&
-        FloatingPoint::equals(self.w(), other.w())
     }
 }

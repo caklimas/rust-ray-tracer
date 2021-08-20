@@ -1,5 +1,7 @@
 use crate::tuple::Tuple;
 
+pub mod ops;
+
 #[cfg(test)]
 mod tests;
 
@@ -31,29 +33,6 @@ impl Color {
         self.blue
     }
 
-    pub fn add(&self, other: &Color) -> Color {
-        let added = &self.to_tuple().add(&other.to_tuple());
-        Color::from_tuple(added)
-    }
-
-    pub fn sub(&self, other: &Color) -> Color {
-        let subtracted = self.to_tuple().sub(&other.to_tuple());
-        Color::from_tuple(&subtracted)
-    }
-
-    pub fn multiply(&self, scalar: f64) -> Color {
-        let multiplied = self.to_tuple().multiply(scalar);
-        Color::from_tuple(&multiplied)
-    }
-
-    pub fn multiply_color(&self, other: &Color) -> Color {
-        Color {
-            red: self.red() * other.red(),
-            green: self.green() * other.green(),
-            blue: self.blue() * other.blue()
-        }
-    }
-
     fn to_tuple(self) -> Tuple {
         Tuple::new(self.red(), self.green(), self.blue(), 0.0)
     }
@@ -64,11 +43,5 @@ impl Color {
             green: tuple.y(),
             blue: tuple.z()
         }
-    }
-}
-
-impl PartialEq for Color {
-    fn eq(&self, other: &Self) -> bool {
-        self.to_tuple() == other.to_tuple()
     }
 }
