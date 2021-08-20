@@ -1,3 +1,5 @@
+use std::ops::Mul;
+
 use crate::{floating_point::FloatingPoint, tuple::Tuple};
 
 pub mod axis;
@@ -6,7 +8,7 @@ pub mod transformation;
 #[cfg(test)]
 mod tests;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Matrix {
     pub rows: usize,
     pub columns: usize,
@@ -57,40 +59,6 @@ impl Matrix {
         Matrix::new(size, size, Option::Some(elements))
     }
 
-    pub fn multiply(&self, other: &Matrix) -> Matrix {
-        if self.columns != other.rows {
-            panic!("Matrices cannot be multiplied");
-        }
-
-        let mut matrix = Matrix::new(self.rows, self.columns, Option::None);
-        for row in 0..self.rows {
-            for column in 0..self.columns {
-                let mut result = 0.0;
-                for i in 0..self.columns {
-                    result += self.elements[row][i] * other.elements[i][column]
-                }
-
-                matrix.elements[row][column] = result;
-            }
-        }
-
-        matrix
-    }
-
-    pub fn multiply_tuple(&self, tuple: &Tuple) -> Tuple {
-        if self.columns != 4 {
-            panic!("Matrix must have 4 columns to be multiplied by a Tuple");
-        }
-
-        let mut elements = [0.0; 4];
-        for (r, row) in self.elements.iter().enumerate() {
-            let row_tuple = Tuple::new(row[0], row[1], row[2], row[3]);
-            elements[r] = row_tuple.dot(tuple);
-        }
-
-        Tuple::new(elements[0], elements[1], elements[2], elements[3])
-    }
-    
     pub fn transpose(&self) -> Matrix {
         let mut elements = Vec::new();
         for i in 0..self.columns {
@@ -203,5 +171,47 @@ impl PartialEq for Matrix {
         }
 
         true
+    }
+}
+
+impl Mul for Matrix {
+    type Output = Self;
+
+    fn mul(self, rhs: Self) -> Self {
+        if self.columns != rhs.rows {
+            panic!("Matrices cannot be multiplied");
+        }
+
+        let mut matrix = Matrix::new(self.rows, self.columns, Option::None);
+        for row in 0..self.rows {
+            for column in 0..self.columns {
+                let mut result = 0.0;
+                for i in 0..self.columns {
+                    result += self.elements[row][i] * rhs.elements[i][column]
+                }
+
+                matrix.elements[row][column] = result;
+            }
+        }
+
+        matrix
+    }
+}
+
+impl Mul<Tuple> for Matrix {
+    type Output = Tuple;
+
+    fn mul(self, rhs: Tuple) -> Self::Output {
+        if self.columns != 4 {
+            panic!("Matrix must have 4 columns to be multiplied by a Tuple");
+        }
+
+        let mut elements = [0.0; 4];
+        for (r, row) in self.elements.iter().enumerate() {
+            let row_tuple = Tuple::new(row[0], row[1], row[2], row[3]);
+            elements[r] = row_tuple.dot(&rhs);
+        }
+
+        Tuple::new(elements[0], elements[1], elements[2], elements[3])
     }
 }

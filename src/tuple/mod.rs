@@ -1,4 +1,4 @@
-use std::ops::{Add, Neg, Sub};
+use std::ops::{Add, Mul, Neg, Sub};
 
 use crate::floating_point::FloatingPoint;
 
@@ -64,15 +64,6 @@ impl Tuple {
             y: self.y().neg(),
             z: self.z().neg(),
             w: self.w().neg()
-        }
-    }
-
-    pub fn multiply(&self, scalar: f64) -> Self {
-        Self {
-            x: self.x() * scalar,
-            y: self.y() * scalar,
-            z: self.z() * scalar,
-            w: self.w() * scalar
         }
     }
 
@@ -168,6 +159,19 @@ impl Sub for Tuple {
             y: self.y() - rhs.y(),
             z: self.z() - rhs.z(),
             w: self.w() - rhs.w()
+        }
+    }
+}
+
+impl Mul<f64> for Tuple {
+    type Output = Self;
+
+    fn mul(self, rhs: f64) -> Self {
+        Self {
+            x: self.x() * rhs,
+            y: self.y() * rhs,
+            z: self.z() * rhs,
+            w: self.w() * rhs
         }
     }
 }

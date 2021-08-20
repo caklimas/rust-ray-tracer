@@ -117,7 +117,7 @@ fn negate_test() {
 #[test]
 fn scalar_multiply_test() {
     let tuple = Tuple::new(1.0, -2.0, 3.0, -4.0);
-    let multiplied = tuple.multiply(3.5);
+    let multiplied = tuple * 3.5;
 
     assert_eq!(multiplied, Tuple::new(3.5, -7.0, 10.5, -14.0));
 }
@@ -125,7 +125,7 @@ fn scalar_multiply_test() {
 #[test]
 fn fraction_multiply_test() {
     let tuple = Tuple::new(1.0, -2.0, 3.0, -4.0);
-    let multiplied = tuple.multiply(0.5);
+    let multiplied = tuple * 0.5;
 
     assert_eq!(multiplied, Tuple::new(0.5, -1.0, 1.5, -2.0));
 }

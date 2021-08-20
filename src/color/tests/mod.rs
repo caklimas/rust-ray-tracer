@@ -40,7 +40,7 @@ fn sub_test() {
 fn multiply_test() {
     let color = Color::new(0.2, 0.3, 0.4);
 
-    let result = color.multiply(2.0);
+    let result = color * 2.0;
     assert_eq!(true, FloatingPoint::equals(0.4, result.red()));
     assert_eq!(true, FloatingPoint::equals(0.6, result.green()));
     assert_eq!(true, FloatingPoint::equals(0.8, result.blue()));
@@ -51,7 +51,7 @@ fn multiply_color_test() {
     let color = Color::new(1.0, 0.2, 0.4);
     let other = Color::new(0.9, 1.0, 0.1);
 
-    let result = color.multiply_color(&other);
+    let result = color * other;
     assert_eq!(true, FloatingPoint::equals(0.9, result.red()));
     assert_eq!(true, FloatingPoint::equals(0.2, result.green()));
     assert_eq!(true, FloatingPoint::equals(0.04, result.blue()));

@@ -78,31 +78,31 @@ pub fn shear(xy: f64, xz: f64, yx: f64, yz: f64, zx: f64, zy: f64) -> Matrix {
 }
 
 impl Matrix {
-    pub fn translate(&self, x: f64, y: f64, z: f64) -> Self {
-        translate(x, y, z).multiply(self)
+    pub fn translate(self, x: f64, y: f64, z: f64) -> Self {
+        translate(x, y, z) * self
     }
 
-    pub fn scale(&self, x: f64, y: f64, z: f64) -> Self {
-        scale(x, y, z).multiply(self)
+    pub fn scale(self, x: f64, y: f64, z: f64) -> Self {
+        scale(x, y, z) * self
     }
 
-    pub fn reflect(&self, axis: Axis) -> Self {
-        reflect(axis).multiply(self)
+    pub fn reflect(self, axis: Axis) -> Self {
+        reflect(axis) * self
     }
 
-    pub fn rotate_x(&self, radians: f64) -> Self {
-        rotate_x(radians).multiply(self)
+    pub fn rotate_x(self, radians: f64) -> Self {
+        rotate_x(radians) * self
     }
 
-    pub fn rotate_y(&self, radians: f64) -> Self {
-        rotate_y(radians).multiply(self)
+    pub fn rotate_y(self, radians: f64) -> Self {
+        rotate_y(radians) * self
     }
 
-    pub fn rotate_z(&self, radians: f64) -> Self {
-        rotate_z(radians).multiply(self)
+    pub fn rotate_z(self, radians: f64) -> Self {
+        rotate_z(radians) * self
     }
 
-    pub fn shear(&self, xy: f64, xz: f64, yx: f64, yz: f64, zx: f64, zy: f64) -> Self {
-        shear(xy, xz, yx, yz, zx, zy).multiply(self)
+    pub fn shear(self, xy: f64, xz: f64, yx: f64, yz: f64, zx: f64, zy: f64) -> Self {
+        shear(xy, xz, yx, yz, zx, zy) * self
     }
 }
