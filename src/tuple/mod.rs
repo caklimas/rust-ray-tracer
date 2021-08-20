@@ -1,4 +1,4 @@
-use std::ops::Neg;
+use std::ops::{Add, Neg};
 
 use crate::floating_point::FloatingPoint;
 
@@ -8,7 +8,7 @@ mod tests;
 pub const POINT_W: f64 = 1.0;
 pub const VECTOR_W: f64 = 0.0;
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct Tuple {
     x: f64,
     y: f64,
@@ -56,19 +56,6 @@ impl Tuple {
 
     pub fn is_point(&self) -> bool {
         !self.is_vector()
-    }
-
-    pub fn add(&self, other: &Self) -> Self {
-        if self.is_point() && other.is_point() {
-            panic!("Can't add two points together");
-        }
-
-        Self {
-            x: self.x() + other.x(),
-            y: self.y() + other.y(),
-            z: self.z() + other.z(),
-            w: self.w() + other.w()
-        }
     }
 
     pub fn sub(&self, other: &Self) -> Self {
@@ -161,5 +148,22 @@ impl PartialEq for Tuple {
         FloatingPoint::equals(self.y(), other.y()) &&
         FloatingPoint::equals(self.z(), other.z()) &&
         FloatingPoint::equals(self.w(), other.w())
+    }
+}
+
+impl Add for Tuple {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        if self.is_point() && rhs.is_point() {
+            panic!("Can't add two points together");
+        }
+
+        Self {
+            x: self.x() + rhs.x(),
+            y: self.y() + rhs.y(),
+            z: self.z() + rhs.z(),
+            w: self.w() + rhs.w()
+        }
     }
 }

@@ -32,7 +32,7 @@ fn vector_test() {
 fn add_point_vector_test() {
     let tuple = Tuple::point(1.0, 1.0, 1.0);
     let other = Tuple::vector(1.0, 1.0, 1.0);
-    let added = tuple.add(&other);
+    let added = tuple + other;
 
     assert_eq!(true, FloatingPoint::equals(2.0, added.x()));
     assert_eq!(true, FloatingPoint::equals(2.0, added.y()));
@@ -44,7 +44,7 @@ fn add_point_vector_test() {
 fn add_vectors_test() {
     let tuple = Tuple::vector(1.0, 1.0, 1.0);
     let other = Tuple::vector(1.0, 1.0, 1.0);
-    let added = tuple.add(&other);
+    let added = tuple + other;
 
     assert_eq!(true, FloatingPoint::equals(2.0, added.x()));
     assert_eq!(true, FloatingPoint::equals(2.0, added.y()));
@@ -57,7 +57,7 @@ fn add_vectors_test() {
 fn add_points_panic_test() {
     let tuple = Tuple::point(1.0, 1.0, 1.0);
     let other = Tuple::point(1.0, 1.0, 1.0);
-    tuple.add(&other);
+    let _result = tuple + other;
 }
 
 #[test]

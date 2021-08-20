@@ -19,7 +19,7 @@ fn add_test() {
     let color = Color::new(0.9, 0.6, 0.75);
     let other = Color::new(0.7, 0.1, 0.25);
 
-    let result = color.add(&other);
+    let result = color + other;
     assert_eq!(true, FloatingPoint::equals(1.6, result.red()));
     assert_eq!(true, FloatingPoint::equals(0.7, result.green()));
     assert_eq!(true, FloatingPoint::equals(1.0, result.blue()));

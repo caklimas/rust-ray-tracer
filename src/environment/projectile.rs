@@ -1,5 +1,6 @@
 use crate::tuple::Tuple;
 
+#[derive(Clone, Copy)]
 pub struct Projectile {
     pub position: Tuple,
     pub velocity: Tuple

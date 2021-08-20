@@ -1,3 +1,5 @@
+use std::ops::Add;
+
 use crate::tuple::Tuple;
 
 #[cfg(test)]
@@ -29,11 +31,6 @@ impl Color {
 
     pub fn blue(&self) -> f64 {
         self.blue
-    }
-
-    pub fn add(&self, other: &Color) -> Color {
-        let added = &self.to_tuple().add(&other.to_tuple());
-        Color::from_tuple(added)
     }
 
     pub fn sub(&self, other: &Color) -> Color {
@@ -70,5 +67,14 @@ impl Color {
 impl PartialEq for Color {
     fn eq(&self, other: &Self) -> bool {
         self.to_tuple() == other.to_tuple()
+    }
+}
+
+impl Add for Color {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self {
+        let added = self.to_tuple() + rhs.to_tuple();
+        Color::from_tuple(&added)
     }
 }
