@@ -6,6 +6,7 @@ pub mod environment;
 pub mod floating_point;
 pub mod matrix;
 pub mod ray;
+pub mod sphere;
 pub mod tuple;
 
 fn main() {
