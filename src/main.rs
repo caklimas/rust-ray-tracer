@@ -4,6 +4,7 @@ pub mod canvas;
 pub mod color;
 pub mod environment;
 pub mod floating_point;
+pub mod intersection;
 pub mod matrix;
 pub mod ray;
 pub mod sphere;

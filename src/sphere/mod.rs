@@ -1,8 +1,11 @@
 use crate::{ray::Ray, tuple::Tuple};
 
+pub mod ops;
+
 #[cfg(test)]
 mod tests;
 
+#[derive(Clone, Copy, Debug)]
 pub struct Sphere {
     center: Tuple
 }
