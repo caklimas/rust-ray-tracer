@@ -12,8 +12,8 @@ fn intersect_two_points_test() {
     let xs = sphere.intersect(&ray);
 
     assert_eq!(2, xs.len());
-    assert_eq!(4.0, xs[0]);
-    assert_eq!(6.0, xs[1]);
+    assert_eq!(4.0, xs[0].value);
+    assert_eq!(6.0, xs[1].value);
 }
 
 #[test]
@@ -27,8 +27,8 @@ fn intersect_tangent_test() {
     let xs = sphere.intersect(&ray);
 
     assert_eq!(2, xs.len());
-    assert_eq!(5.0, xs[0]);
-    assert_eq!(5.0, xs[1]);
+    assert_eq!(5.0, xs[0].value);
+    assert_eq!(5.0, xs[1].value);
 }
 
 #[test]
@@ -55,8 +55,8 @@ fn intersect_inside_sphere_test() {
     let xs = sphere.intersect(&ray);
 
     assert_eq!(2, xs.len());
-    assert_eq!(-1.0, xs[0]);
-    assert_eq!(1.0, xs[1]);
+    assert_eq!(-1.0, xs[0].value);
+    assert_eq!(1.0, xs[1].value);
 }
 
 #[test]
@@ -70,6 +70,17 @@ fn intersect_sphere_behind_ray_test() {
     let xs = sphere.intersect(&ray);
 
     assert_eq!(2, xs.len());
-    assert_eq!(-6.0, xs[0]);
-    assert_eq!(-4.0, xs[1]);
+    assert_eq!(-6.0, xs[0].value);
+    assert_eq!(-4.0, xs[1].value);
+}
+
+#[test]
+fn intersect_sets_object() {
+    let ray = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
+    let sphere = Sphere::new();
+    let xs = sphere.intersect(&ray);
+
+    assert_eq!(2, xs.len());
+    assert_eq!(&sphere, xs[0].object);
+    assert_eq!(&sphere, xs[1].object);
 }

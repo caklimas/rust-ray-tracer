@@ -1,4 +1,4 @@
-use crate::{ray::Ray, tuple::Tuple};
+use crate::{intersection::Intersection, ray::Ray, tuple::Tuple};
 
 pub mod ops;
 
@@ -17,7 +17,7 @@ impl Sphere {
         }
     }
 
-    pub fn intersect(&self, ray: &Ray) -> Vec<f64> {
+    pub fn intersect(&self, ray: &Ray) -> Vec<Intersection> {
         let mut intersections = Vec::new();
         let sphere_to_ray = ray.origin - self.center;
         let a = ray.direction.dot(&ray.direction);
@@ -32,10 +32,16 @@ impl Sphere {
         let t1 = (-b - discriminant.sqrt()) / (2.0 * a);
         let t2 = (-b + discriminant.sqrt()) / (2.0 * a);
 
-        intersections.push(t1);
-        intersections.push(t2);
-        intersections.sort_by(|a, b| a.partial_cmp(b).unwrap());
+        intersections.push(Intersection::new(self, t1));
+        intersections.push(Intersection::new(self, t2));
+        intersections.sort_by(|a, b| a.value.partial_cmp(&b.value).unwrap());
 
         intersections
+    }
+}
+
+impl Default for Sphere {
+    fn default() -> Self {
+        Self::new()
     }
 }
