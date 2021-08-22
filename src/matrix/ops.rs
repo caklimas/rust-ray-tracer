@@ -64,3 +64,21 @@ impl Mul<Tuple> for Matrix {
         Tuple::new(elements[0], elements[1], elements[2], elements[3])
     }
 }
+
+impl Mul<Tuple> for &Matrix {
+    type Output = Tuple;
+
+    fn mul(self, rhs: Tuple) -> Self::Output {
+        if self.columns != 4 {
+            panic!("Matrix must have 4 columns to be multiplied by a Tuple");
+        }
+
+        let mut elements = [0.0; 4];
+        for (r, row) in self.elements.iter().enumerate() {
+            let row_tuple = Tuple::new(row[0], row[1], row[2], row[3]);
+            elements[r] = row_tuple.dot(&rhs);
+        }
+
+        Tuple::new(elements[0], elements[1], elements[2], elements[3])
+    }
+}

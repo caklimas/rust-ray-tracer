@@ -1,4 +1,4 @@
-use crate::tuple::Tuple;
+use crate::{matrix::Matrix, tuple::Tuple};
 
 #[cfg(test)]
 mod tests;
@@ -26,5 +26,12 @@ impl Ray {
 
     pub fn position(&self, t: f64) -> Tuple {
         self.origin + self.direction * t
+    }
+
+    pub fn transform(&self, transformation: Matrix) -> Self {
+        Ray::new(
+            &transformation * self.origin,
+            &transformation * self.direction
+        )
     }
 }
