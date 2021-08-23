@@ -1,4 +1,4 @@
-use crate::{matrix::{Matrix, transformation::{scale, translate}}, tuple::Tuple};
+use crate::{matrix::{transformation::{scale, translate}}, tuple::Tuple};
 
 use super::Ray;
 
@@ -38,7 +38,7 @@ fn position_test() {
 fn translate_test() {
     let ray = Ray::new(Tuple::point(1.0, 2.0, 3.0), Tuple::vector(0.0, 1.0, 0.0));
     let translation = translate(3.0, 4.0, 5.0);
-    let r2 = ray.transform(translation);
+    let r2 = ray.transform(&translation);
 
     assert_eq!(Tuple::point(4.0, 6.0, 8.0), r2.origin);
     assert_eq!(Tuple::vector(0.0, 1.0, 0.0), r2.direction);
@@ -48,7 +48,7 @@ fn translate_test() {
 fn scaling_test() {
     let ray = Ray::new(Tuple::point(1.0, 2.0, 3.0), Tuple::vector(0.0, 1.0, 0.0));
     let transformation = scale(2.0, 3.0, 4.0);
-    let r2 = ray.transform(transformation);
+    let r2 = ray.transform(&transformation);
 
     assert_eq!(Tuple::point(2.0, 6.0, 12.0), r2.origin);
     assert_eq!(Tuple::vector(0.0, 3.0, 0.0), r2.direction);

@@ -28,10 +28,10 @@ impl Ray {
         self.origin + self.direction * t
     }
 
-    pub fn transform(&self, transformation: Matrix) -> Self {
+    pub fn transform(&self, transformation: &Matrix) -> Self {
         Ray::new(
-            &transformation * self.origin,
-            &transformation * self.direction
+            transformation * self.origin,
+            transformation * self.direction
         )
     }
 }
