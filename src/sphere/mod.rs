@@ -41,6 +41,10 @@ impl Sphere {
 
         intersections
     }
+
+    fn normal_at(&self, point: Tuple) -> Tuple {
+        (point - self.center).normalize()
+    }
 }
 
 impl Default for Sphere {

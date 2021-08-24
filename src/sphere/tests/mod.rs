@@ -108,3 +108,50 @@ fn intersect_translated_sphere_test() {
 
     assert_eq!(0, xs.len());
 }
+
+#[test]
+fn normal_x_axis_test() {
+    let sphere = Sphere::new();
+    
+    let n = sphere.normal_at(Tuple::point(1.0, 0.0, 0.0));
+
+    assert_eq!(Tuple::vector(1.0, 0.0, 0.0), n);
+}
+
+#[test]
+fn normal_y_axis_test() {
+    let sphere = Sphere::new();
+    
+    let n = sphere.normal_at(Tuple::point(0.0, 1.0, 0.0));
+
+    assert_eq!(Tuple::vector(0.0, 1.0, 0.0), n);
+}
+
+#[test]
+fn normal_z_axis_test() {
+    let sphere = Sphere::new();
+    
+    let n = sphere.normal_at(Tuple::point(0.0, 0.0, 1.0));
+
+    assert_eq!(Tuple::vector(0.0, 0.0, 1.0), n);
+}
+
+#[test]
+fn normal_nonaxial_axis_test() {
+    let sphere = Sphere::new();
+    let value = (3.0_f64).sqrt() / 3.0;
+    
+    let n = sphere.normal_at(Tuple::point(value, value, value));
+
+    assert_eq!(Tuple::vector(value, value, value), n);
+}
+
+#[test]
+fn normal_is_normalized_vector_test() {
+    let sphere = Sphere::new();
+    let value = (3.0_f64).sqrt() / 3.0;
+    
+    let n = sphere.normal_at(Tuple::point(value, value, value));
+
+    assert_eq!(n.normalize(), n);
+}
