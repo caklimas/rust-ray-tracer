@@ -1,4 +1,6 @@
-use crate::{matrix::transformation::{scale, translate}, ray::Ray, tuple::Tuple};
+use std::f64::consts::PI;
+
+use crate::{matrix::transformation::{rotate_z, scale, translate}, ray::Ray, tuple::Tuple};
 use super::Sphere;
 
 #[test]
@@ -154,4 +156,26 @@ fn normal_is_normalized_vector_test() {
     let n = sphere.normal_at(Tuple::point(value, value, value));
 
     assert_eq!(n.normalize(), n);
+}
+
+#[test]
+fn normal_translated_sphere_test() {
+    let mut sphere = Sphere::new();
+    sphere.transform = translate(0.0, 1.0, 0.0);
+
+    let normal = sphere.normal_at(Tuple::point(0.0, 1.70711, -0.70711));
+
+    assert_eq!(Tuple::vector(0.0, 0.70711, -0.70711), normal);
+}
+
+#[test]
+fn normal_transformed_sphere_test() {
+    let mut sphere = Sphere::new();
+    let transformation = scale(1.0, 0.5, 1.0) * rotate_z(PI / 5.0);
+    let value = (2.0_f64).sqrt() / 2.0;
+    sphere.transform = transformation;
+
+    let normal = sphere.normal_at(Tuple::point(0.0, value, -value));
+
+    assert_eq!(Tuple::vector(0.0, 0.97014, -0.24254), normal);
 }
