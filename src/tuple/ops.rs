@@ -1,5 +1,5 @@
 use crate::floating_point::FloatingPoint;
-use std::ops::{Add, Div, Mul, Sub};
+use std::{ops::{Add, Div, Mul, Sub}, process::Output};
 use super::Tuple;
 
 impl PartialEq for Tuple {
@@ -37,6 +37,23 @@ impl Sub for Tuple {
         }
 
         Self {
+            x: self.x() - rhs.x(),
+            y: self.y() - rhs.y(),
+            z: self.z() - rhs.z(),
+            w: self.w() - rhs.w()
+        }
+    }
+}
+
+impl Sub for &Tuple {
+    type Output = Tuple;
+
+    fn sub(self, rhs: Self) -> Tuple {
+        if self.is_vector() && rhs.is_point() {
+            panic!("Can't subtract a point from a vector");
+        }
+
+        Tuple {
             x: self.x() - rhs.x(),
             y: self.y() - rhs.y(),
             z: self.z() - rhs.z(),
