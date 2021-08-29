@@ -1,4 +1,4 @@
-use crate::{intersection::Intersection, matrix::Matrix, ray::Ray, tuple::Tuple};
+use crate::{intersection::Intersection, material::Material, matrix::Matrix, ray::Ray, tuple::Tuple};
 
 #[cfg(test)]
 mod tests;
@@ -6,6 +6,7 @@ mod tests;
 #[derive(Clone, Debug, PartialEq)]
 pub struct Sphere {
     center: Tuple,
+    pub material: Material,
     pub transform: Matrix
 }
 
@@ -13,6 +14,7 @@ impl Sphere {
     pub fn new() -> Self {
         Sphere {
             center: Tuple::point(0.0, 0.0, 0.0),
+            material: Default::default(),
             transform: Matrix::identity(4)
         }
     }
