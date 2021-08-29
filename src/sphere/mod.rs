@@ -1,11 +1,9 @@
 use crate::{intersection::Intersection, matrix::Matrix, ray::Ray, tuple::Tuple};
 
-pub mod ops;
-
 #[cfg(test)]
 mod tests;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Sphere {
     center: Tuple,
     pub transform: Matrix
