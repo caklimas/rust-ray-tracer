@@ -1,5 +1,5 @@
 use crate::floating_point::FloatingPoint;
-use std::{ops::{Add, Div, Mul, Sub}, process::Output};
+use std::{ops::{Add, Div, Mul, Sub}};
 use super::Tuple;
 
 impl PartialEq for Tuple {
