@@ -108,8 +108,8 @@ impl Tuple {
         )
     }
 
-    pub fn reflect(&self, normal: Tuple) -> Tuple {
-        let dot = (normal * 2.0) * self.dot(&normal);
+    pub fn reflect(&self, normal: &Tuple) -> Tuple {
+        let dot = (*normal * 2.0) * self.dot(&normal);
         self - &dot
     }
 }

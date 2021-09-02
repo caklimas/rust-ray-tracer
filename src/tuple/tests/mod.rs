@@ -249,7 +249,7 @@ fn reflect_45_degrees_test() {
     let v = Tuple::vector(1.0, -1.0, 0.0);
     let n = Tuple::vector(0.0, 1.0, 0.0);
 
-    let r = v.reflect(n);
+    let r = v.reflect(&n);
 
     assert_eq!(Tuple::vector(1.0, 1.0, 0.0), r);
 }
@@ -260,7 +260,7 @@ fn reflect_slanted_surface_test() {
     let v = Tuple::vector(0.0, -1.0, 0.0);
     let n = Tuple::vector(value, value, 0.0);
 
-    let r = v.reflect(n);
+    let r = v.reflect(&n);
 
     assert_eq!(Tuple::vector(1.0, 0.0, 0.0), r);
 }

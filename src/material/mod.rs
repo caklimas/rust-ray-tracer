@@ -1,5 +1,5 @@
 use std::ops::RangeInclusive;
-use crate::color::Color;
+use crate::{color::Color, point_light::PointLight, tuple::Tuple};
 
 #[cfg(test)]
 mod tests;
@@ -34,7 +34,46 @@ impl Material {
         }
     }
 
-    
+    pub fn lighting(&self, light: &PointLight, position: &Tuple, eye: &Tuple, normal: &Tuple) -> Color {
+        // Combine the surface color with the light's color/intensity
+        let effective_color = self.color * light.intensity;
+
+        // Find the direction to the light source
+        let light_v = (&light.position - position).normalize();
+
+        // Compute the ambient contribution
+        let ambient = effective_color * self.ambient;
+
+        /* 
+            light_dot_normal represents the cosine of the angle between the​ 
+            light vector and the normal vector. A negative number means the​ ​  
+            light is on the other side of the surface.​
+        */
+        let light_dot_normal = light_v.dot(normal);
+
+        let mut diffuse = Color::black();
+        let mut specular = Color::black();
+        if light_dot_normal >= 0.0 {
+            // Compute diffuse contribution
+            diffuse = effective_color * self.diffuse * light_dot_normal;
+
+            /*
+                reflect_dot_eye represents the cosine of the angle between the​
+                reflection vector and the eye vector. A negative number means the​
+                light reflects away from the eye.​
+            */
+            let reflectv = light_v.negate().reflect(normal);
+            let reflect_dot_eye = reflectv.dot(eye);
+            if reflect_dot_eye > 0.0 {
+                // Comput specular contribution
+                let factor = reflect_dot_eye.powf(self.shininess);
+                specular = light.intensity * self.specular * factor;
+            }
+        }
+
+        // Three contribution give final shading
+        ambient + diffuse + specular
+    }
 }
 
 impl Default for Material {

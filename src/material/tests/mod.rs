@@ -1,4 +1,4 @@
-use crate::color::Color;
+use crate::{color::Color, point_light::PointLight, tuple::Tuple};
 
 use super::Material;
 
@@ -63,5 +63,88 @@ fn default_test() {
     assert_eq!(0.1, material.ambient);
     assert_eq!(0.9, material.diffuse);
     assert_eq!(0.9, material.specular);
+    
     assert_eq!(200.0, material.shininess);
+}
+
+#[test]
+fn lighting_eye_between_light_and_surface_test() {
+    let material: Material = Default::default();
+    let position = Tuple::point(0.0, 0.0, 0.0);
+    let eye = Tuple::vector(0.0, 0.0, -1.0);
+    let normal = Tuple::vector(0.0, 0.0, -1.0);
+    let light = PointLight::new(
+        Color::new(1.0, 1.0, 1.0),
+        Tuple::point(0.0, 0.0, -10.0)
+    );
+
+    let result = material.lighting(&light, &position, &eye, &normal);
+
+    assert_eq!(Color::new(1.9, 1.9, 1.9), result);
+}
+
+#[test]
+fn lighting_eye_between_light_and_surface_45_offset_test() {
+    let value = 2.0_f64.sqrt() / 2.0;
+    let material: Material = Default::default();
+    let position = Tuple::point(0.0, 0.0, 0.0);
+    let eye = Tuple::vector(0.0, value, -value);
+    let normal = Tuple::vector(0.0, 0.0, -1.0);
+    let light = PointLight::new(
+        Color::new(1.0, 1.0, 1.0),
+        Tuple::point(0.0, 0.0, -10.0)
+    );
+
+    let result = material.lighting(&light, &position, &eye, &normal);
+
+    assert_eq!(Color::new(1.0, 1.0, 1.0), result);
+}
+
+#[test]
+fn lighting_eye_opposite_surface_light_45_offset_test() {
+    let material: Material = Default::default();
+    let position = Tuple::point(0.0, 0.0, 0.0);
+    let eye = Tuple::vector(0.0, 0.0, -1.0);
+    let normal = Tuple::vector(0.0, 0.0, -1.0);
+    let light = PointLight::new(
+        Color::new(1.0, 1.0, 1.0),
+        Tuple::point(0.0, 10.0, -10.0)
+    );
+
+    let result = material.lighting(&light, &position, &eye, &normal);
+
+    assert_eq!(Color::new(0.7364, 0.7364, 0.7364), result);
+}
+
+#[test]
+fn lighting_eye_path_reflection_vector() {
+    let value = 2.0_f64.sqrt() / 2.0;
+    let material: Material = Default::default();
+    let position = Tuple::point(0.0, 0.0, 0.0);
+    let eye = Tuple::vector(0.0, -value, -value);
+    let normal = Tuple::vector(0.0, 0.0, -1.0);
+    let light = PointLight::new(
+        Color::new(1.0, 1.0, 1.0),
+        Tuple::point(0.0, 10.0, -10.0)
+    );
+
+    let result = material.lighting(&light, &position, &eye, &normal);
+
+    assert_eq!(Color::new(1.6364, 1.6364, 1.6364), result);
+}
+
+#[test]
+fn lighting_light_behind_surface() {
+    let material: Material = Default::default();
+    let position = Tuple::point(0.0, 0.0, 0.0);
+    let eye = Tuple::vector(0.0, 0.0, -1.0);
+    let normal = Tuple::vector(0.0, 0.0, -1.0);
+    let light = PointLight::new(
+        Color::new(1.0, 1.0, 1.0),
+        Tuple::point(0.0, 0.0, 10.0)
+    );
+
+    let result = material.lighting(&light, &position, &eye, &normal);
+
+    assert_eq!(Color::new(0.1, 0.1, 0.1), result);
 }
