@@ -243,3 +243,24 @@ fn equals_fail_test() {
     other = Tuple::vector(x, y, z);
     assert_ne!(tuple, other);
 }
+
+#[test]
+fn reflect_45_degrees_test() {
+    let v = Tuple::vector(1.0, -1.0, 0.0);
+    let n = Tuple::vector(0.0, 1.0, 0.0);
+
+    let r = v.reflect(&n);
+
+    assert_eq!(Tuple::vector(1.0, 1.0, 0.0), r);
+}
+
+#[test]
+fn reflect_slanted_surface_test() {
+    let value = (2.0_f64).sqrt() / 2.0;
+    let v = Tuple::vector(0.0, -1.0, 0.0);
+    let n = Tuple::vector(value, value, 0.0);
+
+    let r = v.reflect(&n);
+
+    assert_eq!(Tuple::vector(1.0, 0.0, 0.0), r);
+}

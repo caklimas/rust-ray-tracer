@@ -3,7 +3,9 @@ pub mod color;
 pub mod environment;
 pub mod floating_point;
 pub mod intersection;
+pub mod material;
 pub mod matrix;
+pub mod point_light;
 pub mod ray;
 pub mod sphere;
 pub mod tuple;
@@ -33,7 +35,7 @@ fn main() {
 //     }
 
 //     let ppm_string = canvas.to_ppm();
-//     fs::write("/Users/christopherk/Desktop/Files/sample.ppm", ppm_string.as_str()).unwrap();
+//     std::fs::write("/Users/christopherk/Desktop/Files/sample.ppm", ppm_string.as_str()).unwrap();
 // }
 
 // fn canvas_sphere_test() {
@@ -44,9 +46,12 @@ fn main() {
 //     let pixel_size: f64 = wall_size / (canvas_pixels as f64);
 //     let half = wall_size / 2.0;
 //     let mut canvas = canvas::Canvas::new(canvas_pixels, canvas_pixels);
-//     let color = color::Color::new(1.0, 0.0, 0.0);
 //     let mut shape = sphere::Sphere::new();
-//     shape.transform = matrix::transformation::shear(1.0, 0.0, 0.0, 0.0, 0.0, 0.0).scale(0.5, 1.0, 1.0);
+//     let light = PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0));
+//     let mut material: Material = Default::default();
+//     material.color = Color::new(1.0, 0.2, 1.0);
+//     shape.material = material;
+//     shape.transform = matrix::transformation::scale(1.0, 1.0, 1.0);
 
 //     for y in 0..canvas_pixels {
 //         let world_y = half - pixel_size * (y as f64);
@@ -57,12 +62,19 @@ fn main() {
 //             let mut xs = shape.intersect(&ray);
 //             let intersections = intersection::intersections::Intersections::new(&mut xs);
 
-//             if intersections.hit().is_some() {
-//                 canvas.write_pixel(x, y, color);
+//             match intersections.hit() {
+//                 Some(hit) => {
+//                     let position = ray.position(hit.value);
+//                     let normal = hit.object.normal_at(position);
+//                     let eye = ray.direction.negate();
+//                     let color = hit.object.material.lighting(&light, &position, &eye, &normal);
+//                     canvas.write_pixel(x, y, color);
+//                 },
+//                 None => ()
 //             }
 //         }
 //     }
 
 //     let ppm_string = canvas.to_ppm();
-//     std::fs::write(r"C:\Users\Christopher\Desktop\Files/sample.ppm", ppm_string.as_str()).unwrap();
+//     std::fs::write(r"C:\Users\Christopher\Desktop\Files\sample.ppm", ppm_string.as_str()).unwrap();
 // }

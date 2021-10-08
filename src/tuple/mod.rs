@@ -107,4 +107,9 @@ impl Tuple {
             (self.x() * other.y()) - (self.y() * other.x())
         )
     }
+
+    pub fn reflect(&self, normal: &Tuple) -> Tuple {
+        let dot = (*normal * 2.0) * self.dot(&normal);
+        self - &dot
+    }
 }
