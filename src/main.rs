@@ -9,6 +9,7 @@ pub mod point_light;
 pub mod ray;
 pub mod sphere;
 pub mod tuple;
+pub mod world;
 
 fn main() {
     //canvas_sphere_test();
@@ -16,12 +17,12 @@ fn main() {
 
 // fn canvas_test() {
 //     let projectile = environment::projectile::Projectile::new(
-//         tuple::Tuple::point(0.0, 1.0, 0.0), 
+//         tuple::Tuple::point(0.0, 1.0, 0.0),
 //         tuple::Tuple::vector(1.0, 1.8, 0.0).normalize().multiply(11.25)
 //     );
 
 //     let environment = environment::Environment::new(
-//         tuple::Tuple::vector(0.0, -0.1, 0.0), 
+//         tuple::Tuple::vector(0.0, -0.1, 0.0),
 //         tuple::Tuple::vector(-0.01, 0.0, 0.0)
 //     );
 

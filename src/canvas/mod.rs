@@ -9,7 +9,7 @@ pub const PLAIN_PPM_LINE_LENGTH: usize = 69;
 pub struct Canvas {
     pub pixels: Vec<Vec<Color>>,
     width: usize,
-    height: usize
+    height: usize,
 }
 
 impl Canvas {
@@ -26,7 +26,7 @@ impl Canvas {
         Canvas {
             pixels,
             width,
-            height
+            height,
         }
     }
 
@@ -43,7 +43,7 @@ impl Canvas {
         ppm_string.push_str(format!("{}\n", "P3").as_str());
         ppm_string.push_str(format!("{} {}\n", self.width, self.height).as_str());
         ppm_string.push_str("255\n");
-        
+
         for y in 0..self.height {
             let mut row_string = String::new();
             for (x, pixel) in self.pixels[y].iter().enumerate() {
@@ -54,7 +54,7 @@ impl Canvas {
                 }
 
                 row_string.push_str(rounded_color.as_str());
-                
+
                 if x < self.width - 1 {
                     row_string.push(' ');
                 }
@@ -62,7 +62,6 @@ impl Canvas {
 
             ppm_string.push_str(row_string.as_str());
             ppm_string.push('\n');
-            
         }
 
         ppm_string

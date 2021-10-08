@@ -1,4 +1,6 @@
-use crate::{intersection::Intersection, material::Material, matrix::Matrix, ray::Ray, tuple::Tuple};
+use crate::{
+    intersection::Intersection, material::Material, matrix::Matrix, ray::Ray, tuple::Tuple,
+};
 
 #[cfg(test)]
 mod tests;
@@ -7,7 +9,7 @@ mod tests;
 pub struct Sphere {
     center: Tuple,
     pub material: Material,
-    pub transform: Matrix
+    pub transform: Matrix,
 }
 
 impl Sphere {
@@ -15,7 +17,7 @@ impl Sphere {
         Sphere {
             center: Tuple::point(0.0, 0.0, 0.0),
             material: Default::default(),
-            transform: Matrix::identity(4)
+            transform: Matrix::identity(4),
         }
     }
 

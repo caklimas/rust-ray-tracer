@@ -9,7 +9,7 @@ mod tests;
 pub struct Color {
     red: f64,
     green: f64,
-    blue: f64
+    blue: f64,
 }
 
 impl Color {
@@ -45,7 +45,7 @@ impl Color {
         Color {
             red: tuple.x(),
             green: tuple.y(),
-            blue: tuple.z()
+            blue: tuple.z(),
         }
     }
 }

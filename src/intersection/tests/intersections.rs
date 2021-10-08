@@ -1,4 +1,7 @@
-use crate::{intersection::{Intersection, intersections::Intersections}, sphere::Sphere};
+use crate::{
+    intersection::{intersections::Intersections, Intersection},
+    sphere::Sphere,
+};
 
 #[test]
 fn new_test() {

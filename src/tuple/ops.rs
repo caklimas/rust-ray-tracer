@@ -1,13 +1,13 @@
-use crate::floating_point::FloatingPoint;
-use std::{ops::{Add, Div, Mul, Sub}};
 use super::Tuple;
+use crate::floating_point::FloatingPoint;
+use std::ops::{Add, Div, Mul, Sub};
 
 impl PartialEq for Tuple {
     fn eq(&self, other: &Self) -> bool {
-        FloatingPoint::equals(self.x(), other.x()) &&
-        FloatingPoint::equals(self.y(), other.y()) &&
-        FloatingPoint::equals(self.z(), other.z()) &&
-        FloatingPoint::equals(self.w(), other.w())
+        FloatingPoint::equals(self.x(), other.x())
+            && FloatingPoint::equals(self.y(), other.y())
+            && FloatingPoint::equals(self.z(), other.z())
+            && FloatingPoint::equals(self.w(), other.w())
     }
 }
 
@@ -23,7 +23,7 @@ impl Add for Tuple {
             x: self.x() + rhs.x(),
             y: self.y() + rhs.y(),
             z: self.z() + rhs.z(),
-            w: self.w() + rhs.w()
+            w: self.w() + rhs.w(),
         }
     }
 }
@@ -40,7 +40,7 @@ impl Sub for Tuple {
             x: self.x() - rhs.x(),
             y: self.y() - rhs.y(),
             z: self.z() - rhs.z(),
-            w: self.w() - rhs.w()
+            w: self.w() - rhs.w(),
         }
     }
 }
@@ -57,7 +57,7 @@ impl Sub for &Tuple {
             x: self.x() - rhs.x(),
             y: self.y() - rhs.y(),
             z: self.z() - rhs.z(),
-            w: self.w() - rhs.w()
+            w: self.w() - rhs.w(),
         }
     }
 }
@@ -70,7 +70,7 @@ impl Mul<f64> for Tuple {
             x: self.x() * rhs,
             y: self.y() * rhs,
             z: self.z() * rhs,
-            w: self.w() * rhs
+            w: self.w() * rhs,
         }
     }
 }
@@ -83,7 +83,7 @@ impl Div<f64> for Tuple {
             x: self.x() / rhs,
             y: self.y() / rhs,
             z: self.z() / rhs,
-            w: self.w() / rhs
+            w: self.w() / rhs,
         }
     }
 }

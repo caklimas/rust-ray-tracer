@@ -11,7 +11,7 @@ pub struct Tuple {
     x: f64,
     y: f64,
     z: f64,
-    w: f64
+    w: f64,
 }
 
 impl Tuple {
@@ -24,12 +24,7 @@ impl Tuple {
     }
 
     pub fn new(x: f64, y: f64, z: f64, w: f64) -> Self {
-        Tuple {
-            x,
-            y,
-            z,
-            w
-        }
+        Tuple { x, y, z, w }
     }
 
     pub fn x(&self) -> f64 {
@@ -61,16 +56,12 @@ impl Tuple {
             x: -self.x(),
             y: -self.y(),
             z: -self.z(),
-            w: -self.w()
+            w: -self.w(),
         }
     }
 
     pub fn magnitude(&self) -> f64 {
-        let sum =
-            self.x().powi(2) +
-            self.y().powi(2) +
-            self.z().powi(2) +
-            self.w().powi(2);
+        let sum = self.x().powi(2) + self.y().powi(2) + self.z().powi(2) + self.w().powi(2);
 
         sum.sqrt()
     }
@@ -85,15 +76,15 @@ impl Tuple {
             x: self.x() / magnitude,
             y: self.y() / magnitude,
             z: self.z() / magnitude,
-            w: self.w() / magnitude
+            w: self.w() / magnitude,
         }
     }
 
     pub fn dot(&self, other: &Self) -> f64 {
-        (self.x() * other.x()) +
-        (self.y() * other.y()) +
-        (self.z() * other.z()) +
-        (self.w() * other.w())
+        (self.x() * other.x())
+            + (self.y() * other.y())
+            + (self.z() * other.z())
+            + (self.w() * other.w())
     }
 
     pub fn cross(&self, other: &Self) -> Self {
@@ -104,7 +95,7 @@ impl Tuple {
         Self::vector(
             (self.y() * other.z()) - (self.z() * other.y()),
             (self.z() * other.x()) - (self.x() * other.z()),
-            (self.x() * other.y()) - (self.y() * other.x())
+            (self.x() * other.y()) - (self.y() * other.x()),
         )
     }
 

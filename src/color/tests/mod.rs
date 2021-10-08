@@ -1,4 +1,4 @@
-use crate::floating_point::{FloatingPoint};
+use crate::floating_point::FloatingPoint;
 
 use super::Color;
 

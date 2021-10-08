@@ -1,5 +1,5 @@
-use crate::{floating_point::FloatingPoint, tuple::Tuple};
 use super::Matrix;
+use crate::{floating_point::FloatingPoint, tuple::Tuple};
 use std::ops::Mul;
 
 impl PartialEq for Matrix {

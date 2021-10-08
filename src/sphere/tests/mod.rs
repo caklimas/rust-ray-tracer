@@ -1,15 +1,16 @@
 use std::f64::consts::PI;
 
-use crate::{matrix::transformation::{rotate_z, scale, translate}, ray::Ray, tuple::Tuple};
 use super::Sphere;
+use crate::{
+    matrix::transformation::{rotate_z, scale, translate},
+    ray::Ray,
+    tuple::Tuple,
+};
 
 #[test]
 fn intersect_two_points_test() {
     let sphere = Sphere::new();
-    let ray = Ray::new(
-        Tuple::point(0.0, 0.0, -5.0),
-        Tuple::vector(0.0, 0.0, 1.0)
-    );
+    let ray = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
 
     let xs = sphere.intersect(&ray);
 
@@ -21,10 +22,7 @@ fn intersect_two_points_test() {
 #[test]
 fn intersect_tangent_test() {
     let sphere = Sphere::new();
-    let ray = Ray::new(
-        Tuple::point(0.0, 1.0, -5.0),
-        Tuple::vector(0.0, 0.0, 1.0)
-    );
+    let ray = Ray::new(Tuple::point(0.0, 1.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
 
     let xs = sphere.intersect(&ray);
 
@@ -36,10 +34,7 @@ fn intersect_tangent_test() {
 #[test]
 fn intersect_miss_test() {
     let sphere = Sphere::new();
-    let ray = Ray::new(
-        Tuple::point(0.0, 2.0, -5.0),
-        Tuple::vector(0.0, 0.0, 1.0)
-    );
+    let ray = Ray::new(Tuple::point(0.0, 2.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
 
     let xs = sphere.intersect(&ray);
 
@@ -49,10 +44,7 @@ fn intersect_miss_test() {
 #[test]
 fn intersect_inside_sphere_test() {
     let sphere = Sphere::new();
-    let ray = Ray::new(
-        Tuple::point(0.0, 0.0, 0.0),
-        Tuple::vector(0.0, 0.0, 1.0)
-    );
+    let ray = Ray::new(Tuple::point(0.0, 0.0, 0.0), Tuple::vector(0.0, 0.0, 1.0));
 
     let xs = sphere.intersect(&ray);
 
@@ -64,10 +56,7 @@ fn intersect_inside_sphere_test() {
 #[test]
 fn intersect_sphere_behind_ray_test() {
     let sphere = Sphere::new();
-    let ray = Ray::new(
-        Tuple::point(0.0, 0.0, 5.0),
-        Tuple::vector(0.0, 0.0, 1.0)
-    );
+    let ray = Ray::new(Tuple::point(0.0, 0.0, 5.0), Tuple::vector(0.0, 0.0, 1.0));
 
     let xs = sphere.intersect(&ray);
 
@@ -114,7 +103,7 @@ fn intersect_translated_sphere_test() {
 #[test]
 fn normal_x_axis_test() {
     let sphere = Sphere::new();
-    
+
     let n = sphere.normal_at(Tuple::point(1.0, 0.0, 0.0));
 
     assert_eq!(Tuple::vector(1.0, 0.0, 0.0), n);
@@ -123,7 +112,7 @@ fn normal_x_axis_test() {
 #[test]
 fn normal_y_axis_test() {
     let sphere = Sphere::new();
-    
+
     let n = sphere.normal_at(Tuple::point(0.0, 1.0, 0.0));
 
     assert_eq!(Tuple::vector(0.0, 1.0, 0.0), n);
@@ -132,7 +121,7 @@ fn normal_y_axis_test() {
 #[test]
 fn normal_z_axis_test() {
     let sphere = Sphere::new();
-    
+
     let n = sphere.normal_at(Tuple::point(0.0, 0.0, 1.0));
 
     assert_eq!(Tuple::vector(0.0, 0.0, 1.0), n);
@@ -142,7 +131,7 @@ fn normal_z_axis_test() {
 fn normal_nonaxial_axis_test() {
     let sphere = Sphere::new();
     let value = (3.0_f64).sqrt() / 3.0;
-    
+
     let n = sphere.normal_at(Tuple::point(value, value, value));
 
     assert_eq!(Tuple::vector(value, value, value), n);
@@ -152,7 +141,7 @@ fn normal_nonaxial_axis_test() {
 fn normal_is_normalized_vector_test() {
     let sphere = Sphere::new();
     let value = (3.0_f64).sqrt() / 3.0;
-    
+
     let n = sphere.normal_at(Tuple::point(value, value, value));
 
     assert_eq!(n.normalize(), n);
