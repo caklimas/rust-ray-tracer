@@ -1,6 +1,8 @@
-use crate::sphere::Sphere;
+use crate::{ray::Ray, sphere::Sphere};
 
-pub mod intersections;
+use self::intersection_computation::IntersectionComputation;
+
+pub mod intersection_computation;
 
 #[cfg(test)]
 mod tests;
@@ -14,6 +16,16 @@ pub struct Intersection<'a> {
 impl<'a> Intersection<'a> {
     pub fn new(object: &'a Sphere, value: f64) -> Self {
         Intersection { object, value }
+    }
+
+    pub fn prepare_computations(&self, ray: &Ray) -> IntersectionComputation {
+        let point = ray.position(self.value);
+        IntersectionComputation::new(
+            self.value,
+            point,
+            ray.direction.negate(),
+            self.object.normal_at(point),
+        )
     }
 }
 
