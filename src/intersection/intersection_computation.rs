@@ -1,6 +1,7 @@
-use crate::tuple::Tuple;
+use crate::{sphere::Sphere, tuple::Tuple};
 
-pub struct IntersectionComputation {
+pub struct IntersectionComputation<'a> {
+    pub object: &'a Sphere,
     pub value: f64,
     pub point: Tuple,
     pub eye_v: Tuple,
@@ -8,8 +9,15 @@ pub struct IntersectionComputation {
     pub inside: bool,
 }
 
-impl IntersectionComputation {
-    pub fn new(value: f64, point: Tuple, eye_v: Tuple, normal_v: Tuple, inside: bool) -> Self {
+impl<'a> IntersectionComputation<'a> {
+    pub fn new(
+        object: &'a Sphere,
+        value: f64,
+        point: Tuple,
+        eye_v: Tuple,
+        normal_v: Tuple,
+        inside: bool,
+    ) -> Self {
         if !point.is_point() {
             panic!("point must be a point");
         }
@@ -23,6 +31,7 @@ impl IntersectionComputation {
         }
 
         Self {
+            object,
             value,
             point,
             eye_v,

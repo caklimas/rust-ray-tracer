@@ -1,6 +1,14 @@
 use crate::{
-    color::Color, intersection::Intersection, matrix::transformation::scale,
-    point_light::PointLight, ray::Ray, sphere::Sphere, tuple::Tuple,
+    color::Color,
+    intersection::{
+        intersection_computation::IntersectionComputation, intersections::Intersections,
+        Intersection,
+    },
+    matrix::transformation::scale,
+    point_light::PointLight,
+    ray::Ray,
+    sphere::Sphere,
+    tuple::Tuple,
 };
 
 #[cfg(test)]
@@ -12,7 +20,7 @@ pub struct World {
 }
 
 impl World {
-    pub fn intersect(&self, ray: Ray) -> Vec<Intersection> {
+    pub fn intersect(&self, ray: &Ray) -> Vec<Intersection> {
         let mut intersections = Vec::new();
         for o in self.objects.iter() {
             intersections.append(&mut o.intersect(&ray));
@@ -20,6 +28,27 @@ impl World {
 
         intersections.sort_by(|a, b| a.value.partial_cmp(&b.value).unwrap());
         intersections
+    }
+
+    pub fn color_at(&self, ray: &Ray) -> Color {
+        let intersections = Intersections::new(&mut self.intersect(&ray));
+        let hit = intersections.hit();
+        match hit {
+            Some(i) => {
+                let comps = i.prepare_computations(ray);
+                self.shade_hit(&comps)
+            }
+            None => Color::black(),
+        }
+    }
+
+    pub fn shade_hit(&self, computations: &IntersectionComputation) -> Color {
+        computations.object.material.lighting(
+            &self.light,
+            &computations.point,
+            &computations.eye_v,
+            &computations.normal_v,
+        )
     }
 }
 

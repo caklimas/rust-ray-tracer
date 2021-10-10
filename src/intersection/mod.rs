@@ -3,6 +3,7 @@ use crate::{ray::Ray, sphere::Sphere};
 use self::intersection_computation::IntersectionComputation;
 
 pub mod intersection_computation;
+pub mod intersections;
 
 #[cfg(test)]
 mod tests;
@@ -18,7 +19,7 @@ impl<'a> Intersection<'a> {
         Intersection { object, value }
     }
 
-    pub fn prepare_computations(&self, ray: &Ray) -> IntersectionComputation {
+    pub fn prepare_computations(&self, ray: &Ray) -> IntersectionComputation<'a> {
         let point = ray.position(self.value);
         let eye_v = ray.direction.negate();
         let mut normal_v = self.object.normal_at(point);
@@ -28,7 +29,7 @@ impl<'a> Intersection<'a> {
             inside = true;
         }
 
-        IntersectionComputation::new(self.value, point, eye_v, normal_v, inside)
+        IntersectionComputation::new(self.object, self.value, point, eye_v, normal_v, inside)
     }
 }
 
