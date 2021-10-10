@@ -20,12 +20,15 @@ impl<'a> Intersection<'a> {
 
     pub fn prepare_computations(&self, ray: &Ray) -> IntersectionComputation {
         let point = ray.position(self.value);
-        IntersectionComputation::new(
-            self.value,
-            point,
-            ray.direction.negate(),
-            self.object.normal_at(point),
-        )
+        let eye_v = ray.direction.negate();
+        let mut normal_v = self.object.normal_at(point);
+        let mut inside = false;
+        if normal_v.dot(&eye_v) < 0.0 {
+            normal_v = normal_v.negate();
+            inside = true;
+        }
+
+        IntersectionComputation::new(self.value, point, eye_v, normal_v, inside)
     }
 }
 

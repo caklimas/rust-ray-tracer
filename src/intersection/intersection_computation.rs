@@ -5,10 +5,11 @@ pub struct IntersectionComputation {
     pub point: Tuple,
     pub eye_v: Tuple,
     pub normal_v: Tuple,
+    pub inside: bool,
 }
 
 impl IntersectionComputation {
-    pub fn new(value: f64, point: Tuple, eye_v: Tuple, normal_v: Tuple) -> Self {
+    pub fn new(value: f64, point: Tuple, eye_v: Tuple, normal_v: Tuple, inside: bool) -> Self {
         if !point.is_point() {
             panic!("point must be a point");
         }
@@ -26,6 +27,7 @@ impl IntersectionComputation {
             point,
             eye_v,
             normal_v,
+            inside,
         }
     }
 }
