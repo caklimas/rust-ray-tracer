@@ -3,6 +3,7 @@ use material::Material;
 use point_light::PointLight;
 use tuple::Tuple;
 
+pub mod camera;
 pub mod canvas;
 pub mod color;
 pub mod environment;
