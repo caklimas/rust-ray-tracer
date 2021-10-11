@@ -4,7 +4,10 @@ use crate::{
         intersection_computation::IntersectionComputation, intersections::Intersections,
         Intersection,
     },
-    matrix::transformation::scale,
+    matrix::{
+        transformation::{scale, translate},
+        Matrix,
+    },
     point_light::PointLight,
     ray::Ray,
     sphere::Sphere,
@@ -68,4 +71,29 @@ impl Default for World {
             objects: vec![s1, s2],
         }
     }
+}
+
+pub fn view_transform(from: &Tuple, to: &Tuple, up: &Tuple) -> Matrix {
+    let forward: Tuple = (to - from).normalize();
+    let left = forward.cross(&up.normalize());
+    let true_up = left.cross(&forward);
+    let negated_forward = forward.negate();
+    let negated_from = from.negate();
+    let orientation = Matrix::new(
+        4,
+        4,
+        Some(vec![
+            vec![left.x(), left.y(), left.z(), 0.0],
+            vec![true_up.x(), true_up.y(), true_up.z(), 0.0],
+            vec![
+                negated_forward.x(),
+                negated_forward.y(),
+                negated_forward.z(),
+                0.0,
+            ],
+            vec![0.0, 0.0, 0.0, 1.0],
+        ]),
+    );
+
+    orientation * translate(negated_from.x(), negated_from.y(), negated_from.z())
 }

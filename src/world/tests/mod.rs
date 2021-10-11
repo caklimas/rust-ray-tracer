@@ -1,8 +1,16 @@
 use crate::{
-    color::Color, intersection::Intersection, point_light::PointLight, ray::Ray, tuple::Tuple,
+    color::Color,
+    intersection::Intersection,
+    matrix::{
+        transformation::{scale, translate},
+        Matrix,
+    },
+    point_light::PointLight,
+    ray::Ray,
+    tuple::Tuple,
 };
 
-use super::World;
+use super::{view_transform, World};
 
 #[test]
 fn intersect_test() {
@@ -78,4 +86,60 @@ fn color_at_behind_ray() {
     let c = world.color_at(&ray);
 
     assert_eq!(world.objects[1].material.color, c);
+}
+
+#[test]
+fn view_transform_default_orientation_test() {
+    let t = view_transform(
+        &Tuple::point(0.0, 0.0, 0.0),
+        &Tuple::point(0.0, 0.0, -1.0),
+        &Tuple::vector(0.0, 1.0, 0.0),
+    );
+
+    assert_eq!(Matrix::identity(4), t);
+}
+
+#[test]
+fn view_transform_positive_z_test() {
+    let t = view_transform(
+        &Tuple::point(0.0, 0.0, 0.0),
+        &Tuple::point(0.0, 0.0, 1.0),
+        &Tuple::vector(0.0, 1.0, 0.0),
+    );
+
+    assert_eq!(scale(-1.0, 1.0, -1.0), t);
+}
+
+#[test]
+fn view_transformation_moves_world_test() {
+    let t = view_transform(
+        &Tuple::point(0.0, 0.0, 8.0),
+        &Tuple::point(0.0, 0.0, 0.0),
+        &Tuple::vector(0.0, 1.0, 0.0),
+    );
+
+    assert_eq!(translate(0.0, 0.0, -8.0), t);
+}
+
+#[test]
+fn view_transformation_arbitrary_test() {
+    let t = view_transform(
+        &Tuple::point(1.0, 3.0, 2.0),
+        &Tuple::point(4.0, -2.0, 8.0),
+        &Tuple::vector(1.0, 1.0, 0.0),
+    );
+
+    assert_eq!(
+        Matrix::new(
+            4,
+            4,
+            Some(vec![
+                vec![-0.50709, 0.50709, 0.67612, -2.36643],
+                vec![0.76772, 0.60609, 0.12122, -2.82843],
+                vec![-0.35857, 0.59761, -0.71714, 0.00000],
+                vec![0.00000, 0.00000, 0.00000, 1.00000]
+            ])
+        ),
+        t
+    );
 }
