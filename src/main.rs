@@ -3,7 +3,7 @@ use std::f64::consts::{FRAC_PI_2, FRAC_PI_3, FRAC_PI_4};
 use canvas::Canvas;
 use color::Color;
 use material::Material;
-use matrix::transformation::{rotate_x, rotate_y, scale, translate};
+use matrix::transformation::{scale, translate};
 use point_light::PointLight;
 use sphere::Sphere;
 use tuple::Tuple;
@@ -26,6 +26,7 @@ pub mod tuple;
 pub mod world;
 
 fn main() {
+    canvas_sphere_test();
     camera_world_test();
 }
 
@@ -69,7 +70,7 @@ fn canvas_sphere_test() {
         }
     }
 
-    write_to_file(&canvas);
+    write_to_file(&canvas, r"C:\Users\Christopher\Desktop\Files\sphere.ppm");
 }
 
 fn camera_world_test() {
@@ -131,13 +132,13 @@ fn camera_world_test() {
     );
 
     let canvas = camera.render(&world);
-    write_to_file(&canvas);
+    write_to_file(&canvas, r"C:\Users\Christopher\Desktop\Files\scene.ppm");
 }
 
-fn write_to_file(canvas: &Canvas) {
+fn write_to_file(canvas: &Canvas, path: &str) {
     let ppm_string = canvas.to_ppm();
     std::fs::write(
-        r"C:\Users\Christopher\Desktop\Files\sample.ppm",
+        path,
         ppm_string.as_str(),
     )
     .unwrap();
