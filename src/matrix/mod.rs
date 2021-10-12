@@ -1,4 +1,4 @@
-use crate::{floating_point::FloatingPoint};
+use crate::floating_point::FloatingPoint;
 
 pub mod axis;
 pub mod ops;
@@ -11,7 +11,7 @@ mod tests;
 pub struct Matrix {
     pub rows: usize,
     pub columns: usize,
-    pub elements: Vec<Vec<f64>>
+    pub elements: Vec<Vec<f64>>,
 }
 
 impl Matrix {
@@ -24,7 +24,7 @@ impl Matrix {
             return Matrix {
                 rows,
                 columns,
-                elements: matrix_elements
+                elements: matrix_elements,
             };
         }
 
@@ -40,7 +40,7 @@ impl Matrix {
         Matrix {
             rows,
             columns,
-            elements
+            elements,
         }
     }
 
@@ -73,7 +73,8 @@ impl Matrix {
 
     pub fn determinant(&self) -> f64 {
         if self.rows == 2 && self.columns == 2 {
-            return (self.elements[0][0] * self.elements[1][1]) - (self.elements[0][1] * self.elements[1][0]);
+            return (self.elements[0][0] * self.elements[1][1])
+                - (self.elements[0][1] * self.elements[1][0]);
         }
 
         let mut determinant = 0.0;
@@ -107,7 +108,11 @@ impl Matrix {
             submatrix_elements.push(sub_elements);
         }
 
-        Matrix::new(self.rows - 1, self.columns - 1, Option::Some(submatrix_elements))
+        Matrix::new(
+            self.rows - 1,
+            self.columns - 1,
+            Option::Some(submatrix_elements),
+        )
     }
 
     pub fn minor(&self, row: usize, column: usize) -> f64 {
@@ -117,7 +122,11 @@ impl Matrix {
 
     pub fn cofactor(&self, row: usize, column: usize) -> f64 {
         let minor = self.minor(row, column);
-        if (row + column) % 2 == 0 { minor } else { minor * -1.0 }
+        if (row + column) % 2 == 0 {
+            minor
+        } else {
+            minor * -1.0
+        }
     }
 
     pub fn inverse(&self) -> Matrix {

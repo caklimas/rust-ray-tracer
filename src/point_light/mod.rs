@@ -6,7 +6,7 @@ mod tests;
 #[derive(PartialEq)]
 pub struct PointLight {
     pub intensity: Color,
-    pub position: Tuple
+    pub position: Tuple,
 }
 
 impl PointLight {
@@ -17,7 +17,7 @@ impl PointLight {
 
         Self {
             intensity,
-            position
+            position,
         }
     }
 }

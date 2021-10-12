@@ -1,5 +1,5 @@
-use crate::color::Color;
 use super::Canvas;
+use crate::color::Color;
 
 #[test]
 fn new_test() {
@@ -8,10 +8,10 @@ fn new_test() {
     let canvas = Canvas::new(width, height);
 
     assert_eq!(height, canvas.pixels.len());
-    
+
     for row in canvas.pixels {
         assert_eq!(width, row.len());
-        
+
         for color in row {
             assert_eq!(color, Color::black());
         }

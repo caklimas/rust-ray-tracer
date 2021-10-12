@@ -5,7 +5,7 @@ mod tests;
 
 pub struct Ray {
     pub origin: Tuple,
-    pub direction: Tuple
+    pub direction: Tuple,
 }
 
 impl Ray {
@@ -18,10 +18,7 @@ impl Ray {
             panic!("Direction must be a vector");
         }
 
-        Self {
-            origin,
-            direction
-        }
+        Self { origin, direction }
     }
 
     pub fn position(&self, t: f64) -> Tuple {
@@ -31,7 +28,7 @@ impl Ray {
     pub fn transform(&self, transformation: &Matrix) -> Self {
         Ray::new(
             transformation * self.origin,
-            transformation * self.direction
+            transformation * self.direction,
         )
     }
 }

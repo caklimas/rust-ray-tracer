@@ -1,4 +1,4 @@
-use super::{Matrix, axis::Axis};
+use super::{axis::Axis, Matrix};
 
 pub fn translate(x: f64, y: f64, z: f64) -> Matrix {
     let mut translation = Matrix::identity(4);
@@ -22,7 +22,7 @@ pub fn reflect(axis: Axis) -> Matrix {
     match axis {
         Axis::X => scale(-1.0, 1.0, 1.0),
         Axis::Y => scale(1.0, -1.0, 1.0),
-        Axis::Z => scale(1.0, 1.0, -1.0)
+        Axis::Z => scale(1.0, 1.0, -1.0),
     }
 }
 
@@ -36,7 +36,6 @@ pub fn rotate_x(radians: f64) -> Matrix {
     rotation.elements[2][2] = cos;
 
     rotation
-
 }
 
 pub fn rotate_y(radians: f64) -> Matrix {
@@ -49,7 +48,6 @@ pub fn rotate_y(radians: f64) -> Matrix {
     rotation.elements[2][2] = cos;
 
     rotation
-
 }
 
 pub fn rotate_z(radians: f64) -> Matrix {
@@ -62,7 +60,6 @@ pub fn rotate_z(radians: f64) -> Matrix {
     rotation.elements[1][1] = cos;
 
     rotation
-
 }
 
 pub fn shear(xy: f64, xz: f64, yx: f64, yz: f64, zx: f64, zy: f64) -> Matrix {

@@ -3,7 +3,7 @@ use crate::tuple::Tuple;
 #[derive(Clone)]
 pub struct Projectile {
     pub position: Tuple,
-    pub velocity: Tuple
+    pub velocity: Tuple,
 }
 
 impl Projectile {
@@ -12,9 +12,6 @@ impl Projectile {
             panic!("Position must be a point and velocity must be a vector.");
         }
 
-        Projectile {
-            position,
-            velocity
-        }
+        Projectile { position, velocity }
     }
 }

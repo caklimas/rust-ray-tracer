@@ -1,5 +1,5 @@
-use crate::tuple::Tuple;
 use self::projectile::Projectile;
+use crate::tuple::Tuple;
 
 pub mod projectile;
 
@@ -8,7 +8,7 @@ mod tests;
 
 pub struct Environment {
     pub gravity: Tuple,
-    pub wind: Tuple
+    pub wind: Tuple,
 }
 
 impl Environment {
@@ -17,16 +17,13 @@ impl Environment {
             panic!("Gravity and wind must both be vectors");
         }
 
-        Environment {
-            gravity,
-            wind
-        }
+        Environment { gravity, wind }
     }
 
     pub fn tick(&self, projectile: &Projectile) -> Projectile {
         Projectile {
             position: projectile.position + projectile.velocity,
-            velocity: projectile.velocity + self.gravity + self.wind
+            velocity: projectile.velocity + self.gravity + self.wind,
         }
     }
 }

@@ -1,6 +1,6 @@
+use crate::matrix::{transformation::*, Matrix};
+use crate::{matrix::axis::Axis, tuple::Tuple};
 use std::f64::consts::PI;
-use crate::matrix::{Matrix, transformation::*};
-use crate::{matrix::{axis::Axis}, tuple::Tuple};
 
 #[test]
 fn translation_test() {
@@ -55,9 +55,15 @@ fn rotate_x_test() {
     let half_quarter_result = (2.0f64).sqrt() / 2.0;
     let inverse = half_quarter.inverse();
 
-    assert_eq!(Tuple::point(0.0, half_quarter_result, half_quarter_result), half_quarter_actual);
+    assert_eq!(
+        Tuple::point(0.0, half_quarter_result, half_quarter_result),
+        half_quarter_actual
+    );
     assert_eq!(Tuple::point(0.0, 0.0, 1.0), full_quarter_actual);
-    assert_eq!(Tuple::point(0.0, half_quarter_result, -half_quarter_result), inverse * point);
+    assert_eq!(
+        Tuple::point(0.0, half_quarter_result, -half_quarter_result),
+        inverse * point
+    );
 }
 
 #[test]
@@ -69,7 +75,10 @@ fn rotate_y_test() {
     let full_quarter_actual = full_quarter * point;
     let half_quarter_result = (2.0f64).sqrt() / 2.0;
 
-    assert_eq!(Tuple::point(half_quarter_result, 0.0, half_quarter_result), half_quarter_actual);
+    assert_eq!(
+        Tuple::point(half_quarter_result, 0.0, half_quarter_result),
+        half_quarter_actual
+    );
     assert_eq!(Tuple::point(1.0, 0.0, 0.0), full_quarter_actual);
 }
 
@@ -82,7 +91,10 @@ fn rotate_z_test() {
     let full_quarter_actual = full_quarter * point;
     let half_quarter_result = (2.0f64).sqrt() / 2.0;
 
-    assert_eq!(Tuple::point(-half_quarter_result, half_quarter_result, 0.0), half_quarter_actual);
+    assert_eq!(
+        Tuple::point(-half_quarter_result, half_quarter_result, 0.0),
+        half_quarter_actual
+    );
     assert_eq!(Tuple::point(-1.0, 0.0, 0.0), full_quarter_actual);
 }
 
@@ -90,32 +102,32 @@ fn rotate_z_test() {
 fn shearing_test() {
     let sheared = shear(1.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     let point = Tuple::point(2.0, 3.0, 4.0);
-    
+
     assert_eq!(Tuple::point(5.0, 3.0, 4.0), sheared * point);
 
     let sheared = shear(0.0, 1.0, 0.0, 0.0, 0.0, 0.0);
     let point = Tuple::point(2.0, 3.0, 4.0);
-    
+
     assert_eq!(Tuple::point(6.0, 3.0, 4.0), sheared * point);
 
     let sheared = shear(0.0, 0.0, 1.0, 0.0, 0.0, 0.0);
     let point = Tuple::point(2.0, 3.0, 4.0);
-    
+
     assert_eq!(Tuple::point(2.0, 5.0, 4.0), sheared * point);
 
     let sheared = shear(0.0, 0.0, 0.0, 1.0, 0.0, 0.0);
     let point = Tuple::point(2.0, 3.0, 4.0);
-    
+
     assert_eq!(Tuple::point(2.0, 7.0, 4.0), sheared * point);
 
     let sheared = shear(0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
     let point = Tuple::point(2.0, 3.0, 4.0);
-    
+
     assert_eq!(Tuple::point(2.0, 3.0, 6.0), sheared * point);
 
     let sheared = shear(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
     let point = Tuple::point(2.0, 3.0, 4.0);
-    
+
     assert_eq!(Tuple::point(2.0, 3.0, 7.0), sheared * point);
 }
 
@@ -144,13 +156,16 @@ fn chained_transformation_reverse_order() {
     let c = translate(10.0, 5.0, 7.0);
 
     let t = c * b * a;
-    
+
     assert_eq!(Tuple::point(15.0, 0.0, 7.0), t * p);
 }
 
 #[test]
 fn fluent_api() {
     let p = Tuple::point(1.0, 0.0, 1.0);
-    let transform = Matrix::identity(4).rotate_x(PI / 2.0).scale(5.0, 5.0, 5.0).translate(10.0, 5.0, 7.0);
+    let transform = Matrix::identity(4)
+        .rotate_x(PI / 2.0)
+        .scale(5.0, 5.0, 5.0)
+        .translate(10.0, 5.0, 7.0);
     assert_eq!(Tuple::point(15.0, 0.0, 7.0), transform * p);
 }

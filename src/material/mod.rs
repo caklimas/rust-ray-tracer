@@ -1,5 +1,5 @@
-use std::ops::RangeInclusive;
 use crate::{color::Color, point_light::PointLight, tuple::Tuple};
+use std::ops::RangeInclusive;
 
 #[cfg(test)]
 mod tests;
@@ -12,7 +12,7 @@ pub struct Material {
     pub ambient: f64,
     pub diffuse: f64,
     pub specular: f64,
-    pub shininess: f64
+    pub shininess: f64,
 }
 
 impl Material {
@@ -30,11 +30,17 @@ impl Material {
             ambient,
             diffuse,
             specular,
-            shininess
+            shininess,
         }
     }
 
-    pub fn lighting(&self, light: &PointLight, position: &Tuple, eye: &Tuple, normal: &Tuple) -> Color {
+    pub fn lighting(
+        &self,
+        light: &PointLight,
+        position: &Tuple,
+        eye: &Tuple,
+        normal: &Tuple,
+    ) -> Color {
         // Combine the surface color with the light's color/intensity
         let effective_color = self.color * light.intensity;
 
@@ -44,9 +50,9 @@ impl Material {
         // Compute the ambient contribution
         let ambient = effective_color * self.ambient;
 
-        /* 
-            light_dot_normal represents the cosine of the angle between the​ 
-            light vector and the normal vector. A negative number means the​ ​  
+        /*
+            light_dot_normal represents the cosine of the angle between the​
+            light vector and the normal vector. A negative number means the​ ​
             light is on the other side of the surface.​
         */
         let light_dot_normal = light_v.dot(normal);
@@ -83,11 +89,16 @@ impl Default for Material {
             ambient: 0.1,
             diffuse: 0.9,
             specular: 0.9,
-            shininess: 200.0
+            shininess: 200.0,
         }
     }
 }
 
 fn panic_reflection(name: &str) {
-    panic!("{} must be between {} and {}", name, REFLECTION_RANGE.start(), REFLECTION_RANGE.end());
+    panic!(
+        "{} must be between {} and {}",
+        name,
+        REFLECTION_RANGE.start(),
+        REFLECTION_RANGE.end()
+    );
 }

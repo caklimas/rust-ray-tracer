@@ -1,5 +1,5 @@
-use crate::floating_point::FloatingPoint;
 use super::{Tuple, POINT_W, VECTOR_W};
+use crate::floating_point::FloatingPoint;
 
 #[test]
 fn new_test() {
@@ -186,14 +186,13 @@ fn dot_test() {
     let tuple = Tuple::vector(1.0, 2.0, 3.0);
     let dot = tuple.dot(&Tuple::vector(2.0, 3.0, 4.0));
     assert_eq!(true, FloatingPoint::equals(20.0, dot));
-    
 }
 
 #[test]
 fn cross_test() {
     let tuple = Tuple::vector(1.0, 2.0, 3.0);
     let other = Tuple::vector(2.0, 3.0, 4.0);
-    
+
     let mut cross = tuple.cross(&other);
     assert_eq!(cross, Tuple::vector(-1.0, 2.0, -1.0));
 

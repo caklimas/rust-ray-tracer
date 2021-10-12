@@ -1,4 +1,7 @@
-use crate::{matrix::{transformation::{scale, translate}}, tuple::Tuple};
+use crate::{
+    matrix::transformation::{scale, translate},
+    tuple::Tuple,
+};
 
 use super::Ray;
 
@@ -27,7 +30,7 @@ fn new_direction_panic_test() {
 #[test]
 fn position_test() {
     let ray = Ray::new(Tuple::point(2.0, 3.0, 4.0), Tuple::vector(1.0, 0.0, 0.0));
-    
+
     assert_eq!(Tuple::point(2.0, 3.0, 4.0), ray.position(0.0));
     assert_eq!(Tuple::point(3.0, 3.0, 4.0), ray.position(1.0));
     assert_eq!(Tuple::point(1.0, 3.0, 4.0), ray.position(-1.0));

@@ -1,5 +1,5 @@
-use std::ops::{Add, Mul, Sub};
 use super::Color;
+use std::ops::{Add, Mul, Sub};
 
 impl PartialEq for Color {
     fn eq(&self, other: &Self) -> bool {
@@ -32,7 +32,7 @@ impl Mul for Color {
         Color {
             red: self.red() * rhs.red(),
             green: self.green() * rhs.green(),
-            blue: self.blue() * rhs.blue()
+            blue: self.blue() * rhs.blue(),
         }
     }
 }

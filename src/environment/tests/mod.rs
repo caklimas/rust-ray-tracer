@@ -1,36 +1,30 @@
+use super::{projectile::Projectile, Environment};
 use crate::tuple::Tuple;
-use super::{Environment, projectile::Projectile};
 
 pub mod projectile;
 
 #[test]
 #[should_panic]
 fn new_gravity_panic_test() {
-    Environment::new(
-        Tuple::point(0.0, 0.0, 0.0),
-        Tuple::vector(0.0, 0.0, 0.0)
-    );
+    Environment::new(Tuple::point(0.0, 0.0, 0.0), Tuple::vector(0.0, 0.0, 0.0));
 }
 
 #[test]
 #[should_panic]
 fn new_wind_panic_test() {
-    Environment::new(
-        Tuple::vector(0.0, 0.0, 0.0),
-        Tuple::point(0.0, 0.0, 0.0)
-    );
+    Environment::new(Tuple::vector(0.0, 0.0, 0.0), Tuple::point(0.0, 0.0, 0.0));
 }
 
 #[test]
 fn tick_test() {
     let projectile = Projectile {
         position: Tuple::point(0.0, 1.0, 0.0),
-        velocity: Tuple::vector(2.0, 2.0, 0.0).normalize()
+        velocity: Tuple::vector(2.0, 2.0, 0.0).normalize(),
     };
 
     let environment = Environment {
         gravity: Tuple::vector(0.0, -0.1, 0.0),
-        wind: Tuple::vector(-0.01, 0.0, 0.0)
+        wind: Tuple::vector(-0.01, 0.0, 0.0),
     };
 
     let mut result = environment.tick(&projectile);
