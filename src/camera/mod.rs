@@ -1,4 +1,4 @@
-use crate::matrix::Matrix;
+use crate::{matrix::Matrix, ray::Ray, tuple::Tuple};
 
 #[cfg(test)]
 mod tests;
@@ -68,5 +68,16 @@ impl Camera {
 
     pub fn pixel_size(&self) -> &f64 {
         &self.pixel_size
+    }
+
+    pub fn ray_for_pixel(&self, x: usize, y: usize) -> Ray {
+        let x_offset = ((x as f64) + 0.5) * self.pixel_size;
+        let y_offset = ((y as f64) + 0.5) * self.pixel_size;
+        let world_x = self.half_width - x_offset;
+        let world_y = self.half_height - y_offset;
+        let pixel = self.transform.inverse() * Tuple::point(world_x, world_y, -1.0);
+        let origin = self.transform.inverse() * Tuple::point(0.0, 0.0, 0.0);
+        let direction = (pixel - origin).normalize();
+        Ray::new(origin, direction)
     }
 }

@@ -1,6 +1,6 @@
-use std::f64::consts::FRAC_PI_2;
+use std::f64::consts::{FRAC_PI_2, FRAC_PI_4};
 
-use crate::floating_point::FloatingPoint;
+use crate::{floating_point::FloatingPoint, matrix::transformation::{rotate_y, translate}, tuple::Tuple};
 
 use super::Camera;
 
@@ -16,4 +16,36 @@ fn pixel_size_vertical_canvas_test() {
     let c = Camera::new(125, 200, FRAC_PI_2);
 
     assert_eq!(true, FloatingPoint::equals(0.01, *c.pixel_size()));
+}
+
+#[test]
+fn ray_for_pixel_center_of_canvas_test() {
+    let c = Camera::new(201, 101, FRAC_PI_2);
+
+    let r = c.ray_for_pixel(100, 50);
+
+    assert_eq!(Tuple::point(0.0, 0.0, 0.0), r.origin);
+    assert_eq!(Tuple::vector(0.0, 0.0, -1.0), r.direction);
+}
+
+#[test]
+fn ray_for_pixel_corner_of_canvas_test() {
+    let c = Camera::new(201, 101, FRAC_PI_2);
+
+    let r = c.ray_for_pixel(0, 0);
+
+    assert_eq!(Tuple::point(0.0, 0.0, 0.0), r.origin);
+    assert_eq!(Tuple::vector(0.66519, 0.33259, -0.66851), r.direction);
+}
+
+#[test]
+fn ray_for_pixel_camera_transformed_test() {
+    let mut c = Camera::new(201, 101, FRAC_PI_2);
+    c.transform = rotate_y(FRAC_PI_4) * translate(0.0, -2.0, 5.0);
+    let x_z_result = (2.0_f64).sqrt() / 2.0;
+
+    let r = c.ray_for_pixel(100, 50);
+
+    assert_eq!(Tuple::point(0.0, 2.0, -5.0), r.origin);
+    assert_eq!(Tuple::vector(x_z_result, 0.0, -x_z_result), r.direction);
 }
