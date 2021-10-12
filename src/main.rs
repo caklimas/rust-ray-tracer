@@ -118,7 +118,7 @@ fn camera_world_test() {
     left.material.diffuse = 0.7;
     left.material.specular = 0.3;
 
-    let mut world = World::new(
+    let world = World::new(
         PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0)),
         vec![floor, left_wall, right_wall, middle, right, left],
     );
