@@ -1,7 +1,15 @@
+use std::f64::consts::{FRAC_PI_2, FRAC_PI_3, FRAC_PI_4};
+
+use canvas::Canvas;
 use color::Color;
 use material::Material;
+use matrix::transformation::{rotate_x, rotate_y, scale, translate};
 use point_light::PointLight;
+use sphere::Sphere;
 use tuple::Tuple;
+use world::World;
+
+use crate::{camera::Camera, world::view_transform};
 
 pub mod camera;
 pub mod canvas;
@@ -18,7 +26,7 @@ pub mod tuple;
 pub mod world;
 
 fn main() {
-    canvas_sphere_test();
+    camera_world_test();
 }
 
 fn canvas_sphere_test() {
@@ -61,9 +69,75 @@ fn canvas_sphere_test() {
         }
     }
 
+    write_to_file(&canvas);
+}
+
+fn camera_world_test() {
+    let mut floor = Sphere::new();
+    floor.transform = scale(10.0, 0.01, 10.0);
+    floor.material = Default::default();
+    floor.material.color = Color::new(1.0, 0.9, 0.9);
+    floor.material.specular = 0.0;
+
+    let mut left_wall = Sphere::new();
+    left_wall.transform = scale(10.0, 0.01, 10.0)
+        .rotate_x(FRAC_PI_2)
+        .rotate_y(-FRAC_PI_4)
+        .translate(0.0, 0.0, 5.0);
+    left_wall.material = Default::default();
+    left_wall.material.color = Color::new(1.0, 0.9, 0.9);
+    left_wall.material.specular = 0.0;
+
+    let mut right_wall = Sphere::new();
+    right_wall.transform = scale(10.0, 0.01, 10.0)
+        .rotate_x(FRAC_PI_2)
+        .rotate_y(FRAC_PI_4)
+        .translate(0.0, 0.0, 5.0);
+    right_wall.material = Default::default();
+    right_wall.material.color = Color::new(1.0, 0.9, 0.9);
+    right_wall.material.specular = 0.0;
+
+    let mut middle = Sphere::new();
+    middle.transform = translate(-0.5, 1.0, 0.5);
+    middle.material = Default::default();
+    middle.material.color = Color::new(0.1, 1.0, 0.5);
+    middle.material.diffuse = 0.7;
+    middle.material.specular = 0.3;
+
+    let mut right = Sphere::new();
+    right.transform = scale(0.5, 0.5, 0.5).translate(1.5, 0.5, -0.5);
+    right.material = Default::default();
+    right.material.color = Color::new(0.5, 1.0, 0.1);
+    right.material.diffuse = 0.7;
+    right.material.specular = 0.3;
+
+    let mut left = Sphere::new();
+    left.transform = scale(0.33, 0.33, 0.33).translate(-1.5, 0.33, -0.75);
+    left.material = Default::default();
+    left.material.color = Color::new(1.0, 0.8, 0.1);
+    left.material.diffuse = 0.7;
+    left.material.specular = 0.3;
+
+    let mut world = World::new(
+        PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0)),
+        vec![floor, left_wall, right_wall, middle, right, left],
+    );
+
+    let mut camera = Camera::new(100, 50, FRAC_PI_3);
+    camera.transform = view_transform(
+        &Tuple::point(0.0, 1.5, -5.0),
+        &Tuple::point(0.0, 1.0, 0.0),
+        &Tuple::vector(0.0, 1.0, 0.0),
+    );
+
+    let canvas = camera.render(&world);
+    write_to_file(&canvas);
+}
+
+fn write_to_file(canvas: &Canvas) {
     let ppm_string = canvas.to_ppm();
     std::fs::write(
-        r"C:\Users\cakli\Desktop\Files\sample.ppm",
+        r"C:\Users\Christopher\Desktop\Files\sample.ppm",
         ppm_string.as_str(),
     )
     .unwrap();

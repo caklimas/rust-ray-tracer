@@ -23,6 +23,10 @@ pub struct World {
 }
 
 impl World {
+    pub fn new(light: PointLight, objects: Vec<Sphere>) -> Self {
+        Self { light, objects }
+    }
+
     pub fn intersect(&self, ray: &Ray) -> Vec<Intersection> {
         let mut intersections = Vec::new();
         for o in self.objects.iter() {
@@ -66,10 +70,7 @@ impl Default for World {
         let mut s2 = Sphere::new();
         s2.transform = scale(0.5, 0.5, 0.5);
 
-        Self {
-            light,
-            objects: vec![s1, s2],
-        }
+        Self::new(light, vec![s1, s2])
     }
 }
 

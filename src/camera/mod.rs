@@ -1,4 +1,4 @@
-use crate::{matrix::Matrix, ray::Ray, tuple::Tuple};
+use crate::{canvas::Canvas, matrix::Matrix, ray::Ray, tuple::Tuple, world::World};
 
 #[cfg(test)]
 mod tests;
@@ -7,18 +7,15 @@ pub struct Camera {
     horizontal_size: usize,
     vertical_size: usize,
     field_of_view: f64,
-    transform: Matrix,
     half_width: f64,
     half_height: f64,
-    pixel_size: f64
+    pixel_size: f64,
+    pub transform: Matrix,
 }
 
 impl Camera {
-    pub fn new(horizontal_size: usize,
-        vertical_size: usize,
-        field_of_view: f64) -> Self {
-
-            let half_view = (field_of_view / 2.0).tan();
+    pub fn new(horizontal_size: usize, vertical_size: usize, field_of_view: f64) -> Self {
+        let half_view = (field_of_view / 2.0).tan();
         let aspect = (horizontal_size as f64) / (vertical_size as f64);
         let half_width: f64;
         let half_height: f64;
@@ -38,7 +35,7 @@ impl Camera {
             transform: Matrix::identity(4),
             half_width,
             half_height,
-            pixel_size: (half_width * 2.0) / (horizontal_size as f64)
+            pixel_size: (half_width * 2.0) / (horizontal_size as f64),
         }
     }
 
@@ -79,5 +76,18 @@ impl Camera {
         let origin = self.transform.inverse() * Tuple::point(0.0, 0.0, 0.0);
         let direction = (pixel - origin).normalize();
         Ray::new(origin, direction)
+    }
+
+    pub fn render(&self, world: &World) -> Canvas {
+        let mut image = Canvas::new(self.horizontal_size, self.vertical_size);
+        for y in 0..self.vertical_size {
+            for x in 0..self.horizontal_size {
+                let ray = self.ray_for_pixel(x, y);
+                let color = world.color_at(&ray);
+                image.write_pixel(x, y, color);
+            }
+        }
+
+        image
     }
 }

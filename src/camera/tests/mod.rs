@@ -1,6 +1,12 @@
 use std::f64::consts::{FRAC_PI_2, FRAC_PI_4};
 
-use crate::{floating_point::FloatingPoint, matrix::transformation::{rotate_y, translate}, tuple::Tuple};
+use crate::{
+    color::Color,
+    floating_point::FloatingPoint,
+    matrix::transformation::{rotate_y, translate},
+    tuple::Tuple,
+    world::{view_transform, World},
+};
 
 use super::Camera;
 
@@ -48,4 +54,18 @@ fn ray_for_pixel_camera_transformed_test() {
 
     assert_eq!(Tuple::point(0.0, 2.0, -5.0), r.origin);
     assert_eq!(Tuple::vector(x_z_result, 0.0, -x_z_result), r.direction);
+}
+
+#[test]
+fn render_test() {
+    let world: World = Default::default();
+    let mut camera = Camera::new(11, 11, FRAC_PI_2);
+    let from = Tuple::point(0.0, 0.0, -5.0);
+    let to = Tuple::point(0.0, 0.0, 0.0);
+    let up = Tuple::vector(0.0, 1.0, 0.0);
+    camera.transform = view_transform(&from, &to, &up);
+
+    let image = camera.render(&world);
+
+    assert_eq!(Color::new(0.38066, 0.47583, 0.2855), image.pixels[5][5]);
 }
