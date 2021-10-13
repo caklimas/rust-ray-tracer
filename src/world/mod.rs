@@ -58,11 +58,26 @@ impl World {
             false,
         )
     }
+
+    pub fn is_shadowed(&self, point: &Tuple) -> bool {
+        let v = &self.light.position - point;
+        let distance = v.magnitude();
+        let direction = v.normalize();
+
+        let r = Ray::new(point.clone(), direction);
+        let mut intersect = self.intersect(&r);
+        let intersections = Intersections::new(&mut intersect);
+        if let Some(h) = intersections.hit() {
+            h.value < distance
+        } else {
+            false
+        }
+    }
 }
 
 impl Default for World {
     fn default() -> Self {
-        let light = PointLight::new(Color::white(), Tuple::point(-10.0, -10.0, -10.0));
+        let light = PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0));
         let mut s1 = Sphere::new();
         s1.material.color = Color::new(0.8, 1.0, 0.6);
         s1.material.diffuse = 0.7;

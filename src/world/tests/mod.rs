@@ -143,3 +143,35 @@ fn view_transformation_arbitrary_test() {
         t
     );
 }
+
+#[test]
+fn no_shadow_nothing_colinear_with_point_and_light() {
+    let world: World = Default::default();
+    let point = Tuple::point(0.0, 10.0, 0.0);
+
+    assert_eq!(false, world.is_shadowed(&point));
+}
+
+#[test]
+fn shadow_object_between_point_and_light() {
+    let world: World = Default::default();
+    let point = Tuple::point(10.0, -10.0, 10.0);
+
+    assert_eq!(true, world.is_shadowed(&point));
+}
+
+#[test]
+fn no_shadow_object_behind_light() {
+    let world: World = Default::default();
+    let point = Tuple::point(-20.0, 20.0, -20.0);
+
+    assert_eq!(false, world.is_shadowed(&point));
+}
+
+#[test]
+fn no_shadow_object_behind_point() {
+    let world: World = Default::default();
+    let point = Tuple::point(-2.0, 2.0, -2.0);
+
+    assert_eq!(false, world.is_shadowed(&point));
+}
