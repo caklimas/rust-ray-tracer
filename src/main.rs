@@ -70,7 +70,10 @@ fn canvas_sphere_test() {
         }
     }
 
-    write_to_file(&canvas, r"C:\Users\Christopher\Desktop\Files\Rust\sphere.ppm");
+    write_to_file(
+        &canvas,
+        r"C:\Users\Christopher\Desktop\Files\Rust\sphere.ppm",
+    );
 }
 
 fn camera_world_test() {
@@ -132,14 +135,13 @@ fn camera_world_test() {
     );
 
     let canvas = camera.render(&world);
-    write_to_file(&canvas, r"C:\Users\Christopher\Desktop\Files\Rust\scene.ppm");
+    write_to_file(
+        &canvas,
+        r"C:\Users\Christopher\Desktop\Files\Rust\scene.ppm",
+    );
 }
 
 fn write_to_file(canvas: &Canvas, path: &str) {
     let ppm_string = canvas.to_ppm();
-    std::fs::write(
-        path,
-        ppm_string.as_str(),
-    )
-    .unwrap();
+    std::fs::write(path, ppm_string.as_str()).unwrap();
 }
