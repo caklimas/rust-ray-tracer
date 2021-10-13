@@ -55,6 +55,7 @@ impl World {
             &computations.point,
             &computations.eye_v,
             &computations.normal_v,
+            false
         )
     }
 }
