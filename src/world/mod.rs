@@ -55,7 +55,7 @@ impl World {
             &computations.point,
             &computations.eye_v,
             &computations.normal_v,
-            false,
+            self.is_shadowed(&computations.over_point),
         )
     }
 
