@@ -104,3 +104,9 @@ impl Tuple {
         self - &dot
     }
 }
+
+impl Default for Tuple {
+    fn default() -> Self {
+        Tuple::point(0.0, 0.0, 0.0)
+    }
+}

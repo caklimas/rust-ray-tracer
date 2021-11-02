@@ -160,3 +160,9 @@ impl Matrix {
         true
     }
 }
+
+impl Default for Matrix {
+    fn default() -> Self {
+        Matrix::identity(4)
+    }
+}

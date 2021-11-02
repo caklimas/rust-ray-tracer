@@ -1,4 +1,4 @@
-use crate::{floating_point::EPSILON, ray::Ray, sphere::Sphere};
+use crate::{floating_point::EPSILON, ray::Ray, shape::Shape, sphere::Sphere};
 
 use self::intersection_computation::IntersectionComputation;
 

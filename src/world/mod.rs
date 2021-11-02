@@ -10,6 +10,7 @@ use crate::{
     },
     point_light::PointLight,
     ray::Ray,
+    shape::Shape,
     sphere::Sphere,
     tuple::Tuple,
 };
@@ -20,11 +21,16 @@ mod tests;
 pub struct World {
     pub light: PointLight,
     pub objects: Vec<Sphere>,
+    pub shapes: Vec<Box<dyn Shape>>,
 }
 
 impl World {
     pub fn new(light: PointLight, objects: Vec<Sphere>) -> Self {
-        Self { light, objects }
+        Self {
+            light,
+            objects,
+            shapes: Vec::new(),
+        }
     }
 
     pub fn intersect(&self, ray: &Ray) -> Vec<Intersection> {

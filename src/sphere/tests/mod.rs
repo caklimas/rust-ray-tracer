@@ -4,6 +4,7 @@ use super::Sphere;
 use crate::{
     matrix::transformation::{rotate_z, scale, translate},
     ray::Ray,
+    shape::Shape,
     tuple::Tuple,
 };
 
