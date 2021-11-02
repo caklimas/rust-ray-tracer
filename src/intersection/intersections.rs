@@ -5,15 +5,8 @@ pub struct Intersections<'a> {
 }
 
 impl<'a> Intersections<'a> {
-    pub fn new(collection: &mut Vec<Intersection<'a>>) -> Self {
-        collection.sort_by(|a, b| a.value.partial_cmp(&b.value).unwrap());
-        let mut intersections = Vec::new();
-        for i in collection.iter() {
-            intersections.push(Intersection::new(i.object, i.value));
-        }
-        Intersections {
-            collection: intersections,
-        }
+    pub fn new(collection: Vec<Intersection<'a>>) -> Self {
+        Intersections { collection }
     }
 
     pub fn hit(&self) -> Option<&Intersection<'a>> {

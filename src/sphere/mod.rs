@@ -1,5 +1,6 @@
 use crate::{
-    intersection::Intersection, material::Material, matrix::Matrix, ray::Ray, tuple::Tuple,
+    intersection::Intersection, material::Material, matrix::Matrix, ray::Ray, shape::Shape,
+    tuple::Tuple,
 };
 
 #[cfg(test)]
@@ -15,18 +16,33 @@ pub struct Sphere {
 impl Sphere {
     pub fn new() -> Self {
         Sphere {
-            center: Tuple::point(0.0, 0.0, 0.0),
+            center: Default::default(),
             material: Default::default(),
-            transform: Matrix::identity(4),
+            transform: Default::default(),
         }
     }
+}
 
-    pub fn intersect(&self, ray: &Ray) -> Vec<Intersection> {
-        let new_ray = ray.transform(&self.transform.inverse());
+impl Default for Sphere {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl Shape for Sphere {
+    fn get_material(&self) -> &Material {
+        &self.material
+    }
+
+    fn get_transform(&self) -> &Matrix {
+        &self.transform
+    }
+
+    fn local_intersect(&self, ray: &Ray) -> Vec<Intersection> {
         let mut intersections = Vec::new();
-        let sphere_to_ray = new_ray.origin - self.center;
-        let a = new_ray.direction.dot(&new_ray.direction);
-        let b = 2.0 * new_ray.direction.dot(&sphere_to_ray);
+        let sphere_to_ray = ray.origin - self.center;
+        let a = ray.direction.dot(&ray.direction);
+        let b = 2.0 * ray.direction.dot(&sphere_to_ray);
         let c = sphere_to_ray.dot(&sphere_to_ray) - 1.0;
         let discriminant = b.powi(2) - 4.0 * a * c;
 
@@ -44,17 +60,7 @@ impl Sphere {
         intersections
     }
 
-    pub fn normal_at(&self, world_point: Tuple) -> Tuple {
-        let object_point = self.transform.inverse() * world_point;
-        let object_normal = object_point - Tuple::point(0.0, 0.0, 0.0);
-        let world_normal = self.transform.inverse().transpose() * object_normal;
-        let world_normal = Tuple::vector(world_normal.x(), world_normal.y(), world_normal.z());
-        world_normal.normalize()
-    }
-}
-
-impl Default for Sphere {
-    fn default() -> Self {
-        Self::new()
+    fn local_normal(&self, object_point: Tuple) -> Tuple {
+        object_point - Tuple::point(0.0, 0.0, 0.0)
     }
 }

@@ -5,11 +5,12 @@ use color::Color;
 use material::Material;
 use matrix::transformation::{scale, translate};
 use point_light::PointLight;
+use shape::Shape;
 use sphere::Sphere;
 use tuple::Tuple;
 use world::World;
 
-use crate::{camera::Camera, world::view_transform};
+use crate::{camera::Camera, plane::Plane, world::view_transform};
 
 pub mod camera;
 pub mod canvas;
@@ -19,8 +20,10 @@ pub mod floating_point;
 pub mod intersection;
 pub mod material;
 pub mod matrix;
+pub mod plane;
 pub mod point_light;
 pub mod ray;
+pub mod shape;
 pub mod sphere;
 pub mod tuple;
 pub mod world;
@@ -28,6 +31,7 @@ pub mod world;
 fn main() {
     canvas_sphere_test();
     camera_world_test();
+    camera_plane_test();
 }
 
 fn canvas_sphere_test() {
@@ -51,8 +55,8 @@ fn canvas_sphere_test() {
             let world_x = -half + pixel_size * (x as f64);
             let position = tuple::Tuple::point(world_x, world_y, wall_z);
             let ray = ray::Ray::new(ray_origin, (position - ray_origin).normalize());
-            let mut xs = shape.intersect(&ray);
-            let intersections = intersection::intersections::Intersections::new(&mut xs);
+            let xs = shape.intersect(&ray);
+            let intersections = intersection::intersections::Intersections::new(xs);
 
             match intersections.hit() {
                 Some(hit) => {
@@ -61,7 +65,7 @@ fn canvas_sphere_test() {
                     let eye = ray.direction.negate();
                     let color = hit
                         .object
-                        .material
+                        .get_material()
                         .lighting(&light, &position, &eye, &normal, true);
                     canvas.write_pixel(x, y, color);
                 }
@@ -124,7 +128,14 @@ fn camera_world_test() {
 
     let world = World::new(
         PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0)),
-        vec![floor, left_wall, right_wall, middle, right, left],
+        vec![
+            Box::new(floor),
+            Box::new(left_wall),
+            Box::new(right_wall),
+            Box::new(middle),
+            Box::new(right),
+            Box::new(left),
+        ],
     );
 
     let mut camera = Camera::new(400, 200, FRAC_PI_3);
@@ -138,6 +149,69 @@ fn camera_world_test() {
     write_to_file(
         &canvas,
         r"C:\Users\Christopher\Desktop\Files\Rust\scene.ppm",
+    );
+}
+
+fn camera_plane_test() {
+    let mut floor = Plane::new();
+    floor.transform = scale(10.0, 0.01, 10.0);
+
+    floor.material = Default::default();
+    floor.material.color = Color::new(1.0, 0.9, 0.9);
+    floor.material.specular = 0.0;
+
+    let mut wall = Plane::new();
+    wall.transform = scale(10.0, 0.01, 10.0)
+        .rotate_x(FRAC_PI_2)
+        .translate(0.0, 0.0, 1.0);
+
+    wall.material = Default::default();
+    wall.material.color = Color::new(1.0, 0.9, 0.9);
+    wall.material.specular = 0.0;
+
+    let mut middle = Sphere::new();
+    middle.transform = translate(-0.5, 1.0, 0.5);
+    middle.material = Default::default();
+    middle.material.color = Color::new(0.1, 1.0, 0.5);
+    middle.material.diffuse = 0.7;
+    middle.material.specular = 0.3;
+
+    let mut right = Sphere::new();
+    right.transform = scale(0.5, 0.5, 0.5).translate(1.5, 0.5, -0.5);
+    right.material = Default::default();
+    right.material.color = Color::new(0.5, 1.0, 0.1);
+    right.material.diffuse = 0.7;
+    right.material.specular = 0.3;
+
+    let mut left = Sphere::new();
+    left.transform = scale(0.33, 0.33, 0.33).translate(-1.5, 0.33, -0.75);
+    left.material = Default::default();
+    left.material.color = Color::new(1.0, 0.8, 0.1);
+    left.material.diffuse = 0.7;
+    left.material.specular = 0.3;
+
+    let world = World::new(
+        PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0)),
+        vec![
+            Box::new(floor),
+            Box::new(wall),
+            Box::new(middle),
+            Box::new(right),
+            Box::new(left),
+        ],
+    );
+
+    let mut camera = Camera::new(400, 200, FRAC_PI_3);
+    camera.transform = view_transform(
+        &Tuple::point(0.0, 1.5, -5.0),
+        &Tuple::point(0.0, 1.0, 0.0),
+        &Tuple::vector(0.0, 1.0, 0.0),
+    );
+
+    let canvas = camera.render(&world);
+    write_to_file(
+        &canvas,
+        r"C:\Users\Christopher\Desktop\Files\Rust\plane.ppm",
     );
 }
 

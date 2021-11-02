@@ -10,6 +10,7 @@ use crate::{
     },
     point_light::PointLight,
     ray::Ray,
+    shape::Shape,
     sphere::Sphere,
     tuple::Tuple,
 };
@@ -19,11 +20,11 @@ mod tests;
 
 pub struct World {
     pub light: PointLight,
-    pub objects: Vec<Sphere>,
+    pub objects: Vec<Box<dyn Shape>>,
 }
 
 impl World {
-    pub fn new(light: PointLight, objects: Vec<Sphere>) -> Self {
+    pub fn new(light: PointLight, objects: Vec<Box<dyn Shape>>) -> Self {
         Self { light, objects }
     }
 
@@ -38,7 +39,7 @@ impl World {
     }
 
     pub fn color_at(&self, ray: &Ray) -> Color {
-        let intersections = Intersections::new(&mut self.intersect(&ray));
+        let intersections = Intersections::new(self.intersect(&ray));
         let hit = intersections.hit();
         match hit {
             Some(i) => {
@@ -50,7 +51,7 @@ impl World {
     }
 
     pub fn shade_hit(&self, computations: &IntersectionComputation) -> Color {
-        computations.object.material.lighting(
+        computations.object.get_material().lighting(
             &self.light,
             &computations.point,
             &computations.eye_v,
@@ -65,8 +66,8 @@ impl World {
         let direction = v.normalize();
 
         let r = Ray::new(point.clone(), direction);
-        let mut intersect = self.intersect(&r);
-        let intersections = Intersections::new(&mut intersect);
+        let intersect = self.intersect(&r);
+        let intersections = Intersections::new(intersect);
         if let Some(h) = intersections.hit() {
             h.value < distance
         } else {
@@ -86,7 +87,7 @@ impl Default for World {
         let mut s2 = Sphere::new();
         s2.transform = scale(0.5, 0.5, 0.5);
 
-        Self::new(light, vec![s1, s2])
+        Self::new(light, vec![Box::new(s1), Box::new(s2)])
     }
 }
 
