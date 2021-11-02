@@ -1,4 +1,4 @@
-use crate::{ray::Ray, sphere::Sphere};
+use crate::{floating_point::EPSILON, ray::Ray, sphere::Sphere};
 
 use self::intersection_computation::IntersectionComputation;
 
@@ -29,7 +29,17 @@ impl<'a> Intersection<'a> {
             inside = true;
         }
 
-        IntersectionComputation::new(self.object, self.value, point, eye_v, normal_v, inside)
+        let over_point = point + normal_v * EPSILON;
+
+        IntersectionComputation::new(
+            self.object,
+            self.value,
+            point,
+            eye_v,
+            normal_v,
+            inside,
+            over_point,
+        )
     }
 }
 

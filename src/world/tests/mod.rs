@@ -1,5 +1,6 @@
 use crate::{
     color::Color,
+    floating_point::EPSILON,
     intersection::Intersection,
     matrix::{
         transformation::{scale, translate},
@@ -7,6 +8,7 @@ use crate::{
     },
     point_light::PointLight,
     ray::Ray,
+    sphere::Sphere,
     tuple::Tuple,
 };
 
@@ -142,4 +144,70 @@ fn view_transformation_arbitrary_test() {
         ),
         t
     );
+}
+
+#[test]
+fn no_shadow_nothing_colinear_with_point_and_light() {
+    let world: World = Default::default();
+    let point = Tuple::point(0.0, 10.0, 0.0);
+
+    assert_eq!(false, world.is_shadowed(&point));
+}
+
+#[test]
+fn shadow_object_between_point_and_light() {
+    let world: World = Default::default();
+    let point = Tuple::point(10.0, -10.0, 10.0);
+
+    assert_eq!(true, world.is_shadowed(&point));
+}
+
+#[test]
+fn no_shadow_object_behind_light() {
+    let world: World = Default::default();
+    let point = Tuple::point(-20.0, 20.0, -20.0);
+
+    assert_eq!(false, world.is_shadowed(&point));
+}
+
+#[test]
+fn no_shadow_object_behind_point() {
+    let world: World = Default::default();
+    let point = Tuple::point(-2.0, 2.0, -2.0);
+
+    assert_eq!(false, world.is_shadowed(&point));
+}
+
+#[test]
+fn shade_hit_intersection_in_shadow_test() {
+    let mut world: World = World::new(
+        PointLight::new(Color::white(), Tuple::point(0.0, 0.0, -10.0)),
+        Vec::new(),
+    );
+    world.objects.push(Sphere::new());
+
+    let mut sphere2 = Sphere::new();
+    sphere2.transform = translate(0.0, 0.0, 10.0);
+    world.objects.push(sphere2);
+
+    let ray = Ray::new(Tuple::point(0.0, 0.0, 5.0), Tuple::vector(0.0, 0.0, 1.0));
+    let i = Intersection::new(&world.objects[1], 4.0);
+
+    let comps = i.prepare_computations(&ray);
+    let c = world.shade_hit(&comps);
+
+    assert_eq!(Color::new(0.1, 0.1, 0.1), c);
+}
+
+#[test]
+fn hit_should_offset_point() {
+    let r = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
+    let mut shape = Sphere::new();
+    shape.transform = translate(0.0, 0.0, 1.0);
+
+    let i = Intersection::new(&shape, 5.0);
+    let comps = i.prepare_computations(&r);
+
+    assert_eq!(true, comps.over_point.z() < -(EPSILON / 2.0));
+    assert_eq!(true, comps.point.z() > comps.over_point.z());
 }

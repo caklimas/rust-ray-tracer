@@ -40,6 +40,7 @@ impl Material {
         position: &Tuple,
         eye: &Tuple,
         normal: &Tuple,
+        in_shadow: bool,
     ) -> Color {
         // Combine the surface color with the light's color/intensity
         let effective_color = self.color * light.intensity;
@@ -78,6 +79,10 @@ impl Material {
         }
 
         // Three contribution give final shading
+        if in_shadow {
+            return ambient;
+        }
+
         ambient + diffuse + specular
     }
 }

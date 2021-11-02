@@ -62,7 +62,7 @@ fn canvas_sphere_test() {
                     let color = hit
                         .object
                         .material
-                        .lighting(&light, &position, &eye, &normal);
+                        .lighting(&light, &position, &eye, &normal, true);
                     canvas.write_pixel(x, y, color);
                 }
                 None => (),
@@ -70,7 +70,10 @@ fn canvas_sphere_test() {
         }
     }
 
-    write_to_file(&canvas, r"C:\Users\Christopher\Desktop\Files\sphere.ppm");
+    write_to_file(
+        &canvas,
+        r"C:\Users\Christopher\Desktop\Files\Rust\sphere.ppm",
+    );
 }
 
 fn camera_world_test() {
@@ -124,7 +127,7 @@ fn camera_world_test() {
         vec![floor, left_wall, right_wall, middle, right, left],
     );
 
-    let mut camera = Camera::new(100, 50, FRAC_PI_3);
+    let mut camera = Camera::new(400, 200, FRAC_PI_3);
     camera.transform = view_transform(
         &Tuple::point(0.0, 1.5, -5.0),
         &Tuple::point(0.0, 1.0, 0.0),
@@ -132,14 +135,13 @@ fn camera_world_test() {
     );
 
     let canvas = camera.render(&world);
-    write_to_file(&canvas, r"C:\Users\Christopher\Desktop\Files\scene.ppm");
+    write_to_file(
+        &canvas,
+        r"C:\Users\Christopher\Desktop\Files\Rust\scene.ppm",
+    );
 }
 
 fn write_to_file(canvas: &Canvas, path: &str) {
     let ppm_string = canvas.to_ppm();
-    std::fs::write(
-        path,
-        ppm_string.as_str(),
-    )
-    .unwrap();
+    std::fs::write(path, ppm_string.as_str()).unwrap();
 }
