@@ -1,14 +1,14 @@
 use crate::{
-    intersection::Intersection, material::Material, matrix::Matrix, ray::Ray, shape::Shape,
-    tuple::Tuple,
+    floating_point::EPSILON, intersection::Intersection, material::Material, matrix::Matrix,
+    ray::Ray, shape::Shape, tuple::Tuple,
 };
 
 #[cfg(test)]
 mod tests;
 
 pub struct Plane {
-    material: Material,
-    transform: Matrix,
+    pub material: Material,
+    pub transform: Matrix,
 }
 
 impl Plane {
@@ -35,8 +35,16 @@ impl Shape for Plane {
         &self.transform
     }
 
-    fn local_intersect(&self, _ray: &Ray) -> Vec<Intersection> {
-        todo!()
+    fn local_intersect(&self, ray: &Ray) -> Vec<Intersection> {
+        let mut xs = Vec::new();
+        if ray.direction.y().abs() < EPSILON {
+            return xs;
+        }
+
+        let t = (-ray.origin.y()) / ray.direction.y();
+        let intersection = Intersection::new(self, t);
+        xs.push(intersection);
+        xs
     }
 
     fn local_normal(&self, _object_point: Tuple) -> Tuple {

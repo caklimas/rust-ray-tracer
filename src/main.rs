@@ -10,7 +10,7 @@ use sphere::Sphere;
 use tuple::Tuple;
 use world::World;
 
-use crate::{camera::Camera, world::view_transform};
+use crate::{camera::Camera, plane::Plane, world::view_transform};
 
 pub mod camera;
 pub mod canvas;
@@ -31,6 +31,7 @@ pub mod world;
 fn main() {
     canvas_sphere_test();
     camera_world_test();
+    camera_plane_test();
 }
 
 fn canvas_sphere_test() {
@@ -148,6 +149,69 @@ fn camera_world_test() {
     write_to_file(
         &canvas,
         r"C:\Users\Christopher\Desktop\Files\Rust\scene.ppm",
+    );
+}
+
+fn camera_plane_test() {
+    let mut floor = Plane::new();
+    floor.transform = scale(10.0, 0.01, 10.0);
+
+    floor.material = Default::default();
+    floor.material.color = Color::new(1.0, 0.9, 0.9);
+    floor.material.specular = 0.0;
+
+    let mut wall = Plane::new();
+    wall.transform = scale(10.0, 0.01, 10.0)
+        .rotate_x(FRAC_PI_2)
+        .translate(0.0, 0.0, 1.0);
+
+    wall.material = Default::default();
+    wall.material.color = Color::new(1.0, 0.9, 0.9);
+    wall.material.specular = 0.0;
+
+    let mut middle = Sphere::new();
+    middle.transform = translate(-0.5, 1.0, 0.5);
+    middle.material = Default::default();
+    middle.material.color = Color::new(0.1, 1.0, 0.5);
+    middle.material.diffuse = 0.7;
+    middle.material.specular = 0.3;
+
+    let mut right = Sphere::new();
+    right.transform = scale(0.5, 0.5, 0.5).translate(1.5, 0.5, -0.5);
+    right.material = Default::default();
+    right.material.color = Color::new(0.5, 1.0, 0.1);
+    right.material.diffuse = 0.7;
+    right.material.specular = 0.3;
+
+    let mut left = Sphere::new();
+    left.transform = scale(0.33, 0.33, 0.33).translate(-1.5, 0.33, -0.75);
+    left.material = Default::default();
+    left.material.color = Color::new(1.0, 0.8, 0.1);
+    left.material.diffuse = 0.7;
+    left.material.specular = 0.3;
+
+    let world = World::new(
+        PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0)),
+        vec![
+            Box::new(floor),
+            Box::new(wall),
+            Box::new(middle),
+            Box::new(right),
+            Box::new(left),
+        ],
+    );
+
+    let mut camera = Camera::new(400, 200, FRAC_PI_3);
+    camera.transform = view_transform(
+        &Tuple::point(0.0, 1.5, -5.0),
+        &Tuple::point(0.0, 1.0, 0.0),
+        &Tuple::vector(0.0, 1.0, 0.0),
+    );
+
+    let canvas = camera.render(&world);
+    write_to_file(
+        &canvas,
+        r"C:\Users\Christopher\Desktop\Files\Rust\plane.ppm",
     );
 }
 
