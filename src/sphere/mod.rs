@@ -23,7 +23,7 @@ impl Sphere {
     }
 
     pub fn intersect(&self, ray: &Ray) -> Vec<Intersection> {
-        let new_ray = ray.transform(&self.transform.inverse());
+        let new_ray = self.transform_ray(ray);
         let mut intersections = Vec::new();
         let sphere_to_ray = new_ray.origin - self.center;
         let a = new_ray.direction.dot(&new_ray.direction);
