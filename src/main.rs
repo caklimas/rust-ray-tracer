@@ -63,7 +63,7 @@ fn canvas_sphere_test() {
                     let eye = ray.direction.negate();
                     let color = hit
                         .object
-                        .material
+                        .get_material()
                         .lighting(&light, &position, &eye, &normal, true);
                     canvas.write_pixel(x, y, color);
                 }
@@ -126,7 +126,14 @@ fn camera_world_test() {
 
     let world = World::new(
         PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0)),
-        vec![floor, left_wall, right_wall, middle, right, left],
+        vec![
+            Box::new(floor),
+            Box::new(left_wall),
+            Box::new(right_wall),
+            Box::new(middle),
+            Box::new(right),
+            Box::new(left),
+        ],
     );
 
     let mut camera = Camera::new(400, 200, FRAC_PI_3);

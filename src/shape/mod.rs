@@ -25,3 +25,9 @@ pub trait Shape {
         ray.transform(&self.get_transform().inverse())
     }
 }
+
+impl PartialEq for dyn Shape {
+    fn eq(&self, other: &Self) -> bool {
+        self.get_material() == other.get_material() && self.get_transform() == other.get_transform()
+    }
+}

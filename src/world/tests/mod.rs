@@ -33,8 +33,7 @@ fn intersect_test() {
 fn shade_hit_test() {
     let world: World = Default::default();
     let ray = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
-    let shape = &world.objects[0];
-    let intersection = Intersection::new(shape, 4.0);
+    let intersection = Intersection::new(&*world.objects[0], 4.0);
     let comps = intersection.prepare_computations(&ray);
 
     let color = world.shade_hit(&comps);
@@ -47,8 +46,7 @@ fn shade_hit_from_inside_test() {
     let mut world: World = Default::default();
     world.light = PointLight::new(Color::white(), Tuple::point(0.0, 0.25, 0.0));
     let ray = Ray::new(Tuple::point(0.0, 0.0, 0.0), Tuple::vector(0.0, 0.0, 1.0));
-    let shape = &world.objects[1];
-    let intersection = Intersection::new(shape, 0.5);
+    let intersection = Intersection::new(&*world.objects[1], 0.5);
     let comps = intersection.prepare_computations(&ray);
 
     let color = world.shade_hit(&comps);
@@ -78,16 +76,23 @@ fn color_at_ray_hit() {
 
 #[test]
 fn color_at_behind_ray() {
-    let mut world: World = Default::default();
-    let outer = &mut world.objects[0];
-    outer.material.ambient = 1.0;
-    let inner = &mut world.objects[1];
-    inner.material.ambient = 1.0;
+    let light = PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0));
+    let mut s1 = Sphere::new();
+    s1.material.color = Color::new(0.8, 1.0, 0.6);
+    s1.material.diffuse = 0.7;
+    s1.material.specular = 0.2;
+    s1.material.ambient = 1.0;
+
+    let mut s2 = Sphere::new();
+    s2.transform = scale(0.5, 0.5, 0.5);
+    s2.material.ambient = 1.0;
+
+    let world = World::new(light, vec![Box::new(s1), Box::new(s2)]);
     let ray = Ray::new(Tuple::point(0.0, 0.0, 0.75), Tuple::vector(0.0, 0.0, -1.0));
 
     let c = world.color_at(&ray);
 
-    assert_eq!(world.objects[1].material.color, c);
+    assert_eq!(world.objects[1].get_material().color, c);
 }
 
 #[test]
@@ -184,14 +189,14 @@ fn shade_hit_intersection_in_shadow_test() {
         PointLight::new(Color::white(), Tuple::point(0.0, 0.0, -10.0)),
         Vec::new(),
     );
-    world.objects.push(Sphere::new());
+    world.objects.push(Box::new(Sphere::new()));
 
     let mut sphere2 = Sphere::new();
     sphere2.transform = translate(0.0, 0.0, 10.0);
-    world.objects.push(sphere2);
+    world.objects.push(Box::new(sphere2));
 
     let ray = Ray::new(Tuple::point(0.0, 0.0, 5.0), Tuple::vector(0.0, 0.0, 1.0));
-    let i = Intersection::new(&world.objects[1], 4.0);
+    let i = Intersection::new(&*world.objects[1], 4.0);
 
     let comps = i.prepare_computations(&ray);
     let c = world.shade_hit(&comps);

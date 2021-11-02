@@ -1,7 +1,7 @@
-use crate::{sphere::Sphere, tuple::Tuple};
+use crate::{shape::Shape, tuple::Tuple};
 
 pub struct IntersectionComputation<'a> {
-    pub object: &'a Sphere,
+    pub object: &'a dyn Shape,
     pub value: f64,
     pub point: Tuple,
     pub eye_v: Tuple,
@@ -12,7 +12,7 @@ pub struct IntersectionComputation<'a> {
 
 impl<'a> IntersectionComputation<'a> {
     pub fn new(
-        object: &'a Sphere,
+        object: &'a dyn Shape,
         value: f64,
         point: Tuple,
         eye_v: Tuple,

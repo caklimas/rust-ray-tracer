@@ -20,17 +20,12 @@ mod tests;
 
 pub struct World {
     pub light: PointLight,
-    pub objects: Vec<Sphere>,
-    pub shapes: Vec<Box<dyn Shape>>,
+    pub objects: Vec<Box<dyn Shape>>,
 }
 
 impl World {
-    pub fn new(light: PointLight, objects: Vec<Sphere>) -> Self {
-        Self {
-            light,
-            objects,
-            shapes: Vec::new(),
-        }
+    pub fn new(light: PointLight, objects: Vec<Box<dyn Shape>>) -> Self {
+        Self { light, objects }
     }
 
     pub fn intersect(&self, ray: &Ray) -> Vec<Intersection> {
@@ -56,7 +51,7 @@ impl World {
     }
 
     pub fn shade_hit(&self, computations: &IntersectionComputation) -> Color {
-        computations.object.material.lighting(
+        computations.object.get_material().lighting(
             &self.light,
             &computations.point,
             &computations.eye_v,
@@ -92,7 +87,7 @@ impl Default for World {
         let mut s2 = Sphere::new();
         s2.transform = scale(0.5, 0.5, 0.5);
 
-        Self::new(light, vec![s1, s2])
+        Self::new(light, vec![Box::new(s1), Box::new(s2)])
     }
 }
 
