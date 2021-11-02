@@ -53,8 +53,8 @@ fn canvas_sphere_test() {
             let world_x = -half + pixel_size * (x as f64);
             let position = tuple::Tuple::point(world_x, world_y, wall_z);
             let ray = ray::Ray::new(ray_origin, (position - ray_origin).normalize());
-            let mut xs = shape.intersect(&ray);
-            let intersections = intersection::intersections::Intersections::new(&mut xs);
+            let xs = shape.intersect(&ray);
+            let intersections = intersection::intersections::Intersections::new(xs);
 
             match intersections.hit() {
                 Some(hit) => {

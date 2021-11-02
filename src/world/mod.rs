@@ -44,7 +44,7 @@ impl World {
     }
 
     pub fn color_at(&self, ray: &Ray) -> Color {
-        let intersections = Intersections::new(&mut self.intersect(&ray));
+        let intersections = Intersections::new(self.intersect(&ray));
         let hit = intersections.hit();
         match hit {
             Some(i) => {
@@ -71,8 +71,8 @@ impl World {
         let direction = v.normalize();
 
         let r = Ray::new(point.clone(), direction);
-        let mut intersect = self.intersect(&r);
-        let intersections = Intersections::new(&mut intersect);
+        let intersect = self.intersect(&r);
+        let intersections = Intersections::new(intersect);
         if let Some(h) = intersections.hit() {
             h.value < distance
         } else {
