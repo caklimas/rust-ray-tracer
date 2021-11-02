@@ -21,13 +21,28 @@ impl Sphere {
             transform: Default::default(),
         }
     }
+}
 
-    pub fn intersect(&self, ray: &Ray) -> Vec<Intersection> {
-        let new_ray = self.transform_ray(ray);
+impl Default for Sphere {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl Shape for Sphere {
+    fn get_material(&self) -> &Material {
+        &self.material
+    }
+
+    fn get_transform(&self) -> &Matrix {
+        &self.transform
+    }
+
+    fn local_intersect(&self, ray: &Ray) -> Vec<Intersection> {
         let mut intersections = Vec::new();
-        let sphere_to_ray = new_ray.origin - self.center;
-        let a = new_ray.direction.dot(&new_ray.direction);
-        let b = 2.0 * new_ray.direction.dot(&sphere_to_ray);
+        let sphere_to_ray = ray.origin - self.center;
+        let a = ray.direction.dot(&ray.direction);
+        let b = 2.0 * ray.direction.dot(&sphere_to_ray);
         let c = sphere_to_ray.dot(&sphere_to_ray) - 1.0;
         let discriminant = b.powi(2) - 4.0 * a * c;
 
@@ -44,20 +59,8 @@ impl Sphere {
 
         intersections
     }
-}
 
-impl Default for Sphere {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl Shape for Sphere {
-    fn get_material(&self) -> &Material {
-        &self.material
-    }
-
-    fn get_transform(&self) -> &Matrix {
-        &self.transform
+    fn local_normal(&self, object_point: Tuple) -> Tuple {
+        object_point - Tuple::point(0.0, 0.0, 0.0)
     }
 }
