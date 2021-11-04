@@ -10,7 +10,7 @@ use sphere::Sphere;
 use tuple::Tuple;
 use world::World;
 
-use crate::{camera::Camera, plane::Plane, world::view_transform};
+use crate::{camera::Camera, patterns::stripe::Stripe, plane::Plane, world::view_transform};
 
 pub mod camera;
 pub mod canvas;
@@ -20,6 +20,7 @@ pub mod floating_point;
 pub mod intersection;
 pub mod material;
 pub mod matrix;
+pub mod patterns;
 pub mod plane;
 pub mod point_light;
 pub mod ray;
@@ -44,8 +45,10 @@ fn canvas_sphere_test() {
     let mut canvas = canvas::Canvas::new(canvas_pixels, canvas_pixels);
     let mut shape = sphere::Sphere::new();
     let light = PointLight::new(Color::white(), Tuple::point(-50.0, 10.0, -10.0));
-    let mut material: Material = Default::default();
-    material.color = Color::new(1.0, 0.0, 0.0);
+    let material = Material {
+        color: Color::new(1.0, 0.0, 0.0),
+        ..Default::default()
+    };
     shape.material = material;
     shape.transform = matrix::transformation::scale(1.0, 1.0, 1.0);
 
@@ -58,18 +61,15 @@ fn canvas_sphere_test() {
             let xs = shape.intersect(&ray);
             let intersections = intersection::intersections::Intersections::new(xs);
 
-            match intersections.hit() {
-                Some(hit) => {
-                    let position = ray.position(hit.value);
-                    let normal = hit.object.normal_at(position);
-                    let eye = ray.direction.negate();
-                    let color = hit
-                        .object
-                        .get_material()
-                        .lighting(&light, &position, &eye, &normal, true);
-                    canvas.write_pixel(x, y, color);
-                }
-                None => (),
+            if let Some(hit) = intersections.hit() {
+                let position = ray.position(hit.value);
+                let normal = hit.object.normal_at(position);
+                let eye = ray.direction.negate();
+                let color = hit
+                    .object
+                    .get_material()
+                    .lighting(hit.object, &light, &position, &eye, &normal, true);
+                canvas.write_pixel(x, y, color);
             }
         }
     }
@@ -176,12 +176,20 @@ fn camera_plane_test() {
     middle.material.diffuse = 0.7;
     middle.material.specular = 0.3;
 
+    let mut stripe = Stripe::new(Color::new(1.0, 0.0, 0.0), Color::white());
+    stripe.transform = scale(0.25, 0.25, 0.25);
+    middle.material.pattern = Option::Some(Box::new(stripe));
+
     let mut right = Sphere::new();
     right.transform = scale(0.5, 0.5, 0.5).translate(1.5, 0.5, -0.5);
     right.material = Default::default();
     right.material.color = Color::new(0.5, 1.0, 0.1);
     right.material.diffuse = 0.7;
     right.material.specular = 0.3;
+
+    let mut stripe = Stripe::new(Color::new(0.0, 0.0, 1.0), Color::new(0.0, 1.0, 0.0));
+    stripe.transform = scale(0.25, 0.25, 0.25).rotate_z(FRAC_PI_2);
+    right.material.pattern = Option::Some(Box::new(stripe));
 
     let mut left = Sphere::new();
     left.transform = scale(0.33, 0.33, 0.33).translate(-1.5, 0.33, -0.75);

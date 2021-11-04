@@ -82,3 +82,11 @@ impl Mul<Tuple> for &Matrix {
         Tuple::new(elements[0], elements[1], elements[2], elements[3])
     }
 }
+
+impl Mul<&Tuple> for &Matrix {
+    type Output = Tuple;
+
+    fn mul(self, rhs: &Tuple) -> Self::Output {
+        self * *rhs
+    }
+}

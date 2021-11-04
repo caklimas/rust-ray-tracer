@@ -6,7 +6,7 @@ use crate::{
 #[cfg(test)]
 mod tests;
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(PartialEq)]
 pub struct Sphere {
     center: Tuple,
     pub material: Material,

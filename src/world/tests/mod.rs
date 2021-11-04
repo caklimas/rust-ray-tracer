@@ -36,7 +36,7 @@ fn shade_hit_test() {
     let intersection = Intersection::new(&*world.objects[0], 4.0);
     let comps = intersection.prepare_computations(&ray);
 
-    let color = world.shade_hit(&comps);
+    let color = world.shade_hit(intersection.object, &comps);
 
     assert_eq!(Color::new(0.38066, 0.47583, 0.2855), color);
 }
@@ -49,7 +49,7 @@ fn shade_hit_from_inside_test() {
     let intersection = Intersection::new(&*world.objects[1], 0.5);
     let comps = intersection.prepare_computations(&ray);
 
-    let color = world.shade_hit(&comps);
+    let color = world.shade_hit(intersection.object, &comps);
 
     assert_eq!(Color::new(0.90498, 0.90498, 0.90498), color);
 }
@@ -199,7 +199,7 @@ fn shade_hit_intersection_in_shadow_test() {
     let i = Intersection::new(&*world.objects[1], 4.0);
 
     let comps = i.prepare_computations(&ray);
-    let c = world.shade_hit(&comps);
+    let c = world.shade_hit(i.object, &comps);
 
     assert_eq!(Color::new(0.1, 0.1, 0.1), c);
 }
