@@ -37,7 +37,7 @@ impl Material {
 
     pub fn lighting(
         &self,
-        object: Box<&dyn Shape>,
+        object: &dyn Shape,
         light: &PointLight,
         position: &Tuple,
         eye: &Tuple,

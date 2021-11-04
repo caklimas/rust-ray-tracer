@@ -27,9 +27,9 @@ impl Pattern for Stripe {
         }
     }
 
-    fn color_at_object(&self, object: Box<&dyn Shape>, point: &Tuple) -> Color {
+    fn color_at_object(&self, object: &dyn Shape, point: &Tuple) -> Color {
         let object_space = &object.get_transform().inverse() * point;
-        let pattern_space = &self.transform.inverse() * &object_space;
+        let pattern_space = &self.transform.inverse() * object_space;
         self.color_at(&pattern_space)
     }
 }

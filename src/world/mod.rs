@@ -52,7 +52,7 @@ impl World {
 
     pub fn shade_hit(&self, object: &dyn Shape, computations: &IntersectionComputation) -> Color {
         computations.object.get_material().lighting(
-            Box::new(object),
+            object,
             &self.light,
             &computations.point,
             &computations.eye_v,

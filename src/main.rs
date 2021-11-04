@@ -30,8 +30,8 @@ pub mod tuple;
 pub mod world;
 
 fn main() {
-    // canvas_sphere_test();
-    // camera_world_test();
+    canvas_sphere_test();
+    camera_world_test();
     camera_plane_test();
 }
 
@@ -65,14 +65,10 @@ fn canvas_sphere_test() {
                 let position = ray.position(hit.value);
                 let normal = hit.object.normal_at(position);
                 let eye = ray.direction.negate();
-                let color = hit.object.get_material().lighting(
-                    Box::new(hit.object),
-                    &light,
-                    &position,
-                    &eye,
-                    &normal,
-                    true,
-                );
+                let color = hit
+                    .object
+                    .get_material()
+                    .lighting(hit.object, &light, &position, &eye, &normal, true);
                 canvas.write_pixel(x, y, color);
             }
         }
