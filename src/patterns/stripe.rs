@@ -1,4 +1,4 @@
-use crate::{color::Color, floating_point::EPSILON, matrix::Matrix, shape::Shape, tuple::Tuple};
+use crate::{color::Color, floating_point::EPSILON, matrix::Matrix, tuple::Tuple};
 
 use super::Pattern;
 
@@ -19,17 +19,15 @@ impl Stripe {
 }
 
 impl Pattern for Stripe {
+    fn get_transform(&self) -> &Matrix {
+        &self.transform
+    }
+
     fn color_at(&self, point: &Tuple) -> Color {
         if (point.x().floor() % 2.0).abs() < EPSILON {
             self.a
         } else {
             self.b
         }
-    }
-
-    fn color_at_object(&self, object: &dyn Shape, point: &Tuple) -> Color {
-        let object_space = &object.get_transform().inverse() * point;
-        let pattern_space = &self.transform.inverse() * object_space;
-        self.color_at(&pattern_space)
     }
 }
