@@ -14,7 +14,7 @@ impl Stripe {
 }
 
 impl Pattern for Stripe {
-    fn color_at(&self, point: Tuple) -> Color {
+    fn color_at(&self, point: &Tuple) -> Color {
         if (point.x().floor() % 2.0).abs() < EPSILON {
             self.a
         } else {

@@ -6,11 +6,11 @@ mod tests;
 
 pub const REFLECTION_RANGE: RangeInclusive<f64> = 0.0..=1.0;
 
-#[derive(Clone, Debug, PartialEq)]
 pub struct Material {
     pub color: Color,
     pub ambient: f64,
     pub diffuse: f64,
+    pub pattern: Option<Box<dyn Pattern>>,
     pub specular: f64,
     pub shininess: f64,
 }
@@ -29,6 +29,7 @@ impl Material {
             color,
             ambient,
             diffuse,
+            pattern: Option::None,
             specular,
             shininess,
         }
@@ -43,7 +44,12 @@ impl Material {
         in_shadow: bool,
     ) -> Color {
         // Combine the surface color with the light's color/intensity
-        let effective_color = self.color * light.intensity;
+        let color = if let Some(pattern) = &self.pattern {
+            pattern.color_at(position)
+        } else {
+            self.color
+        };
+        let effective_color = color * light.intensity;
 
         // Find the direction to the light source
         let light_v = (&light.position - position).normalize();
@@ -90,6 +96,16 @@ impl Material {
 impl Default for Material {
     fn default() -> Self {
         Material::new(Color::new(1.0, 1.0, 1.0), 0.1, 0.9, 0.9, 200.0)
+    }
+}
+
+impl PartialEq for Material {
+    fn eq(&self, other: &Self) -> bool {
+        self.color == other.color
+            && self.ambient == other.ambient
+            && self.diffuse == other.diffuse
+            && self.specular == other.specular
+            && self.shininess == other.shininess
     }
 }
 

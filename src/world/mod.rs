@@ -31,7 +31,7 @@ impl World {
     pub fn intersect(&self, ray: &Ray) -> Vec<Intersection> {
         let mut intersections = Vec::new();
         for o in self.objects.iter() {
-            intersections.append(&mut o.intersect(&ray));
+            intersections.append(&mut o.intersect(ray));
         }
 
         intersections.sort_by(|a, b| a.value.partial_cmp(&b.value).unwrap());
@@ -39,7 +39,7 @@ impl World {
     }
 
     pub fn color_at(&self, ray: &Ray) -> Color {
-        let intersections = Intersections::new(self.intersect(&ray));
+        let intersections = Intersections::new(self.intersect(ray));
         let hit = intersections.hit();
         match hit {
             Some(i) => {
@@ -65,7 +65,7 @@ impl World {
         let distance = v.magnitude();
         let direction = v.normalize();
 
-        let r = Ray::new(point.clone(), direction);
+        let r = Ray::new(*point, direction);
         let intersect = self.intersect(&r);
         let intersections = Intersections::new(intersect);
         if let Some(h) = intersections.hit() {

@@ -6,5 +6,5 @@ pub mod stripe;
 mod tests;
 
 pub trait Pattern {
-    fn color_at(&self, point: Tuple) -> Color;
+    fn color_at(&self, point: &Tuple) -> Color;
 }

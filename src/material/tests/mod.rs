@@ -1,4 +1,4 @@
-use crate::{color::Color, point_light::PointLight, tuple::Tuple};
+use crate::{color::Color, patterns::stripe::Stripe, point_light::PointLight, tuple::Tuple};
 
 use super::Material;
 
@@ -145,4 +145,36 @@ fn lighting_surface_in_shadow_test() {
     let result = material.lighting(&light, &position, &eye, &normal, true);
 
     assert_eq!(Color::new(0.1, 0.1, 0.1), result);
+}
+
+#[test]
+fn lighting_pattern_applied() {
+    let mut m: Material = Default::default();
+    m.pattern = Option::Some(Box::new(Stripe::new(Color::white(), Color::black())));
+    m.ambient = 1.0;
+    m.diffuse = 0.0;
+    m.specular = 0.0;
+
+    let eye_v = Tuple::vector(0.0, 0.0, -1.0);
+    let normal_v = Tuple::vector(0.0, 0.0, -1.0);
+    let light = PointLight::new(Color::white(), Tuple::point(0.0, 0.0, -10.0));
+
+    let c1 = m.lighting(
+        &light,
+        &Tuple::point(0.9, 0.0, 0.0),
+        &eye_v,
+        &normal_v,
+        false,
+    );
+
+    let c2 = m.lighting(
+        &light,
+        &Tuple::point(1.1, 0.0, 0.0),
+        &eye_v,
+        &normal_v,
+        false,
+    );
+
+    assert_eq!(Color::white(), c1);
+    assert_eq!(Color::black(), c2);
 }

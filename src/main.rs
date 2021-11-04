@@ -45,8 +45,10 @@ fn canvas_sphere_test() {
     let mut canvas = canvas::Canvas::new(canvas_pixels, canvas_pixels);
     let mut shape = sphere::Sphere::new();
     let light = PointLight::new(Color::white(), Tuple::point(-50.0, 10.0, -10.0));
-    let mut material: Material = Default::default();
-    material.color = Color::new(1.0, 0.0, 0.0);
+    let material = Material {
+        color: Color::new(1.0, 0.0, 0.0),
+        ..Default::default()
+    };
     shape.material = material;
     shape.transform = matrix::transformation::scale(1.0, 1.0, 1.0);
 
@@ -59,18 +61,15 @@ fn canvas_sphere_test() {
             let xs = shape.intersect(&ray);
             let intersections = intersection::intersections::Intersections::new(xs);
 
-            match intersections.hit() {
-                Some(hit) => {
-                    let position = ray.position(hit.value);
-                    let normal = hit.object.normal_at(position);
-                    let eye = ray.direction.negate();
-                    let color = hit
-                        .object
-                        .get_material()
-                        .lighting(&light, &position, &eye, &normal, true);
-                    canvas.write_pixel(x, y, color);
-                }
-                None => (),
+            if let Some(hit) = intersections.hit() {
+                let position = ray.position(hit.value);
+                let normal = hit.object.normal_at(position);
+                let eye = ray.direction.negate();
+                let color = hit
+                    .object
+                    .get_material()
+                    .lighting(&light, &position, &eye, &normal, true);
+                canvas.write_pixel(x, y, color);
             }
         }
     }
