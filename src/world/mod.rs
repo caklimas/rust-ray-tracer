@@ -44,14 +44,15 @@ impl World {
         match hit {
             Some(i) => {
                 let comps = i.prepare_computations(ray);
-                self.shade_hit(&comps)
+                self.shade_hit(i.object, &comps)
             }
             None => Color::black(),
         }
     }
 
-    pub fn shade_hit(&self, computations: &IntersectionComputation) -> Color {
+    pub fn shade_hit(&self, object: &dyn Shape, computations: &IntersectionComputation) -> Color {
         computations.object.get_material().lighting(
+            Box::new(object),
             &self.light,
             &computations.point,
             &computations.eye_v,

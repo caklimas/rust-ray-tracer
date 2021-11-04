@@ -1,4 +1,4 @@
-use crate::{color::Color, patterns::Pattern, point_light::PointLight, tuple::Tuple};
+use crate::{color::Color, patterns::Pattern, point_light::PointLight, shape::Shape, tuple::Tuple};
 use std::ops::RangeInclusive;
 
 #[cfg(test)]
@@ -37,6 +37,7 @@ impl Material {
 
     pub fn lighting(
         &self,
+        object: Box<&dyn Shape>,
         light: &PointLight,
         position: &Tuple,
         eye: &Tuple,
@@ -45,7 +46,7 @@ impl Material {
     ) -> Color {
         // Combine the surface color with the light's color/intensity
         let color = if let Some(pattern) = &self.pattern {
-            pattern.color_at(position)
+            pattern.color_at_object(object, position)
         } else {
             self.color
         };

@@ -1,6 +1,8 @@
 use crate::{
     color::Color,
+    matrix::transformation::{scale, translate},
     patterns::{stripe::Stripe, Pattern},
+    sphere::Sphere,
     tuple::Tuple,
 };
 
@@ -47,4 +49,38 @@ fn stripe_alternates_in_x() {
     assert_eq!(Color::black(), a4);
     assert_eq!(Color::black(), a5);
     assert_eq!(Color::white(), a6);
+}
+
+#[test]
+fn stripe_object_transformation() {
+    let pattern = Stripe::new(Color::white(), Color::black());
+    let mut object: Sphere = Default::default();
+    object.transform = scale(2.0, 2.0, 2.0);
+
+    let c = pattern.color_at_object(Box::new(&object), &Tuple::point(1.5, 0.0, 0.0));
+
+    assert_eq!(Color::white(), c);
+}
+
+#[test]
+fn stripe_pattern_transformation() {
+    let object: Sphere = Default::default();
+    let mut pattern = Stripe::new(Color::white(), Color::black());
+    pattern.transform = scale(2.0, 2.0, 2.0);
+
+    let c = pattern.color_at_object(Box::new(&object), &Tuple::point(1.5, 0.0, 0.0));
+
+    assert_eq!(Color::white(), c);
+}
+
+#[test]
+fn stripe_object_pattern_transformation() {
+    let mut object: Sphere = Default::default();
+    object.transform = scale(2.0, 2.0, 2.0);
+    let mut pattern = Stripe::new(Color::white(), Color::black());
+    pattern.transform = translate(0.5, 0.0, 0.0);
+
+    let c = pattern.color_at_object(Box::new(&object), &Tuple::point(1.5, 0.0, 0.0));
+
+    assert_eq!(Color::white(), c);
 }

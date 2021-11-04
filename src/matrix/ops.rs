@@ -69,6 +69,14 @@ impl Mul<Tuple> for &Matrix {
     type Output = Tuple;
 
     fn mul(self, rhs: Tuple) -> Self::Output {
+        self * &rhs
+    }
+}
+
+impl Mul<&Tuple> for &Matrix {
+    type Output = Tuple;
+
+    fn mul(self, rhs: &Tuple) -> Self::Output {
         if self.columns != 4 {
             panic!("Matrix must have 4 columns to be multiplied by a Tuple");
         }

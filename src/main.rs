@@ -10,7 +10,7 @@ use sphere::Sphere;
 use tuple::Tuple;
 use world::World;
 
-use crate::{camera::Camera, plane::Plane, world::view_transform};
+use crate::{camera::Camera, patterns::stripe::Stripe, plane::Plane, world::view_transform};
 
 pub mod camera;
 pub mod canvas;
@@ -30,8 +30,8 @@ pub mod tuple;
 pub mod world;
 
 fn main() {
-    canvas_sphere_test();
-    camera_world_test();
+    // canvas_sphere_test();
+    // camera_world_test();
     camera_plane_test();
 }
 
@@ -65,10 +65,14 @@ fn canvas_sphere_test() {
                 let position = ray.position(hit.value);
                 let normal = hit.object.normal_at(position);
                 let eye = ray.direction.negate();
-                let color = hit
-                    .object
-                    .get_material()
-                    .lighting(&light, &position, &eye, &normal, true);
+                let color = hit.object.get_material().lighting(
+                    Box::new(hit.object),
+                    &light,
+                    &position,
+                    &eye,
+                    &normal,
+                    true,
+                );
                 canvas.write_pixel(x, y, color);
             }
         }
@@ -176,12 +180,20 @@ fn camera_plane_test() {
     middle.material.diffuse = 0.7;
     middle.material.specular = 0.3;
 
+    let mut stripe = Stripe::new(Color::new(1.0, 0.0, 0.0), Color::white());
+    stripe.transform = scale(0.25, 0.25, 0.25);
+    middle.material.pattern = Option::Some(Box::new(stripe));
+
     let mut right = Sphere::new();
     right.transform = scale(0.5, 0.5, 0.5).translate(1.5, 0.5, -0.5);
     right.material = Default::default();
     right.material.color = Color::new(0.5, 1.0, 0.1);
     right.material.diffuse = 0.7;
     right.material.specular = 0.3;
+
+    let mut stripe = Stripe::new(Color::new(0.0, 0.0, 1.0), Color::new(0.0, 1.0, 0.0));
+    stripe.transform = scale(0.25, 0.25, 0.25).rotate_z(FRAC_PI_2);
+    right.material.pattern = Option::Some(Box::new(stripe));
 
     let mut left = Sphere::new();
     left.transform = scale(0.33, 0.33, 0.33).translate(-1.5, 0.33, -0.75);
