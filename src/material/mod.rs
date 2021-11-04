@@ -1,4 +1,4 @@
-use crate::{color::Color, point_light::PointLight, tuple::Tuple};
+use crate::{color::Color, patterns::Pattern, point_light::PointLight, tuple::Tuple};
 use std::ops::RangeInclusive;
 
 #[cfg(test)]
@@ -89,13 +89,7 @@ impl Material {
 
 impl Default for Material {
     fn default() -> Self {
-        Self {
-            color: Color::new(1.0, 1.0, 1.0),
-            ambient: 0.1,
-            diffuse: 0.9,
-            specular: 0.9,
-            shininess: 200.0,
-        }
+        Material::new(Color::new(1.0, 1.0, 1.0), 0.1, 0.9, 0.9, 200.0)
     }
 }
 
