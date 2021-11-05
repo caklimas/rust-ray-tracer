@@ -12,7 +12,7 @@ use world::World;
 
 use crate::{
     camera::Camera,
-    patterns::{checker::Checker, ring::Ring, stripe::Stripe, Pattern},
+    patterns::{checker::Checker, gradient::Gradient, ring::Ring, stripe::Stripe, Pattern},
     plane::Plane,
     world::view_transform,
 };
@@ -165,6 +165,10 @@ fn camera_plane_test() {
     floor.material.color = Color::new(1.0, 0.9, 0.9);
     floor.material.specular = 0.0;
 
+    let mut gradient = Gradient::new(Color::new(1.0, 0.0, 0.0), Color::new(0.0, 0.0, 1.0));
+    gradient.set_transform(scale(0.5, 0.5, 0.5));
+    floor.material.pattern = Option::Some(Box::new(gradient));
+
     let mut wall = Plane::new();
     wall.transform = scale(10.0, 0.01, 10.0)
         .rotate_x(FRAC_PI_2)
@@ -203,7 +207,7 @@ fn camera_plane_test() {
     left.material.diffuse = 0.7;
     left.material.specular = 0.3;
 
-    let mut checker = Checker::new(Color::white(), Color::new(0.0, 1.0, 0.0));
+    let mut checker = Checker::new(Color::new(1.0, 0.0, 0.0), Color::new(0.0, 1.0, 0.0));
     checker.set_transform(scale(0.25, 0.25, 0.25));
     left.material.pattern = Option::Some(Box::new(checker));
 
