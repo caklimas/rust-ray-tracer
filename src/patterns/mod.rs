@@ -1,5 +1,6 @@
 use crate::{color::Color, matrix::Matrix, shape::Shape, tuple::Tuple};
 
+pub mod gradient;
 pub mod stripe;
 
 #[cfg(test)]

@@ -10,7 +10,12 @@ use sphere::Sphere;
 use tuple::Tuple;
 use world::World;
 
-use crate::{camera::Camera, patterns::stripe::Stripe, plane::Plane, world::view_transform};
+use crate::{
+    camera::Camera,
+    patterns::{gradient::Gradient, stripe::Stripe},
+    plane::Plane,
+    world::view_transform,
+};
 
 pub mod camera;
 pub mod canvas;
@@ -197,6 +202,9 @@ fn camera_plane_test() {
     left.material.color = Color::new(1.0, 0.8, 0.1);
     left.material.diffuse = 0.7;
     left.material.specular = 0.3;
+
+    let gradient = Gradient::new(Color::white(), Color::black());
+    left.material.pattern = Option::Some(Box::new(gradient));
 
     let world = World::new(
         PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0)),
