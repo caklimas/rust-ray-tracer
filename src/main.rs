@@ -12,7 +12,7 @@ use world::World;
 
 use crate::{
     camera::Camera,
-    patterns::{gradient::Gradient, stripe::Stripe},
+    patterns::{gradient::Gradient, ring::Ring, stripe::Stripe, Pattern},
     plane::Plane,
     world::view_transform,
 };
@@ -181,9 +181,9 @@ fn camera_plane_test() {
     middle.material.diffuse = 0.7;
     middle.material.specular = 0.3;
 
-    let mut stripe = Stripe::new(Color::new(1.0, 0.0, 0.0), Color::white());
-    stripe.transform = scale(0.25, 0.25, 0.25);
-    middle.material.pattern = Option::Some(Box::new(stripe));
+    let mut ring = Ring::new(Color::white(), Color::black());
+    ring.set_transform(scale(0.1, 0.1, 0.1).rotate_x(FRAC_PI_2));
+    middle.material.pattern = Option::Some(Box::new(ring));
 
     let mut right = Sphere::new();
     right.transform = scale(0.5, 0.5, 0.5).translate(1.5, 0.5, -0.5);
@@ -193,7 +193,7 @@ fn camera_plane_test() {
     right.material.specular = 0.3;
 
     let mut stripe = Stripe::new(Color::new(0.0, 0.0, 1.0), Color::new(0.0, 1.0, 0.0));
-    stripe.transform = scale(0.25, 0.25, 0.25).rotate_z(FRAC_PI_2);
+    stripe.set_transform(scale(0.25, 0.25, 0.25).rotate_z(FRAC_PI_2));
     right.material.pattern = Option::Some(Box::new(stripe));
 
     let mut left = Sphere::new();

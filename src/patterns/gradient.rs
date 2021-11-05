@@ -23,6 +23,10 @@ impl Pattern for Gradient {
         &self.transform
     }
 
+    fn set_transform(&mut self, transform: Matrix) {
+        self.transform = transform;
+    }
+
     fn color_at(&self, point: &Tuple) -> crate::color::Color {
         let distance = self.b - self.a;
         let fraction = point.x() - point.x().floor();

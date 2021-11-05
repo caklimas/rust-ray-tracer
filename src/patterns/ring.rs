@@ -1,14 +1,14 @@
-use crate::{color::Color, floating_point::EPSILON, matrix::Matrix, tuple::Tuple};
+use crate::{color::Color, matrix::Matrix};
 
 use super::Pattern;
 
-pub struct Stripe {
-    pub a: Color,
-    pub b: Color,
+pub struct Ring {
+    a: Color,
+    b: Color,
     transform: Matrix,
 }
 
-impl Stripe {
+impl Ring {
     pub fn new(a: Color, b: Color) -> Self {
         Self {
             a,
@@ -18,7 +18,7 @@ impl Stripe {
     }
 }
 
-impl Pattern for Stripe {
+impl Pattern for Ring {
     fn get_transform(&self) -> &Matrix {
         &self.transform
     }
@@ -27,8 +27,9 @@ impl Pattern for Stripe {
         self.transform = transform;
     }
 
-    fn color_at(&self, point: &Tuple) -> Color {
-        if (point.x().floor() % 2.0).abs() < EPSILON {
+    fn color_at(&self, point: &crate::tuple::Tuple) -> Color {
+        let n = (point.x().powi(2) + point.z().powi(2)).sqrt().floor();
+        if n % 2.0 == 0.0 {
             self.a
         } else {
             self.b
