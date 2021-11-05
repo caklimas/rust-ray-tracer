@@ -1,4 +1,4 @@
-use crate::{color::Color, matrix::Matrix};
+use crate::{color::Color, floating_point::FloatingPoint, matrix::Matrix};
 
 use super::Pattern;
 
@@ -29,7 +29,7 @@ impl Pattern for Checker {
 
     fn color_at(&self, point: &crate::tuple::Tuple) -> Color {
         let n = point.x().floor() + point.y().floor() + point.z().floor();
-        if n % 2.0 == 0.0 {
+        if FloatingPoint::equals(n % 2.0, 0.0) {
             self.a
         } else {
             self.b
