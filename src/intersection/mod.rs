@@ -1,6 +1,6 @@
 use crate::{floating_point::EPSILON, ray::Ray, shape::Shape};
 
-use self::intersection_computation::IntersectionComputation;
+use self::intersection_computation::{IntersectionComputation, IntersectionComputationConfig};
 
 pub mod intersection_computation;
 pub mod intersections;
@@ -36,12 +36,14 @@ impl<'a> Intersection<'a> {
         IntersectionComputation::new(
             self.object,
             self.value,
-            point,
-            eye_v,
-            normal_v,
-            inside,
-            over_point,
-            reflect_v,
+            IntersectionComputationConfig {
+                point,
+                eye_v,
+                normal_v,
+                inside,
+                over_point,
+                reflect_v,
+            },
         )
     }
 }

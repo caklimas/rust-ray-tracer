@@ -1,5 +1,9 @@
 use crate::{
-    intersection::intersection_computation::IntersectionComputation, sphere::Sphere, tuple::Tuple,
+    intersection::intersection_computation::{
+        IntersectionComputation, IntersectionComputationConfig,
+    },
+    sphere::Sphere,
+    tuple::Tuple,
 };
 
 #[test]
@@ -9,12 +13,14 @@ fn new_point_panic_test() {
     IntersectionComputation::new(
         &shape,
         0.0,
-        Tuple::vector(1.0, 1.0, 1.0),
-        Tuple::vector(1.0, 1.0, 1.0),
-        Tuple::vector(1.0, 1.0, 1.0),
-        true,
-        Tuple::point(1.0, 1.0, 1.0),
-        Tuple::vector(0.0, 0.0, 0.0),
+        IntersectionComputationConfig {
+            point: Tuple::vector(1.0, 1.0, 1.0),
+            eye_v: Tuple::vector(1.0, 1.0, 1.0),
+            normal_v: Tuple::vector(1.0, 1.0, 1.0),
+            inside: true,
+            over_point: Tuple::point(1.0, 1.0, 1.0),
+            reflect_v: Tuple::vector(0.0, 0.0, 0.0),
+        },
     );
 }
 
@@ -25,12 +31,14 @@ fn new_eye_v_panic_test() {
     IntersectionComputation::new(
         &shape,
         0.0,
-        Tuple::point(1.0, 1.0, 1.0),
-        Tuple::point(1.0, 1.0, 1.0),
-        Tuple::vector(1.0, 1.0, 1.0),
-        true,
-        Tuple::point(1.0, 1.0, 1.0),
-        Tuple::vector(0.0, 0.0, 0.0),
+        IntersectionComputationConfig {
+            point: Tuple::point(1.0, 1.0, 1.0),
+            eye_v: Tuple::point(1.0, 1.0, 1.0),
+            normal_v: Tuple::vector(1.0, 1.0, 1.0),
+            inside: true,
+            over_point: Tuple::point(1.0, 1.0, 1.0),
+            reflect_v: Tuple::vector(0.0, 0.0, 0.0),
+        },
     );
 }
 
@@ -41,12 +49,14 @@ fn new_normal_v_panic_test() {
     IntersectionComputation::new(
         &shape,
         0.0,
-        Tuple::point(1.0, 1.0, 1.0),
-        Tuple::vector(1.0, 1.0, 1.0),
-        Tuple::point(1.0, 1.0, 1.0),
-        true,
-        Tuple::point(1.0, 1.0, 1.0),
-        Tuple::vector(0.0, 0.0, 0.0),
+        IntersectionComputationConfig {
+            point: Tuple::point(1.0, 1.0, 1.0),
+            eye_v: Tuple::vector(1.0, 1.0, 1.0),
+            normal_v: Tuple::point(1.0, 1.0, 1.0),
+            inside: true,
+            over_point: Tuple::point(1.0, 1.0, 1.0),
+            reflect_v: Tuple::vector(0.0, 0.0, 0.0),
+        },
     );
 }
 
@@ -57,12 +67,14 @@ fn new_over_point_panic_test() {
     IntersectionComputation::new(
         &shape,
         0.0,
-        Tuple::point(1.0, 1.0, 1.0),
-        Tuple::vector(1.0, 1.0, 1.0),
-        Tuple::vector(1.0, 1.0, 1.0),
-        true,
-        Tuple::vector(1.0, 1.0, 1.0),
-        Tuple::vector(0.0, 0.0, 0.0),
+        IntersectionComputationConfig {
+            point: Tuple::point(1.0, 1.0, 1.0),
+            eye_v: Tuple::vector(1.0, 1.0, 1.0),
+            normal_v: Tuple::vector(1.0, 1.0, 1.0),
+            inside: true,
+            over_point: Tuple::vector(1.0, 1.0, 1.0),
+            reflect_v: Tuple::vector(0.0, 0.0, 0.0),
+        },
     );
 }
 
@@ -73,12 +85,14 @@ fn new_reflect_v_panic_test() {
     IntersectionComputation::new(
         &shape,
         0.0,
-        Tuple::point(1.0, 1.0, 1.0),
-        Tuple::vector(1.0, 1.0, 1.0),
-        Tuple::vector(1.0, 1.0, 1.0),
-        true,
-        Tuple::point(1.0, 1.0, 1.0),
-        Tuple::point(1.0, 1.0, 1.0),
+        IntersectionComputationConfig {
+            point: Tuple::point(1.0, 1.0, 1.0),
+            eye_v: Tuple::vector(1.0, 1.0, 1.0),
+            normal_v: Tuple::vector(1.0, 1.0, 1.0),
+            inside: true,
+            over_point: Tuple::point(1.0, 1.0, 1.0),
+            reflect_v: Tuple::point(1.0, 1.0, 1.0),
+        },
     );
 }
 
@@ -88,11 +102,13 @@ fn new_test() {
     IntersectionComputation::new(
         &shape,
         0.0,
-        Tuple::point(1.0, 1.0, 1.0),
-        Tuple::vector(1.0, 1.0, 1.0),
-        Tuple::vector(1.0, 1.0, 1.0),
-        true,
-        Tuple::point(1.0, 1.0, 1.0),
-        Tuple::vector(0.0, 0.0, 0.0),
+        IntersectionComputationConfig {
+            point: Tuple::point(1.0, 1.0, 1.0),
+            eye_v: Tuple::vector(1.0, 1.0, 1.0),
+            normal_v: Tuple::vector(1.0, 1.0, 1.0),
+            inside: true,
+            over_point: Tuple::point(1.0, 1.0, 1.0),
+            reflect_v: Tuple::vector(0.0, 0.0, 0.0),
+        },
     );
 }
