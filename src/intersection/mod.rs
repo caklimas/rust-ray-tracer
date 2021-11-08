@@ -29,6 +29,8 @@ impl<'a> Intersection<'a> {
             inside = true;
         }
 
+        let reflect_v = ray.direction.reflect(&normal_v);
+
         let over_point = point + normal_v * EPSILON;
 
         IntersectionComputation::new(
@@ -39,6 +41,7 @@ impl<'a> Intersection<'a> {
             normal_v,
             inside,
             over_point,
+            reflect_v,
         )
     }
 }

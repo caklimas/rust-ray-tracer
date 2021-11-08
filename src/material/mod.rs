@@ -13,16 +13,26 @@ pub struct Material {
     pub pattern: Option<Box<dyn Pattern>>,
     pub specular: f64,
     pub shininess: f64,
+    pub reflective: f64,
 }
 
 impl Material {
-    pub fn new(color: Color, ambient: f64, diffuse: f64, specular: f64, shininess: f64) -> Self {
+    pub fn new(
+        color: Color,
+        ambient: f64,
+        diffuse: f64,
+        specular: f64,
+        shininess: f64,
+        reflective: f64,
+    ) -> Self {
         if !REFLECTION_RANGE.contains(&ambient) {
             panic_reflection("ambient");
         } else if !REFLECTION_RANGE.contains(&diffuse) {
             panic_reflection("diffuse");
         } else if !REFLECTION_RANGE.contains(&specular) {
             panic_reflection("specular");
+        } else if !REFLECTION_RANGE.contains(&reflective) {
+            panic_reflection("reflective");
         }
 
         Self {
@@ -32,6 +42,7 @@ impl Material {
             pattern: Option::None,
             specular,
             shininess,
+            reflective: 0.0,
         }
     }
 
@@ -96,7 +107,7 @@ impl Material {
 
 impl Default for Material {
     fn default() -> Self {
-        Material::new(Color::new(1.0, 1.0, 1.0), 0.1, 0.9, 0.9, 200.0)
+        Material::new(Color::new(1.0, 1.0, 1.0), 0.1, 0.9, 0.9, 200.0, 0.0)
     }
 }
 

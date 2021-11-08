@@ -8,6 +8,7 @@ pub struct IntersectionComputation<'a> {
     pub normal_v: Tuple,
     pub inside: bool,
     pub over_point: Tuple,
+    pub reflect_v: Tuple,
 }
 
 impl<'a> IntersectionComputation<'a> {
@@ -19,6 +20,7 @@ impl<'a> IntersectionComputation<'a> {
         normal_v: Tuple,
         inside: bool,
         over_point: Tuple,
+        reflect_v: Tuple,
     ) -> Self {
         if !point.is_point() {
             panic!("point must be a point");
@@ -36,6 +38,10 @@ impl<'a> IntersectionComputation<'a> {
             panic!("over_point must be a point");
         }
 
+        if !reflect_v.is_vector() {
+            panic!("reflect_v must be a vector");
+        }
+
         Self {
             object,
             value,
@@ -44,6 +50,7 @@ impl<'a> IntersectionComputation<'a> {
             normal_v,
             inside,
             over_point,
+            reflect_v,
         }
     }
 }

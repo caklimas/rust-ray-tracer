@@ -12,7 +12,7 @@ fn new_test() {
     let specular = 0.3;
     let shininess = 100.0;
 
-    let material = Material::new(color, ambient, diffuse, specular, shininess);
+    let material = Material::new(color, ambient, diffuse, specular, shininess, 0.0);
 
     assert_eq!(color, material.color);
     assert_eq!(ambient, material.ambient);
@@ -30,7 +30,7 @@ fn new_ambient_panic() {
     let specular = 0.3;
     let shininess = 100.0;
 
-    Material::new(color, ambient, diffuse, specular, shininess);
+    Material::new(color, ambient, diffuse, specular, shininess, 0.0);
 }
 
 #[test]
@@ -42,7 +42,7 @@ fn new_diffuse_panic() {
     let specular = 0.3;
     let shininess = 100.0;
 
-    Material::new(color, ambient, diffuse, specular, shininess);
+    Material::new(color, ambient, diffuse, specular, shininess, 0.0);
 }
 
 #[test]
@@ -54,7 +54,7 @@ fn new_specular_panic() {
     let specular = 4.3;
     let shininess = 100.0;
 
-    Material::new(color, ambient, diffuse, specular, shininess);
+    Material::new(color, ambient, diffuse, specular, shininess, 0.0);
 }
 
 #[test]

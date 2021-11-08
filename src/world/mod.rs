@@ -1,5 +1,6 @@
 use crate::{
     color::Color,
+    floating_point::FloatingPoint,
     intersection::{
         intersection_computation::IntersectionComputation, intersections::Intersections,
         Intersection,
@@ -74,6 +75,17 @@ impl World {
         } else {
             false
         }
+    }
+
+    pub fn reflected_color(&self, comps: &IntersectionComputation) -> Color {
+        if FloatingPoint::equals(comps.object.get_material().reflective, 0.0) {
+            return Color::black();
+        }
+
+        let reflect_ray = Ray::new(comps.over_point, comps.reflect_v);
+        let color = self.color_at(&reflect_ray);
+
+        color * comps.object.get_material().reflective
     }
 }
 

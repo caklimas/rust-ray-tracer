@@ -6,6 +6,7 @@ use crate::{
         transformation::{scale, translate},
         Matrix,
     },
+    plane::Plane,
     point_light::PointLight,
     ray::Ray,
     sphere::Sphere,
@@ -215,4 +216,41 @@ fn hit_should_offset_point() {
 
     assert_eq!(true, comps.over_point.z() < -(EPSILON / 2.0));
     assert_eq!(true, comps.point.z() > comps.over_point.z());
+}
+
+#[test]
+fn reflected_color_for_nonreflective_material() {
+    let light = PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0));
+    let mut s1 = Sphere::new();
+    s1.material.color = Color::new(0.8, 1.0, 0.6);
+    s1.material.diffuse = 0.7;
+    s1.material.specular = 0.2;
+    let mut s2 = Sphere::new();
+    s2.transform = scale(0.5, 0.5, 0.5);
+    s2.material.ambient = 1.0;
+    let w = World::new(light, vec![Box::new(s1), Box::new(s2)]);
+    let i = Intersection::new(&*w.objects[0], 1.0);
+    let r = Ray::new(Tuple::point(0.0, 0.0, 0.0), Tuple::vector(0.0, 0.0, 1.0));
+    let comps = i.prepare_computations(&r);
+
+    let color = w.reflected_color(&comps);
+
+    assert_eq!(Color::black(), color);
+}
+
+#[test]
+fn reflected_color_for_reflective_material() {
+    let v = (2.0f64).sqrt() / 2.0;
+    let mut w = World::default();
+    let mut shape = Plane::default();
+    shape.material.reflective = 0.5;
+    shape.transform = translate(0.0, -1.0, 0.0);
+    w.objects.push(Box::new(shape));
+    let r = Ray::new(Tuple::point(0.0, 0.0, -3.0), Tuple::vector(0.0, -v, v));
+    let i = Intersection::new(&*w.objects[2], (2.0_f64).sqrt());
+    let comps = i.prepare_computations(&r);
+
+    let color = w.reflected_color(&comps);
+
+    assert_eq!(Color::new(0.19033, 0.23791, 0.14274), color);
 }
