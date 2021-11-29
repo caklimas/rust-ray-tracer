@@ -20,6 +20,8 @@ fn new_point_panic_test() {
             inside: true,
             over_point: Tuple::point(1.0, 1.0, 1.0),
             reflect_v: Tuple::vector(0.0, 0.0, 0.0),
+            n1: 1.0,
+            n2: 1.0,
         },
     );
 }
@@ -38,6 +40,8 @@ fn new_eye_v_panic_test() {
             inside: true,
             over_point: Tuple::point(1.0, 1.0, 1.0),
             reflect_v: Tuple::vector(0.0, 0.0, 0.0),
+            n1: 1.0,
+            n2: 1.0,
         },
     );
 }
@@ -56,6 +60,8 @@ fn new_normal_v_panic_test() {
             inside: true,
             over_point: Tuple::point(1.0, 1.0, 1.0),
             reflect_v: Tuple::vector(0.0, 0.0, 0.0),
+            n1: 1.0,
+            n2: 1.0,
         },
     );
 }
@@ -74,6 +80,8 @@ fn new_over_point_panic_test() {
             inside: true,
             over_point: Tuple::vector(1.0, 1.0, 1.0),
             reflect_v: Tuple::vector(0.0, 0.0, 0.0),
+            n1: 1.0,
+            n2: 1.0,
         },
     );
 }
@@ -92,6 +100,8 @@ fn new_reflect_v_panic_test() {
             inside: true,
             over_point: Tuple::point(1.0, 1.0, 1.0),
             reflect_v: Tuple::point(1.0, 1.0, 1.0),
+            n1: 1.0,
+            n2: 1.0,
         },
     );
 }
@@ -109,6 +119,8 @@ fn new_test() {
             inside: true,
             over_point: Tuple::point(1.0, 1.0, 1.0),
             reflect_v: Tuple::vector(0.0, 0.0, 0.0),
+            n1: 1.0,
+            n2: 1.0,
         },
     );
 }

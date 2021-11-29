@@ -46,7 +46,7 @@ impl World {
         let hit = intersections.hit();
         match hit {
             Some(i) => {
-                let comps = i.prepare_computations(ray);
+                let comps = i.prepare_computations(ray, Option::Some(&intersections));
                 self.shade_hit(i.object, &comps, remaining)
             }
             None => Color::black(),

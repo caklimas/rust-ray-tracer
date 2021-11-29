@@ -36,7 +36,7 @@ fn shade_hit_test() {
     let world: World = Default::default();
     let ray = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
     let intersection = Intersection::new(&*world.objects[0], 4.0);
-    let comps = intersection.prepare_computations(&ray);
+    let comps = intersection.prepare_computations(&ray, Option::None);
 
     let color = world.shade_hit(intersection.object, &comps, DEFAULT_REMAINING);
 
@@ -49,7 +49,7 @@ fn shade_hit_from_inside_test() {
     world.light = PointLight::new(Color::white(), Tuple::point(0.0, 0.25, 0.0));
     let ray = Ray::new(Tuple::point(0.0, 0.0, 0.0), Tuple::vector(0.0, 0.0, 1.0));
     let intersection = Intersection::new(&*world.objects[1], 0.5);
-    let comps = intersection.prepare_computations(&ray);
+    let comps = intersection.prepare_computations(&ray, Option::None);
 
     let color = world.shade_hit(intersection.object, &comps, DEFAULT_REMAINING);
 
@@ -200,7 +200,7 @@ fn shade_hit_intersection_in_shadow_test() {
     let ray = Ray::new(Tuple::point(0.0, 0.0, 5.0), Tuple::vector(0.0, 0.0, 1.0));
     let i = Intersection::new(&*world.objects[1], 4.0);
 
-    let comps = i.prepare_computations(&ray);
+    let comps = i.prepare_computations(&ray, Option::None);
     let c = world.shade_hit(i.object, &comps, DEFAULT_REMAINING);
 
     assert_eq!(Color::new(0.1, 0.1, 0.1), c);
@@ -219,7 +219,7 @@ fn shade_hit_reflective_material() {
     );
     world.objects.push(Box::new(shape));
     let i = Intersection::new(&*world.objects[2], (2.0_f64).sqrt());
-    let comps = i.prepare_computations(&r);
+    let comps = i.prepare_computations(&r, Option::None);
 
     let color = world.shade_hit(&*world.objects[2], &comps, DEFAULT_REMAINING);
 
@@ -233,7 +233,7 @@ fn hit_should_offset_point() {
     shape.transform = translate(0.0, 0.0, 1.0);
 
     let i = Intersection::new(&shape, 5.0);
-    let comps = i.prepare_computations(&r);
+    let comps = i.prepare_computations(&r, Option::None);
 
     assert_eq!(true, comps.over_point.z() < -(EPSILON / 2.0));
     assert_eq!(true, comps.point.z() > comps.over_point.z());
@@ -252,7 +252,7 @@ fn reflected_color_for_nonreflective_material() {
     let w = World::new(light, vec![Box::new(s1), Box::new(s2)]);
     let i = Intersection::new(&*w.objects[0], 1.0);
     let r = Ray::new(Tuple::point(0.0, 0.0, 0.0), Tuple::vector(0.0, 0.0, 1.0));
-    let comps = i.prepare_computations(&r);
+    let comps = i.prepare_computations(&r, Option::None);
 
     let color = w.reflected_color(&comps, DEFAULT_REMAINING);
 
@@ -269,7 +269,7 @@ fn reflected_color_for_reflective_material() {
     w.objects.push(Box::new(shape));
     let r = Ray::new(Tuple::point(0.0, 0.0, -3.0), Tuple::vector(0.0, -v, v));
     let i = Intersection::new(&*w.objects[2], (2.0_f64).sqrt());
-    let comps = i.prepare_computations(&r);
+    let comps = i.prepare_computations(&r, Option::None);
 
     let color = w.reflected_color(&comps, DEFAULT_REMAINING);
 
@@ -303,7 +303,7 @@ fn reflected_color_max_recursion_depth() {
     w.objects.push(Box::new(shape));
     let r = Ray::new(Tuple::point(0.0, 0.0, -3.0), Tuple::vector(0.0, -v, v));
     let i = Intersection::new(&*w.objects[2], (2.0_f64).sqrt());
-    let comps = i.prepare_computations(&r);
+    let comps = i.prepare_computations(&r, Option::None);
 
     let color = w.reflected_color(&comps, 0);
 

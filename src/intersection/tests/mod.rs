@@ -16,7 +16,7 @@ fn prepare_computations_test() {
     let shape: Sphere = Default::default();
     let intersection = Intersection::new(&shape, 4.0);
 
-    let computations = intersection.prepare_computations(&ray);
+    let computations = intersection.prepare_computations(&ray, Option::None);
 
     assert_eq!(Tuple::point(0.0, 0.0, -1.0), computations.point);
     assert_eq!(Tuple::vector(0.0, 0.0, -1.0), computations.eye_v);
@@ -29,7 +29,7 @@ fn prepare_computations_intersect_occurs_outside() {
     let shape: Sphere = Default::default();
     let intersection = Intersection::new(&shape, 4.0);
 
-    let computations = intersection.prepare_computations(&ray);
+    let computations = intersection.prepare_computations(&ray, Option::None);
 
     assert_eq!(false, computations.inside);
 }
@@ -40,7 +40,7 @@ fn prepare_computations_intersect_occurs_inside() {
     let shape: Sphere = Default::default();
     let intersection = Intersection::new(&shape, 1.0);
 
-    let computations = intersection.prepare_computations(&ray);
+    let computations = intersection.prepare_computations(&ray, Option::None);
 
     assert_eq!(Tuple::point(0.0, 0.0, 1.0), computations.point);
     assert_eq!(Tuple::vector(0.0, 0.0, -1.0), computations.eye_v);
@@ -55,7 +55,7 @@ fn prepare_computations_reflection_vector() {
     let r = Ray::new(Tuple::point(0.0, 1.0, -1.0), Tuple::vector(0.0, -v, v));
     let i = Intersection::new(&shape, (2.0_f64).sqrt());
 
-    let comps = i.prepare_computations(&r);
+    let comps = i.prepare_computations(&r, Option::None);
 
     assert_eq!(Tuple::vector(0.0, v, v), comps.reflect_v);
 }
@@ -80,6 +80,12 @@ fn prepare_computations_finding_n1_and_n2() {
         Intersection::new(&c, 5.25),
         Intersection::new(&a, 6.0),
     ]);
+    let n1s = [1.0, 1.5, 2.0, 2.5, 2.5, 1.5];
+    let n2s = [1.5, 2.0, 2.5, 2.5, 1.5, 1.0];
 
-    let comps = xs.collection[0].prepare_computations(&r);
+    for x in 0..=5 {
+        let comps = xs.collection[x].prepare_computations(&r, Option::Some(&xs));
+        assert_eq!(n1s[x], comps.n1);
+        assert_eq!(n2s[x], comps.n2);
+    }
 }
