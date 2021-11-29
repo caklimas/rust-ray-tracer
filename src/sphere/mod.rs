@@ -21,6 +21,20 @@ impl Sphere {
             transform: Default::default(),
         }
     }
+
+    pub fn glass() -> Self {
+        let material = Material {
+            transparency: 1.0,
+            refractive_index: 1.5,
+            ..Default::default()
+        };
+
+        Sphere {
+            center: Default::default(),
+            material,
+            transform: Default::default(),
+        }
+    }
 }
 
 impl Default for Sphere {

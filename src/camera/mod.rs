@@ -1,4 +1,10 @@
-use crate::{canvas::Canvas, matrix::Matrix, ray::Ray, tuple::Tuple, world::World};
+use crate::{
+    canvas::Canvas,
+    matrix::Matrix,
+    ray::Ray,
+    tuple::Tuple,
+    world::{World, DEFAULT_REMAINING},
+};
 
 #[cfg(test)]
 mod tests;
@@ -83,7 +89,7 @@ impl Camera {
         for y in 0..self.vertical_size {
             for x in 0..self.horizontal_size {
                 let ray = self.ray_for_pixel(x, y);
-                let color = world.color_at(&ray);
+                let color = world.color_at(&ray, DEFAULT_REMAINING);
                 image.write_pixel(x, y, color);
             }
         }

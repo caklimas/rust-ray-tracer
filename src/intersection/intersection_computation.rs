@@ -9,6 +9,8 @@ pub struct IntersectionComputation<'a> {
     pub inside: bool,
     pub over_point: Tuple,
     pub reflect_v: Tuple,
+    pub n1: f64,
+    pub n2: f64,
 }
 
 pub struct IntersectionComputationConfig {
@@ -51,6 +53,8 @@ impl<'a> IntersectionComputation<'a> {
             inside: config.inside,
             over_point: config.over_point,
             reflect_v: config.reflect_v,
+            n1: 0.0,
+            n2: 0.0,
         }
     }
 }

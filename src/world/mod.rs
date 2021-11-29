@@ -19,6 +19,8 @@ use crate::{
 #[cfg(test)]
 mod tests;
 
+pub const DEFAULT_REMAINING: u8 = 4;
+
 pub struct World {
     pub light: PointLight,
     pub objects: Vec<Box<dyn Shape>>,
@@ -39,27 +41,36 @@ impl World {
         intersections
     }
 
-    pub fn color_at(&self, ray: &Ray) -> Color {
+    pub fn color_at(&self, ray: &Ray, remaining: u8) -> Color {
         let intersections = Intersections::new(self.intersect(ray));
         let hit = intersections.hit();
         match hit {
             Some(i) => {
                 let comps = i.prepare_computations(ray);
-                self.shade_hit(i.object, &comps)
+                self.shade_hit(i.object, &comps, remaining)
             }
             None => Color::black(),
         }
     }
 
-    pub fn shade_hit(&self, object: &dyn Shape, computations: &IntersectionComputation) -> Color {
-        computations.object.get_material().lighting(
+    pub fn shade_hit(
+        &self,
+        object: &dyn Shape,
+        computations: &IntersectionComputation,
+        remaining: u8,
+    ) -> Color {
+        let surface = computations.object.get_material().lighting(
             object,
             &self.light,
             &computations.point,
             &computations.eye_v,
             &computations.normal_v,
             self.is_shadowed(&computations.over_point),
-        )
+        );
+
+        let reflected = self.reflected_color(computations, remaining);
+
+        surface + reflected
     }
 
     pub fn is_shadowed(&self, point: &Tuple) -> bool {
@@ -77,13 +88,13 @@ impl World {
         }
     }
 
-    pub fn reflected_color(&self, comps: &IntersectionComputation) -> Color {
-        if FloatingPoint::equals(comps.object.get_material().reflective, 0.0) {
+    pub fn reflected_color(&self, comps: &IntersectionComputation, remaining: u8) -> Color {
+        if remaining == 0 || FloatingPoint::equals(comps.object.get_material().reflective, 0.0) {
             return Color::black();
         }
 
         let reflect_ray = Ray::new(comps.over_point, comps.reflect_v);
-        let color = self.color_at(&reflect_ray);
+        let color = self.color_at(&reflect_ray, remaining - 1);
 
         color * comps.object.get_material().reflective
     }

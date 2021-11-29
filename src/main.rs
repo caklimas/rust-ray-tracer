@@ -37,7 +37,7 @@ pub mod world;
 
 fn main() {
     canvas_sphere_test();
-    camera_world_test();
+    camera_scene_test();
     camera_plane_test();
 }
 
@@ -86,7 +86,7 @@ fn canvas_sphere_test() {
     );
 }
 
-fn camera_world_test() {
+fn camera_scene_test() {
     let mut floor = Sphere::new();
     floor.transform = scale(10.0, 0.01, 10.0);
     floor.material = Default::default();
