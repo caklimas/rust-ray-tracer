@@ -3,7 +3,7 @@ use crate::{
     floating_point::FloatingPoint,
     intersection::{
         intersection_computation::IntersectionComputation, intersections::Intersections,
-        Intersection,
+        prepare_computation::PrepareComputationConfig, Intersection,
     },
     matrix::{
         transformation::{scale, translate},
@@ -46,7 +46,10 @@ impl World {
         let hit = intersections.hit();
         match hit {
             Some(i) => {
-                let comps = i.prepare_computations(ray, Option::Some(&intersections));
+                let comps = i.prepare_computations(
+                    ray,
+                    Option::Some(&mut PrepareComputationConfig::new(&intersections)),
+                );
                 self.shade_hit(i.object, &comps, remaining)
             }
             None => Color::black(),

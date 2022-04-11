@@ -3,11 +3,12 @@ use std::ptr;
 
 use self::{
     intersection_computation::{IntersectionComputation, IntersectionComputationConfig},
-    intersections::Intersections,
+    prepare_computation::PrepareComputationConfig,
 };
 
 pub mod intersection_computation;
 pub mod intersections;
+pub mod prepare_computation;
 
 #[cfg(test)]
 mod tests;
@@ -26,7 +27,7 @@ impl<'a> Intersection<'a> {
     pub fn prepare_computations(
         &self,
         ray: &Ray,
-        xs: Option<&Intersections<'a>>,
+        config: Option<&mut PrepareComputationConfig>,
     ) -> IntersectionComputation<'a> {
         let point = ray.position(self.value);
         let eye_v = ray.direction.negate();
@@ -38,50 +39,8 @@ impl<'a> Intersection<'a> {
         }
 
         let reflect_v = ray.direction.reflect(&normal_v);
-
         let over_point = point + normal_v * EPSILON;
-
-        let mut n1 = 0.0;
-        let mut n2 = 0.0;
-        let mut container: Vec<&dyn Shape> = Vec::new();
-        if let Some(x) = xs {
-            for i in x.collection.iter() {
-                if let Some(h) = x.hit() {
-                    if ptr::eq(i, h) {
-                        if container.is_empty() {
-                            n1 = 1.0;
-                        } else if let Some(c) = container.last() {
-                            n1 = c.get_material().refractive_index;
-                        }
-                    }
-                }
-
-                let mut found_index = Option::None;
-                for (j, k) in container.iter().enumerate() {
-                    if ptr::eq(&i.object, k) {
-                        found_index = Option::Some(j);
-                    }
-                }
-
-                if let Some(index) = found_index {
-                    container.remove(index);
-                } else {
-                    container.push(i.object);
-                }
-
-                if let Some(h) = x.hit() {
-                    if ptr::eq(i, h) {
-                        if container.is_empty() {
-                            n2 = 1.0;
-                        } else if let Some(c) = container.last() {
-                            n2 = c.get_material().refractive_index;
-                        }
-                    }
-
-                    break;
-                }
-            }
-        }
+        let (n1, n2) = self.determine_n1_n2(config);
 
         IntersectionComputation::new(
             self.object,
@@ -97,5 +56,49 @@ impl<'a> Intersection<'a> {
                 n2,
             },
         )
+    }
+
+    #[allow(clippy::vtable_address_comparisons)]
+    fn determine_n1_n2(&self, config: Option<&mut PrepareComputationConfig>) -> (f64, f64) {
+        let mut n1 = 0.0;
+        let mut n2 = 0.0;
+        let mut container: Vec<&dyn Shape> = Vec::new();
+        if let Some(pc) = config {
+            for i in pc.xs.collection.iter() {
+                let is_intersection = ptr::eq(self, i);
+                if is_intersection {
+                    if container.is_empty() {
+                        n1 = 1.0;
+                    } else if let Some(c) = container.last() {
+                        n1 = c.get_material().refractive_index;
+                    }
+                }
+
+                let mut found_index = Option::None;
+                for (j, k) in container.iter().enumerate() {
+                    if std::ptr::eq(i.object, *k) {
+                        found_index = Option::Some(j);
+                        break;
+                    }
+                }
+
+                if let Some(index) = found_index {
+                    container.remove(index);
+                } else {
+                    container.push(i.object);
+                }
+
+                if is_intersection {
+                    if container.is_empty() {
+                        n2 = 1.0;
+                    } else if let Some(c) = container.last() {
+                        n2 = c.get_material().refractive_index;
+                    }
+                    break;
+                }
+            }
+        }
+
+        (n1, n2)
     }
 }

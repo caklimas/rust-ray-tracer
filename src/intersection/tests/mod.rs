@@ -6,7 +6,9 @@ use crate::{
     tuple::Tuple,
 };
 
-use super::{intersections::Intersections, Intersection};
+use super::{
+    intersections::Intersections, prepare_computation::PrepareComputationConfig, Intersection,
+};
 
 pub mod intersection_computation;
 
@@ -82,9 +84,10 @@ fn prepare_computations_finding_n1_and_n2() {
     ]);
     let n1s = [1.0, 1.5, 2.0, 2.5, 2.5, 1.5];
     let n2s = [1.5, 2.0, 2.5, 2.5, 1.5, 1.0];
+    let mut config = PrepareComputationConfig::new(&xs);
 
     for x in 0..=5 {
-        let comps = xs.collection[x].prepare_computations(&r, Option::Some(&xs));
+        let comps = xs.collection[x].prepare_computations(&r, Option::Some(&mut config));
         assert_eq!(n1s[x], comps.n1);
         assert_eq!(n2s[x], comps.n2);
     }
