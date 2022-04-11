@@ -67,11 +67,7 @@ impl<'a> Intersection<'a> {
             for i in pc.xs.collection.iter() {
                 let is_intersection = ptr::eq(self, i);
                 if is_intersection {
-                    if container.is_empty() {
-                        n1 = 1.0;
-                    } else if let Some(c) = container.last() {
-                        n1 = c.get_material().refractive_index;
-                    }
+                    n1 = self.get_refractive_index(&container);
                 }
 
                 let mut found_index = Option::None;
@@ -83,22 +79,29 @@ impl<'a> Intersection<'a> {
                 }
 
                 if let Some(index) = found_index {
+                    // The intersection must be exiting the object
                     container.remove(index);
                 } else {
+                    // The intersection is entering the object
                     container.push(i.object);
                 }
 
                 if is_intersection {
-                    if container.is_empty() {
-                        n2 = 1.0;
-                    } else if let Some(c) = container.last() {
-                        n2 = c.get_material().refractive_index;
-                    }
+                    n2 = self.get_refractive_index(&container);
                     break;
                 }
             }
         }
 
         (n1, n2)
+    }
+
+    fn get_refractive_index(&self, container: &[&dyn Shape]) -> f64 {
+        if let Some(c) = container.last() {
+            c.get_material().refractive_index
+        } else {
+            // There is no containing object
+            1.0
+        }
     }
 }
