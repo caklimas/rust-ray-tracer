@@ -323,7 +323,58 @@ fn refracted_color_opaque_surface() {
     let mut config = PrepareComputationConfig::new(&xs);
     let comps = xs.collection[0].prepare_computations(&r, Option::Some(&mut config));
 
-    let c = w.refracted_color(&comps, 5.0);
+    let c = w.refracted_color(&comps, 0);
+
+    assert_eq!(Color::black(), c);
+}
+
+#[test]
+fn refracted_color_max_recursive_depth() {
+    let light = PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0));
+    let mut s1 = Sphere::new();
+    s1.material.color = Color::new(0.8, 1.0, 0.6);
+    s1.material.diffuse = 0.7;
+    s1.material.specular = 0.2;
+    s1.material.transparency = 1.0;
+    s1.material.refractive_index = 1.5;
+    let mut s2 = Sphere::new();
+    s2.transform = scale(0.5, 0.5, 0.5);
+    let world = World::new(light, vec![Box::new(s1), Box::new(s2)]);
+    let r = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
+    let xs = Intersections::new(vec![
+        Intersection::new(&*world.objects[0], 4.0),
+        Intersection::new(&*world.objects[0], 6.0),
+    ]);
+    let mut config = PrepareComputationConfig::new(&xs);
+    let comps = xs.collection[0].prepare_computations(&r, Option::Some(&mut config));
+
+    let c = world.refracted_color(&comps, 0);
+
+    assert_eq!(Color::black(), c);
+}
+
+#[test]
+fn refracted_color_total_internal_reflection() {
+    let light = PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0));
+    let mut s1 = Sphere::new();
+    s1.material.color = Color::new(0.8, 1.0, 0.6);
+    s1.material.diffuse = 0.7;
+    s1.material.specular = 0.2;
+    s1.material.transparency = 1.0;
+    s1.material.refractive_index = 1.5;
+    let mut s2 = Sphere::new();
+    s2.transform = scale(0.5, 0.5, 0.5);
+    let world = World::new(light, vec![Box::new(s1), Box::new(s2)]);
+    let value = (2.0_f64).sqrt() / 2.0;
+    let r = Ray::new(Tuple::point(0.0, 0.0, value), Tuple::vector(0.0, 1.0, 0.0));
+    let xs = Intersections::new(vec![
+        Intersection::new(&*world.objects[0], -value),
+        Intersection::new(&*world.objects[0], value),
+    ]);
+    let mut config = PrepareComputationConfig::new(&xs);
+    let comps = xs.collection[1].prepare_computations(&r, Option::Some(&mut config));
+
+    let c = world.refracted_color(&comps, 5);
 
     assert_eq!(Color::black(), c);
 }

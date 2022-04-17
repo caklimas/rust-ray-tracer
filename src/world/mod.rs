@@ -102,8 +102,21 @@ impl World {
         color * comps.object.get_material().reflective
     }
 
-    pub fn refracted_color(&self, comps: &IntersectionComputation, _remaining: f64) -> Color {
-        if FloatingPoint::equals(comps.object.get_material().transparency, 0.0) {
+    pub fn refracted_color(&self, comps: &IntersectionComputation, remaining: u8) -> Color {
+        if FloatingPoint::equals(comps.object.get_material().transparency, 0.0) || remaining == 0 {
+            return Color::black();
+        }
+
+        // Find the ratio of first index of refraction to the second.​
+        let n_ratio = comps.n1 / comps.n2;
+
+        // cos(theta_i) is the same as the dot product of the two vectors​
+        let cos_i = comps.eye_v.dot(&comps.normal_v);
+
+        // Find sin(theta_t)^2 via trigonometric identity
+        let sin2_i = n_ratio.powi(2) * (1.0 - cos_i.powi(2));
+
+        if sin2_i > 1.0 {
             Color::black()
         } else {
             Color::white()
