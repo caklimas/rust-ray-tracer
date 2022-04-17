@@ -11,6 +11,7 @@ pub struct IntersectionComputation<'a> {
     pub reflect_v: Tuple,
     pub n1: f64,
     pub n2: f64,
+    pub under_point: Tuple,
 }
 
 pub struct IntersectionComputationConfig {
@@ -22,6 +23,7 @@ pub struct IntersectionComputationConfig {
     pub reflect_v: Tuple,
     pub n1: f64,
     pub n2: f64,
+    pub under_point: Tuple,
 }
 
 impl<'a> IntersectionComputation<'a> {
@@ -46,6 +48,10 @@ impl<'a> IntersectionComputation<'a> {
             panic!("reflect_v must be a vector");
         }
 
+        if !config.under_point.is_point() {
+            panic!("under_point must be a point");
+        }
+
         Self {
             object,
             value,
@@ -57,6 +63,7 @@ impl<'a> IntersectionComputation<'a> {
             reflect_v: config.reflect_v,
             n1: config.n1,
             n2: config.n2,
+            under_point: config.under_point,
         }
     }
 }

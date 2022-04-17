@@ -1,4 +1,5 @@
 use crate::{
+    floating_point::EPSILON,
     matrix::transformation::{scale, translate},
     plane::Plane,
     ray::Ray,
@@ -91,4 +92,18 @@ fn prepare_computations_finding_n1_and_n2() {
         assert_eq!(n1s[x], comps.n1);
         assert_eq!(n2s[x], comps.n2);
     }
+}
+
+#[test]
+fn under_point_offset_below_surface() {
+    let ray = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
+    let mut shape = Sphere::glass();
+    shape.transform = translate(0.0, 0.0, 1.0);
+    let xs = Intersections::new(vec![Intersection::new(&shape, 5.0)]);
+    let mut config = PrepareComputationConfig::new(&xs);
+
+    let comps = xs.collection[0].prepare_computations(&ray, Option::Some(&mut config));
+
+    assert_eq!(true, comps.under_point.z() > EPSILON / 2.0);
+    assert_eq!(true, comps.point.z() < comps.under_point.z());
 }

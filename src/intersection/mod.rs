@@ -40,6 +40,7 @@ impl<'a> Intersection<'a> {
 
         let reflect_v = ray.direction.reflect(&normal_v);
         let over_point = point + normal_v * EPSILON;
+        let under_point = point - normal_v * EPSILON;
         let (n1, n2) = self.determine_n1_n2(config);
 
         IntersectionComputation::new(
@@ -54,6 +55,7 @@ impl<'a> Intersection<'a> {
                 reflect_v,
                 n1,
                 n2,
+                under_point,
             },
         )
     }
