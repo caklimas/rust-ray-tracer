@@ -101,6 +101,14 @@ impl World {
 
         color * comps.object.get_material().reflective
     }
+
+    pub fn refracted_color(&self, comps: &IntersectionComputation, _remaining: f64) -> Color {
+        if FloatingPoint::equals(comps.object.get_material().transparency, 0.0) {
+            Color::black()
+        } else {
+            Color::white()
+        }
+    }
 }
 
 impl Default for World {

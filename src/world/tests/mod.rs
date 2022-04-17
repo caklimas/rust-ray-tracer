@@ -1,7 +1,9 @@
 use crate::{
     color::Color,
     floating_point::EPSILON,
-    intersection::Intersection,
+    intersection::{
+        intersections::Intersections, prepare_computation::PrepareComputationConfig, Intersection,
+    },
     matrix::{
         transformation::{scale, translate},
         Matrix,
@@ -308,4 +310,20 @@ fn reflected_color_max_recursion_depth() {
     let color = w.reflected_color(&comps, 0);
 
     assert_eq!(Color::black(), color);
+}
+
+#[test]
+fn refracted_color_opaque_surface() {
+    let w = World::default();
+    let r = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
+    let xs = Intersections::new(vec![
+        Intersection::new(&*w.objects[0], 4.0),
+        Intersection::new(&*w.objects[0], 6.0),
+    ]);
+    let mut config = PrepareComputationConfig::new(&xs);
+    let comps = xs.collection[0].prepare_computations(&r, Option::Some(&mut config));
+
+    let c = w.refracted_color(&comps, 5.0);
+
+    assert_eq!(Color::black(), c);
 }
