@@ -8,6 +8,7 @@ use crate::{
         transformation::{scale, translate},
         Matrix,
     },
+    patterns::{gradient::Gradient, test_pattern::TestPattern},
     plane::Plane,
     point_light::PointLight,
     ray::Ray,
@@ -377,4 +378,33 @@ fn refracted_color_total_internal_reflection() {
     let c = world.refracted_color(&comps, 5);
 
     assert_eq!(Color::black(), c);
+}
+
+#[test]
+fn refracted_color_with_refracted_ray() {
+    let light = PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0));
+    let mut s1 = Sphere::new();
+    s1.material.color = Color::new(0.8, 1.0, 0.6);
+    s1.material.diffuse = 0.7;
+    s1.material.specular = 0.2;
+    s1.material.ambient = 1.0;
+    s1.material.pattern = Option::Some(Box::new(TestPattern::new()));
+    let mut s2 = Sphere::new();
+    s2.transform = scale(0.5, 0.5, 0.5);
+    s2.material.transparency = 1.0;
+    s2.material.refractive_index = 1.5;
+    let world = World::new(light, vec![Box::new(s1), Box::new(s2)]);
+    let r = Ray::new(Tuple::point(0.0, 0.0, 0.1), Tuple::vector(0.0, 1.0, 0.0));
+    let xs = Intersections::new(vec![
+        Intersection::new(&*world.objects[0], -0.9899),
+        Intersection::new(&*world.objects[1], -0.4899),
+        Intersection::new(&*world.objects[1], 0.4899),
+        Intersection::new(&*world.objects[0], 0.9899),
+    ]);
+    let mut config = PrepareComputationConfig::new(&xs);
+    let comps = xs.collection[2].prepare_computations(&r, Option::Some(&mut config));
+
+    let c = world.refracted_color(&comps, 5);
+
+    assert_eq!(Color::new(0.0, 0.99888, 0.04721), c);
 }

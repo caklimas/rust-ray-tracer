@@ -114,13 +114,24 @@ impl World {
         let cos_i = comps.eye_v.dot(&comps.normal_v);
 
         // Find sin(theta_t)^2 via trigonometric identity
-        let sin2_i = n_ratio.powi(2) * (1.0 - cos_i.powi(2));
+        let sin2_t = n_ratio.powi(2) * (1.0 - cos_i.powi(2));
 
-        if sin2_i > 1.0 {
-            Color::black()
-        } else {
-            Color::white()
+        if sin2_t > 1.0 {
+            return Color::black();
         }
+
+        // Find cos(theta_t) via trigonometric identity​
+        let cos_t = (1.0 - sin2_t).sqrt();
+
+        // Compute the direction of the refracted ray​
+        let direction = comps.normal_v * (n_ratio * cos_i - cos_t) - comps.eye_v * n_ratio;
+        let refracted_ray = Ray::new(comps.under_point, direction);
+
+        let color = self.color_at(&refracted_ray, remaining - 1);
+        println!("{:?}", color);
+
+        // Find the color of the refracted ray, making sure to multiply​ by the transparency value to account for any opacity​
+        color * comps.object.get_material().transparency
     }
 }
 

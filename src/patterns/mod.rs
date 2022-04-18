@@ -4,6 +4,7 @@ pub mod checker;
 pub mod gradient;
 pub mod ring;
 pub mod stripe;
+pub mod test_pattern;
 
 #[cfg(test)]
 mod tests;
