@@ -2,8 +2,7 @@ use crate::{
     intersection::intersection_computation::{
         IntersectionComputation, IntersectionComputationConfig,
     },
-    shape::{Shape, ShapeType},
-    sphere::Sphere,
+    shapes::{sphere::Sphere, Shape, ShapeType},
     tuple::Tuple,
 };
 

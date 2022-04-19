@@ -9,8 +9,7 @@ use patterns::{
     Pattern, PatternType,
 };
 use point_light::PointLight;
-use shape::{Shape, ShapeType};
-use sphere::Sphere;
+use shapes::{sphere::Sphere, Shape, ShapeType};
 use tuple::Tuple;
 use world::World;
 
@@ -30,8 +29,7 @@ pub mod patterns;
 pub mod plane;
 pub mod point_light;
 pub mod ray;
-pub mod shape;
-pub mod sphere;
+pub mod shapes;
 pub mod tuple;
 pub mod world;
 
@@ -49,7 +47,7 @@ fn canvas_sphere_test() {
     let pixel_size: f64 = wall_size / (canvas_pixels as f64);
     let half = wall_size / 2.0;
     let mut canvas = canvas::Canvas::new(canvas_pixels, canvas_pixels);
-    let mut sphere = sphere::Sphere::new();
+    let mut sphere = Sphere::new();
     let light = PointLight::new(Color::white(), Tuple::point(-50.0, 10.0, -10.0));
     let material = Material {
         color: Color::new(1.0, 0.0, 0.0),

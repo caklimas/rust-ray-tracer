@@ -1,6 +1,6 @@
 use crate::{
     ray::Ray,
-    shape::{Shape, ShapeType},
+    shapes::{Shape, ShapeType},
     tuple::Tuple,
 };
 

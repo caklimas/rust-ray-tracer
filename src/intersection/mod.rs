@@ -1,4 +1,4 @@
-use crate::{floating_point::EPSILON, ray::Ray, shape::Shape};
+use crate::{floating_point::EPSILON, ray::Ray, shapes::Shape};
 use std::ptr;
 
 use self::{

@@ -2,8 +2,7 @@ use crate::{
     color::Color,
     matrix::transformation::{scale, translate},
     patterns::{stripe::StripePattern, Pattern, PatternType},
-    shape::{Shape, ShapeType},
-    sphere::Sphere,
+    shapes::{sphere::Sphere, Shape, ShapeType},
     tuple::Tuple,
 };
 
@@ -67,7 +66,7 @@ fn stripe_object_transformation() {
         Color::white(),
         Color::black(),
     )));
-    let mut object: Sphere = Default::default();
+    let mut object = Sphere::default();
     object.transform = scale(2.0, 2.0, 2.0);
 
     let shape = Shape::new(ShapeType::Sphere(object));
@@ -78,7 +77,7 @@ fn stripe_object_transformation() {
 
 #[test]
 fn stripe_pattern_transformation() {
-    let object: Sphere = Default::default();
+    let object = Sphere::default();
     let mut pattern = Pattern::new(PatternType::Stripe(StripePattern::new(
         Color::white(),
         Color::black(),
@@ -93,7 +92,7 @@ fn stripe_pattern_transformation() {
 
 #[test]
 fn stripe_object_pattern_transformation() {
-    let mut object: Sphere = Default::default();
+    let mut object = Sphere::default();
     object.transform = scale(2.0, 2.0, 2.0);
     let mut pattern = Pattern::new(PatternType::Stripe(StripePattern::new(
         Color::white(),

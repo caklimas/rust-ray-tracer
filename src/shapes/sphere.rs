@@ -1,8 +1,5 @@
 use crate::{material::Material, matrix::Matrix, ray::Ray, tuple::Tuple};
 
-#[cfg(test)]
-mod tests;
-
 #[derive(PartialEq)]
 pub struct Sphere {
     center: Tuple,

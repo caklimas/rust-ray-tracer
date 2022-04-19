@@ -11,8 +11,7 @@ use crate::{
     },
     point_light::PointLight,
     ray::Ray,
-    shape::{Shape, ShapeType},
-    sphere::Sphere,
+    shapes::{sphere::Sphere, Shape, ShapeType},
     tuple::Tuple,
 };
 

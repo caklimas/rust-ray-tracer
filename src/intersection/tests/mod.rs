@@ -3,8 +3,7 @@ use crate::{
     matrix::transformation::{scale, translate},
     plane::Plane,
     ray::Ray,
-    shape::{Shape, ShapeType},
-    sphere::Sphere,
+    shapes::{sphere::Sphere, Shape, ShapeType},
     tuple::Tuple,
 };
 
@@ -17,7 +16,7 @@ pub mod intersection_computation;
 #[test]
 fn prepare_computations_test() {
     let ray = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
-    let sphere: Sphere = Default::default();
+    let sphere = Sphere::default();
     let shape = Shape::new(ShapeType::Sphere(sphere));
     let intersection = Intersection::new(&shape, 4.0);
 
@@ -31,7 +30,7 @@ fn prepare_computations_test() {
 #[test]
 fn prepare_computations_intersect_occurs_outside() {
     let ray = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
-    let sphere: Sphere = Default::default();
+    let sphere = Sphere::default();
     let shape = Shape::new(ShapeType::Sphere(sphere));
     let intersection = Intersection::new(&shape, 4.0);
 

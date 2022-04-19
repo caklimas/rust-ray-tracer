@@ -12,8 +12,7 @@ use crate::{
     plane::Plane,
     point_light::PointLight,
     ray::Ray,
-    shape::{Shape, ShapeType},
-    sphere::Sphere,
+    shapes::{sphere::Sphere, Shape, ShapeType},
     tuple::Tuple,
     world::DEFAULT_REMAINING,
 };

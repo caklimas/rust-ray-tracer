@@ -1,7 +1,14 @@
 use crate::{
     intersection::Intersection, material::Material, matrix::Matrix, plane::Plane, ray::Ray,
-    sphere::Sphere, tuple::Tuple,
+    tuple::Tuple,
 };
+
+use self::sphere::Sphere;
+
+pub mod sphere;
+
+#[cfg(test)]
+mod tests;
 
 pub struct Shape {
     shape_type: ShapeType,

@@ -1,4 +1,4 @@
-use crate::{shape::Shape, tuple::Tuple};
+use crate::{shapes::Shape, tuple::Tuple};
 
 pub struct IntersectionComputation<'a> {
     pub object: &'a Shape,

@@ -1,4 +1,6 @@
-use crate::{color::Color, patterns::Pattern, point_light::PointLight, shape::Shape, tuple::Tuple};
+use crate::{
+    color::Color, patterns::Pattern, point_light::PointLight, shapes::Shape, tuple::Tuple,
+};
 use std::ops::RangeInclusive;
 
 #[cfg(test)]

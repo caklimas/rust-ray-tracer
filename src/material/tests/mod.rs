@@ -2,8 +2,7 @@ use crate::{
     color::Color,
     patterns::{stripe::StripePattern, Pattern, PatternType},
     point_light::PointLight,
-    shape::{Shape, ShapeType},
-    sphere::Sphere,
+    shapes::{sphere::Sphere, Shape, ShapeType},
     tuple::Tuple,
 };
 

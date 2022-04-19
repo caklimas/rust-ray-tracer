@@ -1,10 +1,9 @@
 use std::f64::consts::PI;
 
-use super::Sphere;
 use crate::{
     matrix::transformation::{rotate_z, scale, translate},
     ray::Ray,
-    shape::{Shape, ShapeType},
+    shapes::{sphere::Sphere, Shape, ShapeType},
     tuple::Tuple,
 };
 

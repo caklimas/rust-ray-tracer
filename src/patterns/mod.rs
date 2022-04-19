@@ -1,4 +1,4 @@
-use crate::{color::Color, matrix::Matrix, shape::Shape, tuple::Tuple};
+use crate::{color::Color, matrix::Matrix, shapes::Shape, tuple::Tuple};
 
 use self::{
     checker::CheckerPattern, gradient::GradientPattern, ring::RingPattern, stripe::StripePattern,
