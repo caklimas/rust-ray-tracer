@@ -4,6 +4,10 @@ use canvas::Canvas;
 use color::Color;
 use material::Material;
 use matrix::transformation::{scale, translate};
+use patterns::{
+    checker::CheckerPattern, gradient::GradientPattern, ring::RingPattern, stripe::StripePattern,
+    Pattern, PatternType,
+};
 use point_light::PointLight;
 use shape::Shape;
 use sphere::Sphere;
@@ -11,11 +15,7 @@ use tuple::Tuple;
 use world::World;
 
 use crate::{
-    camera::Camera,
-    matrix::transformation::rotate_y,
-    patterns::{checker::Checker, gradient::Gradient, ring::Ring, stripe::Stripe, Pattern},
-    plane::Plane,
-    world::view_transform,
+    camera::Camera, matrix::transformation::rotate_y, plane::Plane, world::view_transform,
 };
 
 pub mod camera;
@@ -175,9 +175,12 @@ fn camera_plane_test() {
     wall.material.color = Color::new(1.0, 0.9, 0.9);
     wall.material.specular = 0.0;
 
-    let mut checker = Checker::new(Color::new(0.0, 0.0, 0.0), Color::new(0.0, 1.0, 0.0));
-    checker.set_transform(scale(0.5, 0.5, 0.5));
-    wall.material.pattern = Option::Some(Box::new(checker));
+    let mut checker = Pattern::new(PatternType::Checker(CheckerPattern::new(
+        Color::new(0.0, 0.0, 0.0),
+        Color::new(0.0, 1.0, 0.0),
+    )));
+    checker.transform = scale(0.5, 0.5, 0.5);
+    wall.material.pattern = Option::Some(checker);
 
     let mut middle = Sphere::new();
     middle.transform = translate(-0.5, 1.0, 0.5);
@@ -186,9 +189,12 @@ fn camera_plane_test() {
     middle.material.diffuse = 0.7;
     middle.material.specular = 0.3;
 
-    let mut ring = Ring::new(Color::white(), Color::black());
-    ring.set_transform(scale(0.1, 0.1, 0.1).rotate_x(FRAC_PI_2));
-    middle.material.pattern = Option::Some(Box::new(ring));
+    let mut ring = Pattern::new(PatternType::Ring(RingPattern::new(
+        Color::white(),
+        Color::black(),
+    )));
+    ring.transform = scale(0.1, 0.1, 0.1).rotate_x(FRAC_PI_2);
+    middle.material.pattern = Option::Some(ring);
 
     let mut right = Sphere::new();
     right.transform = scale(0.5, 0.5, 0.5).translate(1.5, 0.5, -0.5);
@@ -197,9 +203,12 @@ fn camera_plane_test() {
     right.material.diffuse = 0.7;
     right.material.specular = 0.3;
 
-    let mut stripe = Stripe::new(Color::new(0.0, 0.0, 1.0), Color::new(0.0, 1.0, 0.0));
-    stripe.set_transform(scale(0.25, 0.25, 0.25).rotate_z(FRAC_PI_2));
-    right.material.pattern = Option::Some(Box::new(stripe));
+    let mut stripe = Pattern::new(PatternType::Stripe(StripePattern::new(
+        Color::new(0.0, 0.0, 1.0),
+        Color::new(0.0, 1.0, 0.0),
+    )));
+    stripe.transform = scale(0.25, 0.25, 0.25).rotate_z(FRAC_PI_2);
+    right.material.pattern = Option::Some(stripe);
 
     let mut left = Sphere::new();
     left.transform = scale(0.33, 0.33, 0.33).translate(-1.5, 0.33, -0.75);
@@ -208,9 +217,12 @@ fn camera_plane_test() {
     left.material.diffuse = 0.7;
     left.material.specular = 0.3;
 
-    let mut gradient = Gradient::new(Color::new(1.0, 0.0, 0.0), Color::new(0.0, 0.0, 1.0));
-    gradient.set_transform(rotate_y(FRAC_PI_2));
-    left.material.pattern = Option::Some(Box::new(gradient));
+    let mut gradient = Pattern::new(PatternType::Gradient(GradientPattern::new(
+        Color::new(1.0, 0.0, 0.0),
+        Color::new(0.0, 0.0, 1.0),
+    )));
+    gradient.transform = rotate_y(FRAC_PI_2);
+    left.material.pattern = Option::Some(gradient);
 
     let world = World::new(
         PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0)),

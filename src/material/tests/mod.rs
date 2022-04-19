@@ -1,5 +1,9 @@
 use crate::{
-    color::Color, patterns::stripe::Stripe, point_light::PointLight, sphere::Sphere, tuple::Tuple,
+    color::Color,
+    patterns::{stripe::StripePattern, Pattern, PatternType},
+    point_light::PointLight,
+    sphere::Sphere,
+    tuple::Tuple,
 };
 
 use super::Material;
@@ -152,7 +156,10 @@ fn lighting_surface_in_shadow_test() {
 #[test]
 fn lighting_pattern_applied() {
     let mut m: Material = Default::default();
-    m.pattern = Option::Some(Box::new(Stripe::new(Color::white(), Color::black())));
+    m.pattern = Option::Some(Pattern::new(PatternType::Stripe(StripePattern::new(
+        Color::white(),
+        Color::black(),
+    ))));
     m.ambient = 1.0;
     m.diffuse = 0.0;
     m.specular = 0.0;

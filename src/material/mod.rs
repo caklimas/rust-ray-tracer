@@ -10,7 +10,7 @@ pub struct Material {
     pub color: Color,
     pub ambient: f64,
     pub diffuse: f64,
-    pub pattern: Option<Box<dyn Pattern>>,
+    pub pattern: Option<Pattern>,
     pub specular: f64,
     pub shininess: f64,
     pub reflective: f64,

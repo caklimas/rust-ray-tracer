@@ -8,7 +8,7 @@ use crate::{
         transformation::{scale, translate},
         Matrix,
     },
-    patterns::{gradient::Gradient, test_pattern::TestPattern},
+    patterns::{Pattern, PatternType},
     plane::Plane,
     point_light::PointLight,
     ray::Ray,
@@ -388,7 +388,7 @@ fn refracted_color_with_refracted_ray() {
     s1.material.diffuse = 0.7;
     s1.material.specular = 0.2;
     s1.material.ambient = 1.0;
-    s1.material.pattern = Option::Some(Box::new(TestPattern::new()));
+    s1.material.pattern = Option::Some(Pattern::new(PatternType::Test));
     let mut s2 = Sphere::new();
     s2.transform = scale(0.5, 0.5, 0.5);
     s2.material.transparency = 1.0;
