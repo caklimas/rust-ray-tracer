@@ -15,12 +15,12 @@ mod tests;
 
 #[derive(Clone)]
 pub struct Intersection<'a> {
-    pub object: &'a dyn Shape,
+    pub object: &'a Shape,
     pub value: f64,
 }
 
 impl<'a> Intersection<'a> {
-    pub fn new(object: &'a dyn Shape, value: f64) -> Self {
+    pub fn new(object: &'a Shape, value: f64) -> Self {
         Intersection { object, value }
     }
 
@@ -64,7 +64,7 @@ impl<'a> Intersection<'a> {
     fn determine_n1_n2(&self, config: Option<&mut PrepareComputationConfig>) -> (f64, f64) {
         let mut n1 = 0.0;
         let mut n2 = 0.0;
-        let mut container: Vec<&dyn Shape> = Vec::new();
+        let mut container: Vec<&Shape> = Vec::new();
         if let Some(pc) = config {
             for i in pc.xs.collection.iter() {
                 let is_intersection = ptr::eq(self, i);
@@ -98,7 +98,7 @@ impl<'a> Intersection<'a> {
         (n1, n2)
     }
 
-    fn get_refractive_index(&self, container: &[&dyn Shape]) -> f64 {
+    fn get_refractive_index(&self, container: &[&Shape]) -> f64 {
         if let Some(c) = container.last() {
             c.get_material().refractive_index
         } else {

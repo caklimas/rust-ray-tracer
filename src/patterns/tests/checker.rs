@@ -1,12 +1,15 @@
 use crate::{
     color::Color,
-    patterns::{checker::Checker, Pattern},
+    patterns::{checker::CheckerPattern, Pattern, PatternType},
     tuple::Tuple,
 };
 
 #[test]
 fn color_at_should_repeat_in_x() {
-    let pattern = Checker::new(Color::white(), Color::black());
+    let pattern = Pattern::new(PatternType::Checker(CheckerPattern::new(
+        Color::white(),
+        Color::black(),
+    )));
 
     let a1 = pattern.color_at(&Tuple::point(0.0, 0.0, 0.0));
     let a2 = pattern.color_at(&Tuple::point(0.99, 0.0, 0.0));
@@ -19,7 +22,10 @@ fn color_at_should_repeat_in_x() {
 
 #[test]
 fn color_at_should_repeat_in_y() {
-    let pattern = Checker::new(Color::white(), Color::black());
+    let pattern = Pattern::new(PatternType::Checker(CheckerPattern::new(
+        Color::white(),
+        Color::black(),
+    )));
 
     let a1 = pattern.color_at(&Tuple::point(0.0, 0.0, 0.0));
     let a2 = pattern.color_at(&Tuple::point(0.0, 0.99, 0.0));
@@ -32,7 +38,10 @@ fn color_at_should_repeat_in_y() {
 
 #[test]
 fn color_at_should_repeat_in_z() {
-    let pattern = Checker::new(Color::white(), Color::black());
+    let pattern = Pattern::new(PatternType::Checker(CheckerPattern::new(
+        Color::white(),
+        Color::black(),
+    )));
 
     let a1 = pattern.color_at(&Tuple::point(0.0, 0.0, 0.0));
     let a2 = pattern.color_at(&Tuple::point(0.0, 0.0, 0.99));

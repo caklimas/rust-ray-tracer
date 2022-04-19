@@ -1,14 +1,18 @@
 use crate::{
     color::Color,
     matrix::transformation::{scale, translate},
-    patterns::{stripe::Stripe, Pattern},
+    patterns::{stripe::StripePattern, Pattern, PatternType},
+    shape::{Shape, ShapeType},
     sphere::Sphere,
     tuple::Tuple,
 };
 
 #[test]
 fn stripe_constant_in_y() {
-    let pattern = Stripe::new(Color::white(), Color::black());
+    let pattern = Pattern::new(PatternType::Stripe(StripePattern::new(
+        Color::white(),
+        Color::black(),
+    )));
 
     let a1 = pattern.color_at(&Tuple::point(0.0, 0.0, 0.0));
     let a2 = pattern.color_at(&Tuple::point(0.0, 1.0, 0.0));
@@ -21,7 +25,10 @@ fn stripe_constant_in_y() {
 
 #[test]
 fn stripe_constant_in_z() {
-    let pattern = Stripe::new(Color::white(), Color::black());
+    let pattern = Pattern::new(PatternType::Stripe(StripePattern::new(
+        Color::white(),
+        Color::black(),
+    )));
 
     let a1 = pattern.color_at(&Tuple::point(0.0, 0.0, 0.0));
     let a2 = pattern.color_at(&Tuple::point(0.0, 0.0, 1.0));
@@ -34,7 +41,10 @@ fn stripe_constant_in_z() {
 
 #[test]
 fn stripe_alternates_in_x() {
-    let pattern = Stripe::new(Color::white(), Color::black());
+    let pattern = Pattern::new(PatternType::Stripe(StripePattern::new(
+        Color::white(),
+        Color::black(),
+    )));
 
     let a1 = pattern.color_at(&Tuple::point(0.0, 0.0, 0.0));
     let a2 = pattern.color_at(&Tuple::point(0.9, 0.0, 0.0));
@@ -53,11 +63,15 @@ fn stripe_alternates_in_x() {
 
 #[test]
 fn stripe_object_transformation() {
-    let pattern = Stripe::new(Color::white(), Color::black());
+    let pattern = Pattern::new(PatternType::Stripe(StripePattern::new(
+        Color::white(),
+        Color::black(),
+    )));
     let mut object: Sphere = Default::default();
     object.transform = scale(2.0, 2.0, 2.0);
 
-    let c = pattern.color_at_object(&object, &Tuple::point(1.5, 0.0, 0.0));
+    let shape = Shape::new(ShapeType::Sphere(object));
+    let c = pattern.color_at_object(&shape, &Tuple::point(1.5, 0.0, 0.0));
 
     assert_eq!(Color::white(), c);
 }
@@ -65,10 +79,14 @@ fn stripe_object_transformation() {
 #[test]
 fn stripe_pattern_transformation() {
     let object: Sphere = Default::default();
-    let mut pattern = Stripe::new(Color::white(), Color::black());
-    pattern.set_transform(scale(2.0, 2.0, 2.0));
+    let mut pattern = Pattern::new(PatternType::Stripe(StripePattern::new(
+        Color::white(),
+        Color::black(),
+    )));
+    pattern.transform = scale(2.0, 2.0, 2.0);
 
-    let c = pattern.color_at_object(&object, &Tuple::point(1.5, 0.0, 0.0));
+    let shape = Shape::new(ShapeType::Sphere(object));
+    let c = pattern.color_at_object(&shape, &Tuple::point(1.5, 0.0, 0.0));
 
     assert_eq!(Color::white(), c);
 }
@@ -77,10 +95,14 @@ fn stripe_pattern_transformation() {
 fn stripe_object_pattern_transformation() {
     let mut object: Sphere = Default::default();
     object.transform = scale(2.0, 2.0, 2.0);
-    let mut pattern = Stripe::new(Color::white(), Color::black());
-    pattern.set_transform(translate(0.5, 0.0, 0.0));
+    let mut pattern = Pattern::new(PatternType::Stripe(StripePattern::new(
+        Color::white(),
+        Color::black(),
+    )));
+    pattern.transform = translate(0.5, 0.0, 0.0);
 
-    let c = pattern.color_at_object(&object, &Tuple::point(1.5, 0.0, 0.0));
+    let shape = Shape::new(ShapeType::Sphere(object));
+    let c = pattern.color_at_object(&shape, &Tuple::point(1.5, 0.0, 0.0));
 
     assert_eq!(Color::white(), c);
 }

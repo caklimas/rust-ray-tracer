@@ -3,6 +3,7 @@ use crate::{
     matrix::transformation::{scale, translate},
     plane::Plane,
     ray::Ray,
+    shape::{Shape, ShapeType},
     sphere::Sphere,
     tuple::Tuple,
 };
@@ -16,7 +17,8 @@ pub mod intersection_computation;
 #[test]
 fn prepare_computations_test() {
     let ray = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
-    let shape: Sphere = Default::default();
+    let sphere: Sphere = Default::default();
+    let shape = Shape::new(ShapeType::Sphere(sphere));
     let intersection = Intersection::new(&shape, 4.0);
 
     let computations = intersection.prepare_computations(&ray, Option::None);
@@ -29,7 +31,8 @@ fn prepare_computations_test() {
 #[test]
 fn prepare_computations_intersect_occurs_outside() {
     let ray = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
-    let shape: Sphere = Default::default();
+    let sphere: Sphere = Default::default();
+    let shape = Shape::new(ShapeType::Sphere(sphere));
     let intersection = Intersection::new(&shape, 4.0);
 
     let computations = intersection.prepare_computations(&ray, Option::None);
@@ -40,7 +43,8 @@ fn prepare_computations_intersect_occurs_outside() {
 #[test]
 fn prepare_computations_intersect_occurs_inside() {
     let ray = Ray::new(Tuple::point(0.0, 0.0, 0.0), Tuple::vector(0.0, 0.0, 1.0));
-    let shape: Sphere = Default::default();
+    let sphere = Sphere::default();
+    let shape = Shape::new(ShapeType::Sphere(sphere));
     let intersection = Intersection::new(&shape, 1.0);
 
     let computations = intersection.prepare_computations(&ray, Option::None);
@@ -54,8 +58,9 @@ fn prepare_computations_intersect_occurs_inside() {
 #[test]
 fn prepare_computations_reflection_vector() {
     let v = (2.0_f64).sqrt() / 2.0;
-    let shape = Plane::default();
+    let plane = Plane::default();
     let r = Ray::new(Tuple::point(0.0, 1.0, -1.0), Tuple::vector(0.0, -v, v));
+    let shape = Shape::new(ShapeType::Plane(plane));
     let i = Intersection::new(&shape, (2.0_f64).sqrt());
 
     let comps = i.prepare_computations(&r, Option::None);
@@ -75,13 +80,17 @@ fn prepare_computations_finding_n1_and_n2() {
     c.transform = translate(0.0, 0.0, 0.25);
     c.material.refractive_index = 2.5;
     let r = Ray::new(Tuple::point(0.0, 0.0, -4.0), Tuple::vector(0.0, 0.0, 1.0));
+    let shape_a = Shape::new(ShapeType::Sphere(a));
+    let shape_b = Shape::new(ShapeType::Sphere(b));
+    let shape_c = Shape::new(ShapeType::Sphere(c));
+
     let xs = Intersections::new(vec![
-        Intersection::new(&a, 2.0),
-        Intersection::new(&b, 2.75),
-        Intersection::new(&c, 3.25),
-        Intersection::new(&b, 4.75),
-        Intersection::new(&c, 5.25),
-        Intersection::new(&a, 6.0),
+        Intersection::new(&shape_a, 2.0),
+        Intersection::new(&shape_b, 2.75),
+        Intersection::new(&shape_c, 3.25),
+        Intersection::new(&shape_b, 4.75),
+        Intersection::new(&shape_c, 5.25),
+        Intersection::new(&shape_a, 6.0),
     ]);
     let n1s = [1.0, 1.5, 2.0, 2.5, 2.5, 1.5];
     let n2s = [1.5, 2.0, 2.5, 2.5, 1.5, 1.0];
@@ -97,8 +106,10 @@ fn prepare_computations_finding_n1_and_n2() {
 #[test]
 fn under_point_offset_below_surface() {
     let ray = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
-    let mut shape = Sphere::glass();
-    shape.transform = translate(0.0, 0.0, 1.0);
+    let mut sphere = Sphere::glass();
+    sphere.transform = translate(0.0, 0.0, 1.0);
+
+    let shape = Shape::new(ShapeType::Sphere(sphere));
     let xs = Intersections::new(vec![Intersection::new(&shape, 5.0)]);
     let mut config = PrepareComputationConfig::new(&xs);
 

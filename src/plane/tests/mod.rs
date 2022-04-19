@@ -1,10 +1,14 @@
-use crate::{ray::Ray, shape::Shape, tuple::Tuple};
+use crate::{
+    ray::Ray,
+    shape::{Shape, ShapeType},
+    tuple::Tuple,
+};
 
 use super::Plane;
 
 #[test]
 fn normal_at_test() {
-    let plane: Plane = Default::default();
+    let plane = Shape::new(ShapeType::Plane(Plane::default()));
 
     let n1 = plane.normal_at(Tuple::point(0.0, 0.0, 0.0));
     let n2 = plane.normal_at(Tuple::point(10.0, 0.0, -10.0));
@@ -22,7 +26,7 @@ fn intersect_ray_parallel() {
 
     let xs = plane.local_intersect(&r);
 
-    assert_eq!(0, xs.len());
+    assert_eq!(true, xs.is_none());
 }
 
 #[test]
@@ -32,7 +36,7 @@ fn intersect_ray_coplanar() {
 
     let xs = plane.local_intersect(&r);
 
-    assert_eq!(0, xs.len());
+    assert_eq!(true, xs.is_none());
 }
 
 #[test]
@@ -42,8 +46,11 @@ fn intersect_ray_from_above() {
 
     let xs = plane.local_intersect(&r);
 
-    assert_eq!(1, xs.len());
-    assert_eq!(1.0, xs[0].value);
+    assert_eq!(true, xs.is_some());
+
+    let xsw = xs.unwrap();
+    assert_eq!(1, xsw.len());
+    assert_eq!(1.0, xsw[0]);
 }
 
 #[test]
@@ -53,6 +60,9 @@ fn intersect_ray_from_below() {
 
     let xs = plane.local_intersect(&r);
 
-    assert_eq!(1, xs.len());
-    assert_eq!(1.0, xs[0].value);
+    assert_eq!(true, xs.is_some());
+
+    let xsw = xs.unwrap();
+    assert_eq!(1, xsw.len());
+    assert_eq!(1.0, xsw[0]);
 }

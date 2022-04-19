@@ -8,10 +8,11 @@ use crate::{
         transformation::{scale, translate},
         Matrix,
     },
-    patterns::{gradient::Gradient, test_pattern::TestPattern},
+    patterns::{Pattern, PatternType},
     plane::Plane,
     point_light::PointLight,
     ray::Ray,
+    shape::{Shape, ShapeType},
     sphere::Sphere,
     tuple::Tuple,
     world::DEFAULT_REMAINING,
@@ -92,7 +93,13 @@ fn color_at_behind_ray() {
     s2.transform = scale(0.5, 0.5, 0.5);
     s2.material.ambient = 1.0;
 
-    let world = World::new(light, vec![Box::new(s1), Box::new(s2)]);
+    let world = World::new(
+        light,
+        vec![
+            Box::new(Shape::new(ShapeType::Sphere(s1))),
+            Box::new(Shape::new(ShapeType::Sphere(s2))),
+        ],
+    );
     let ray = Ray::new(Tuple::point(0.0, 0.0, 0.75), Tuple::vector(0.0, 0.0, -1.0));
 
     let c = world.color_at(&ray, DEFAULT_REMAINING);
@@ -194,11 +201,15 @@ fn shade_hit_intersection_in_shadow_test() {
         PointLight::new(Color::white(), Tuple::point(0.0, 0.0, -10.0)),
         Vec::new(),
     );
-    world.objects.push(Box::new(Sphere::new()));
+    world
+        .objects
+        .push(Box::new(Shape::new(ShapeType::Sphere(Sphere::new()))));
 
     let mut sphere2 = Sphere::new();
     sphere2.transform = translate(0.0, 0.0, 10.0);
-    world.objects.push(Box::new(sphere2));
+    world
+        .objects
+        .push(Box::new(Shape::new(ShapeType::Sphere(sphere2))));
 
     let ray = Ray::new(Tuple::point(0.0, 0.0, 5.0), Tuple::vector(0.0, 0.0, 1.0));
     let i = Intersection::new(&*world.objects[1], 4.0);
@@ -220,7 +231,9 @@ fn shade_hit_reflective_material() {
         Tuple::point(0.0, 0.0, -3.0),
         Tuple::vector(0.0, -value, value),
     );
-    world.objects.push(Box::new(shape));
+    world
+        .objects
+        .push(Box::new(Shape::new(ShapeType::Plane(shape))));
     let i = Intersection::new(&*world.objects[2], (2.0_f64).sqrt());
     let comps = i.prepare_computations(&r, Option::None);
 
@@ -232,9 +245,10 @@ fn shade_hit_reflective_material() {
 #[test]
 fn hit_should_offset_point() {
     let r = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
-    let mut shape = Sphere::new();
-    shape.transform = translate(0.0, 0.0, 1.0);
+    let mut sphere = Sphere::new();
+    sphere.transform = translate(0.0, 0.0, 1.0);
 
+    let shape = Shape::new(ShapeType::Sphere(sphere));
     let i = Intersection::new(&shape, 5.0);
     let comps = i.prepare_computations(&r, Option::None);
 
@@ -252,7 +266,13 @@ fn reflected_color_for_nonreflective_material() {
     let mut s2 = Sphere::new();
     s2.transform = scale(0.5, 0.5, 0.5);
     s2.material.ambient = 1.0;
-    let w = World::new(light, vec![Box::new(s1), Box::new(s2)]);
+    let w = World::new(
+        light,
+        vec![
+            Box::new(Shape::new(ShapeType::Sphere(s1))),
+            Box::new(Shape::new(ShapeType::Sphere(s2))),
+        ],
+    );
     let i = Intersection::new(&*w.objects[0], 1.0);
     let r = Ray::new(Tuple::point(0.0, 0.0, 0.0), Tuple::vector(0.0, 0.0, 1.0));
     let comps = i.prepare_computations(&r, Option::None);
@@ -269,7 +289,8 @@ fn reflected_color_for_reflective_material() {
     let mut shape = Plane::default();
     shape.material.reflective = 0.5;
     shape.transform = translate(0.0, -1.0, 0.0);
-    w.objects.push(Box::new(shape));
+    w.objects
+        .push(Box::new(Shape::new(ShapeType::Plane(shape))));
     let r = Ray::new(Tuple::point(0.0, 0.0, -3.0), Tuple::vector(0.0, -v, v));
     let i = Intersection::new(&*w.objects[2], (2.0_f64).sqrt());
     let comps = i.prepare_computations(&r, Option::None);
@@ -289,7 +310,10 @@ fn color_at_mutually_reflective_surfaces() {
     upper.transform = translate(0.0, 1.0, 0.0);
     let world = World::new(
         PointLight::new(Color::white(), Tuple::point(0.0, 0.0, 0.0)),
-        vec![Box::new(lower), Box::new(upper)],
+        vec![
+            Box::new(Shape::new(ShapeType::Plane(lower))),
+            Box::new(Shape::new(ShapeType::Plane(upper))),
+        ],
     );
     let r = Ray::new(Tuple::point(0.0, 0.0, 0.0), Tuple::vector(0.0, 1.0, 0.0));
 
@@ -303,7 +327,8 @@ fn reflected_color_max_recursion_depth() {
     let mut shape = Plane::new();
     shape.material.reflective = 0.5;
     shape.transform = translate(0.0, -1.0, 0.0);
-    w.objects.push(Box::new(shape));
+    w.objects
+        .push(Box::new(Shape::new(ShapeType::Plane(shape))));
     let r = Ray::new(Tuple::point(0.0, 0.0, -3.0), Tuple::vector(0.0, -v, v));
     let i = Intersection::new(&*w.objects[2], (2.0_f64).sqrt());
     let comps = i.prepare_computations(&r, Option::None);
@@ -340,7 +365,13 @@ fn refracted_color_max_recursive_depth() {
     s1.material.refractive_index = 1.5;
     let mut s2 = Sphere::new();
     s2.transform = scale(0.5, 0.5, 0.5);
-    let world = World::new(light, vec![Box::new(s1), Box::new(s2)]);
+    let world = World::new(
+        light,
+        vec![
+            Box::new(Shape::new(ShapeType::Sphere(s1))),
+            Box::new(Shape::new(ShapeType::Sphere(s2))),
+        ],
+    );
     let r = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
     let xs = Intersections::new(vec![
         Intersection::new(&*world.objects[0], 4.0),
@@ -365,7 +396,13 @@ fn refracted_color_total_internal_reflection() {
     s1.material.refractive_index = 1.5;
     let mut s2 = Sphere::new();
     s2.transform = scale(0.5, 0.5, 0.5);
-    let world = World::new(light, vec![Box::new(s1), Box::new(s2)]);
+    let world = World::new(
+        light,
+        vec![
+            Box::new(Shape::new(ShapeType::Sphere(s1))),
+            Box::new(Shape::new(ShapeType::Sphere(s2))),
+        ],
+    );
     let value = (2.0_f64).sqrt() / 2.0;
     let r = Ray::new(Tuple::point(0.0, 0.0, value), Tuple::vector(0.0, 1.0, 0.0));
     let xs = Intersections::new(vec![
@@ -388,12 +425,18 @@ fn refracted_color_with_refracted_ray() {
     s1.material.diffuse = 0.7;
     s1.material.specular = 0.2;
     s1.material.ambient = 1.0;
-    s1.material.pattern = Option::Some(Box::new(TestPattern::new()));
+    s1.material.pattern = Option::Some(Pattern::new(PatternType::Test));
     let mut s2 = Sphere::new();
     s2.transform = scale(0.5, 0.5, 0.5);
     s2.material.transparency = 1.0;
     s2.material.refractive_index = 1.5;
-    let world = World::new(light, vec![Box::new(s1), Box::new(s2)]);
+    let world = World::new(
+        light,
+        vec![
+            Box::new(Shape::new(ShapeType::Sphere(s1))),
+            Box::new(Shape::new(ShapeType::Sphere(s2))),
+        ],
+    );
     let r = Ray::new(Tuple::point(0.0, 0.0, 0.1), Tuple::vector(0.0, 1.0, 0.0));
     let xs = Intersections::new(vec![
         Intersection::new(&*world.objects[0], -0.9899),

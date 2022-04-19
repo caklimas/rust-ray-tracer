@@ -10,7 +10,7 @@ pub struct Material {
     pub color: Color,
     pub ambient: f64,
     pub diffuse: f64,
-    pub pattern: Option<Box<dyn Pattern>>,
+    pub pattern: Option<Pattern>,
     pub specular: f64,
     pub shininess: f64,
     pub reflective: f64,
@@ -52,7 +52,7 @@ impl Material {
 
     pub fn lighting(
         &self,
-        object: &dyn Shape,
+        object: &Shape,
         light: &PointLight,
         position: &Tuple,
         eye: &Tuple,

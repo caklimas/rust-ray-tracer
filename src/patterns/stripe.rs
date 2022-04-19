@@ -1,33 +1,16 @@
-use crate::{color::Color, floating_point::EPSILON, matrix::Matrix, tuple::Tuple};
+use crate::{color::Color, floating_point::EPSILON, tuple::Tuple};
 
-use super::Pattern;
-
-pub struct Stripe {
-    pub a: Color,
-    pub b: Color,
-    transform: Matrix,
+pub struct StripePattern {
+    a: Color,
+    b: Color,
 }
 
-impl Stripe {
+impl StripePattern {
     pub fn new(a: Color, b: Color) -> Self {
-        Self {
-            a,
-            b,
-            transform: Default::default(),
-        }
-    }
-}
-
-impl Pattern for Stripe {
-    fn get_transform(&self) -> &Matrix {
-        &self.transform
+        Self { a, b }
     }
 
-    fn set_transform(&mut self, transform: Matrix) {
-        self.transform = transform;
-    }
-
-    fn color_at(&self, point: &Tuple) -> Color {
+    pub fn color_at(&self, point: &Tuple) -> Color {
         if (point.x().floor() % 2.0).abs() < EPSILON {
             self.a
         } else {

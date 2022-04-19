@@ -1,7 +1,4 @@
-use crate::{
-    intersection::Intersection, material::Material, matrix::Matrix, ray::Ray, shape::Shape,
-    tuple::Tuple,
-};
+use crate::{material::Material, matrix::Matrix, ray::Ray, tuple::Tuple};
 
 #[cfg(test)]
 mod tests;
@@ -15,7 +12,7 @@ pub struct Sphere {
 
 impl Sphere {
     pub fn new() -> Self {
-        Sphere {
+        Self {
             center: Default::default(),
             material: Default::default(),
             transform: Default::default(),
@@ -29,31 +26,14 @@ impl Sphere {
             ..Default::default()
         };
 
-        Sphere {
+        Self {
             center: Default::default(),
             material,
             transform: Default::default(),
         }
     }
-}
 
-impl Default for Sphere {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl Shape for Sphere {
-    fn get_material(&self) -> &Material {
-        &self.material
-    }
-
-    fn get_transform(&self) -> &Matrix {
-        &self.transform
-    }
-
-    fn local_intersect(&self, ray: &Ray) -> Vec<Intersection> {
-        let mut intersections = Vec::new();
+    pub fn local_intersect(&self, ray: &Ray) -> Option<Vec<f64>> {
         let sphere_to_ray = ray.origin - self.center;
         let a = ray.direction.dot(&ray.direction);
         let b = 2.0 * ray.direction.dot(&sphere_to_ray);
@@ -61,20 +41,23 @@ impl Shape for Sphere {
         let discriminant = b.powi(2) - 4.0 * a * c;
 
         if discriminant < 0.0 {
-            return intersections;
+            return Option::None;
         }
 
         let t1 = (-b - discriminant.sqrt()) / (2.0 * a);
         let t2 = (-b + discriminant.sqrt()) / (2.0 * a);
-
-        intersections.push(Intersection::new(self, t1));
-        intersections.push(Intersection::new(self, t2));
-        intersections.sort_by(|a, b| a.value.partial_cmp(&b.value).unwrap());
-
-        intersections
+        let mut values = vec![t1, t2];
+        values.sort_by(|a, b| a.partial_cmp(b).unwrap());
+        Option::Some(values)
     }
 
-    fn local_normal(&self, object_point: Tuple) -> Tuple {
+    pub fn local_normal(&self, object_point: Tuple) -> Tuple {
         object_point - Tuple::point(0.0, 0.0, 0.0)
+    }
+}
+
+impl Default for Sphere {
+    fn default() -> Self {
+        Self::new()
     }
 }

@@ -4,13 +4,13 @@ use super::Sphere;
 use crate::{
     matrix::transformation::{rotate_z, scale, translate},
     ray::Ray,
-    shape::Shape,
+    shape::{Shape, ShapeType},
     tuple::Tuple,
 };
 
 #[test]
 fn intersect_two_points_test() {
-    let sphere = Sphere::new();
+    let sphere = Shape::new(ShapeType::Sphere(Sphere::new()));
     let ray = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
 
     let xs = sphere.intersect(&ray);
@@ -22,7 +22,7 @@ fn intersect_two_points_test() {
 
 #[test]
 fn intersect_tangent_test() {
-    let sphere = Sphere::new();
+    let sphere = Shape::new(ShapeType::Sphere(Sphere::new()));
     let ray = Ray::new(Tuple::point(0.0, 1.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
 
     let xs = sphere.intersect(&ray);
@@ -34,7 +34,7 @@ fn intersect_tangent_test() {
 
 #[test]
 fn intersect_miss_test() {
-    let sphere = Sphere::new();
+    let sphere = Shape::new(ShapeType::Sphere(Sphere::new()));
     let ray = Ray::new(Tuple::point(0.0, 2.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
 
     let xs = sphere.intersect(&ray);
@@ -44,7 +44,7 @@ fn intersect_miss_test() {
 
 #[test]
 fn intersect_inside_sphere_test() {
-    let sphere = Sphere::new();
+    let sphere = Shape::new(ShapeType::Sphere(Sphere::new()));
     let ray = Ray::new(Tuple::point(0.0, 0.0, 0.0), Tuple::vector(0.0, 0.0, 1.0));
 
     let xs = sphere.intersect(&ray);
@@ -56,7 +56,7 @@ fn intersect_inside_sphere_test() {
 
 #[test]
 fn intersect_sphere_behind_ray_test() {
-    let sphere = Sphere::new();
+    let sphere = Shape::new(ShapeType::Sphere(Sphere::new()));
     let ray = Ray::new(Tuple::point(0.0, 0.0, 5.0), Tuple::vector(0.0, 0.0, 1.0));
 
     let xs = sphere.intersect(&ray);
@@ -69,7 +69,7 @@ fn intersect_sphere_behind_ray_test() {
 #[test]
 fn intersect_sets_object() {
     let ray = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
-    let sphere = Sphere::new();
+    let sphere = Shape::new(ShapeType::Sphere(Sphere::new()));
     let xs = sphere.intersect(&ray);
 
     assert_eq!(2, xs.len());
@@ -83,7 +83,8 @@ fn intersect_scaled_sphere_test() {
     let mut sphere = Sphere::new();
     sphere.transform = scale(2.0, 2.0, 2.0);
 
-    let xs = sphere.intersect(&ray);
+    let shape = Shape::new(ShapeType::Sphere(sphere));
+    let xs = shape.intersect(&ray);
 
     assert_eq!(2, xs.len());
     assert_eq!(3.0, xs[0].value);
@@ -96,14 +97,15 @@ fn intersect_translated_sphere_test() {
     let mut sphere = Sphere::new();
     sphere.transform = translate(2.0, 2.0, 2.0);
 
-    let xs = sphere.intersect(&ray);
+    let shape = Shape::new(ShapeType::Sphere(sphere));
+    let xs = shape.intersect(&ray);
 
     assert_eq!(0, xs.len());
 }
 
 #[test]
 fn normal_x_axis_test() {
-    let sphere = Sphere::new();
+    let sphere = Shape::new(ShapeType::Sphere(Sphere::new()));
 
     let n = sphere.normal_at(Tuple::point(1.0, 0.0, 0.0));
 
@@ -112,7 +114,7 @@ fn normal_x_axis_test() {
 
 #[test]
 fn normal_y_axis_test() {
-    let sphere = Sphere::new();
+    let sphere = Shape::new(ShapeType::Sphere(Sphere::new()));
 
     let n = sphere.normal_at(Tuple::point(0.0, 1.0, 0.0));
 
@@ -121,7 +123,7 @@ fn normal_y_axis_test() {
 
 #[test]
 fn normal_z_axis_test() {
-    let sphere = Sphere::new();
+    let sphere = Shape::new(ShapeType::Sphere(Sphere::new()));
 
     let n = sphere.normal_at(Tuple::point(0.0, 0.0, 1.0));
 
@@ -130,7 +132,7 @@ fn normal_z_axis_test() {
 
 #[test]
 fn normal_nonaxial_axis_test() {
-    let sphere = Sphere::new();
+    let sphere = Shape::new(ShapeType::Sphere(Sphere::new()));
     let value = (3.0_f64).sqrt() / 3.0;
 
     let n = sphere.normal_at(Tuple::point(value, value, value));
@@ -140,7 +142,7 @@ fn normal_nonaxial_axis_test() {
 
 #[test]
 fn normal_is_normalized_vector_test() {
-    let sphere = Sphere::new();
+    let sphere = Shape::new(ShapeType::Sphere(Sphere::new()));
     let value = (3.0_f64).sqrt() / 3.0;
 
     let n = sphere.normal_at(Tuple::point(value, value, value));
@@ -153,7 +155,8 @@ fn normal_translated_sphere_test() {
     let mut sphere = Sphere::new();
     sphere.transform = translate(0.0, 1.0, 0.0);
 
-    let normal = sphere.normal_at(Tuple::point(0.0, 1.70711, -0.70711));
+    let shape = Shape::new(ShapeType::Sphere(sphere));
+    let normal = shape.normal_at(Tuple::point(0.0, 1.70711, -0.70711));
 
     assert_eq!(Tuple::vector(0.0, 0.70711, -0.70711), normal);
 }
@@ -165,7 +168,8 @@ fn normal_transformed_sphere_test() {
     let value = (2.0_f64).sqrt() / 2.0;
     sphere.transform = transformation;
 
-    let normal = sphere.normal_at(Tuple::point(0.0, value, -value));
+    let shape = Shape::new(ShapeType::Sphere(sphere));
+    let normal = shape.normal_at(Tuple::point(0.0, value, -value));
 
     assert_eq!(Tuple::vector(0.0, 0.97014, -0.24254), normal);
 }

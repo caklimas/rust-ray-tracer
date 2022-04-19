@@ -1,7 +1,4 @@
-use crate::{
-    floating_point::EPSILON, intersection::Intersection, material::Material, matrix::Matrix,
-    ray::Ray, shape::Shape, tuple::Tuple,
-};
+use crate::{floating_point::EPSILON, material::Material, matrix::Matrix, ray::Ray, tuple::Tuple};
 
 #[cfg(test)]
 mod tests;
@@ -18,36 +15,23 @@ impl Plane {
             transform: Default::default(),
         }
     }
+
+    pub fn local_intersect(&self, ray: &Ray) -> Option<Vec<f64>> {
+        if ray.direction.y().abs() < EPSILON {
+            return Option::None;
+        }
+
+        let t = (-ray.origin.y()) / ray.direction.y();
+        Option::Some(vec![t])
+    }
+
+    pub fn local_normal(&self, _object_point: Tuple) -> Tuple {
+        Tuple::vector(0.0, 1.0, 0.0)
+    }
 }
 
 impl Default for Plane {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-impl Shape for Plane {
-    fn get_material(&self) -> &Material {
-        &self.material
-    }
-
-    fn get_transform(&self) -> &Matrix {
-        &self.transform
-    }
-
-    fn local_intersect(&self, ray: &Ray) -> Vec<Intersection> {
-        let mut xs = Vec::new();
-        if ray.direction.y().abs() < EPSILON {
-            return xs;
-        }
-
-        let t = (-ray.origin.y()) / ray.direction.y();
-        let intersection = Intersection::new(self, t);
-        xs.push(intersection);
-        xs
-    }
-
-    fn local_normal(&self, _object_point: Tuple) -> Tuple {
-        Tuple::vector(0.0, 1.0, 0.0)
     }
 }
