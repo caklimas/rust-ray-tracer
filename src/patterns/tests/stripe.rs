@@ -2,6 +2,7 @@ use crate::{
     color::Color,
     matrix::transformation::{scale, translate},
     patterns::{stripe::StripePattern, Pattern, PatternType},
+    shape::{Shape, ShapeType},
     sphere::Sphere,
     tuple::Tuple,
 };
@@ -69,7 +70,8 @@ fn stripe_object_transformation() {
     let mut object: Sphere = Default::default();
     object.transform = scale(2.0, 2.0, 2.0);
 
-    let c = pattern.color_at_object(&object, &Tuple::point(1.5, 0.0, 0.0));
+    let shape = Shape::new(ShapeType::Sphere(object));
+    let c = pattern.color_at_object(&shape, &Tuple::point(1.5, 0.0, 0.0));
 
     assert_eq!(Color::white(), c);
 }
@@ -83,7 +85,8 @@ fn stripe_pattern_transformation() {
     )));
     pattern.transform = scale(2.0, 2.0, 2.0);
 
-    let c = pattern.color_at_object(&object, &Tuple::point(1.5, 0.0, 0.0));
+    let shape = Shape::new(ShapeType::Sphere(object));
+    let c = pattern.color_at_object(&shape, &Tuple::point(1.5, 0.0, 0.0));
 
     assert_eq!(Color::white(), c);
 }
@@ -98,7 +101,8 @@ fn stripe_object_pattern_transformation() {
     )));
     pattern.transform = translate(0.5, 0.0, 0.0);
 
-    let c = pattern.color_at_object(&object, &Tuple::point(1.5, 0.0, 0.0));
+    let shape = Shape::new(ShapeType::Sphere(object));
+    let c = pattern.color_at_object(&shape, &Tuple::point(1.5, 0.0, 0.0));
 
     assert_eq!(Color::white(), c);
 }

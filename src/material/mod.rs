@@ -52,7 +52,7 @@ impl Material {
 
     pub fn lighting(
         &self,
-        object: &dyn Shape,
+        object: &Shape,
         light: &PointLight,
         position: &Tuple,
         eye: &Tuple,

@@ -11,7 +11,7 @@ use crate::{
     },
     point_light::PointLight,
     ray::Ray,
-    shape::Shape,
+    shape::{Shape, ShapeType},
     sphere::Sphere,
     tuple::Tuple,
 };
@@ -23,11 +23,11 @@ pub const DEFAULT_REMAINING: u8 = 4;
 
 pub struct World {
     pub light: PointLight,
-    pub objects: Vec<Box<dyn Shape>>,
+    pub objects: Vec<Box<Shape>>,
 }
 
 impl World {
-    pub fn new(light: PointLight, objects: Vec<Box<dyn Shape>>) -> Self {
+    pub fn new(light: PointLight, objects: Vec<Box<Shape>>) -> Self {
         Self { light, objects }
     }
 
@@ -58,7 +58,7 @@ impl World {
 
     pub fn shade_hit(
         &self,
-        object: &dyn Shape,
+        object: &Shape,
         computations: &IntersectionComputation,
         remaining: u8,
     ) -> Color {
@@ -143,10 +143,14 @@ impl Default for World {
         s1.material.diffuse = 0.7;
         s1.material.specular = 0.2;
 
+        let shape_1 = Shape::new(ShapeType::Sphere(s1));
+
         let mut s2 = Sphere::new();
         s2.transform = scale(0.5, 0.5, 0.5);
 
-        Self::new(light, vec![Box::new(s1), Box::new(s2)])
+        let shape_2 = Shape::new(ShapeType::Sphere(s2));
+
+        Self::new(light, vec![Box::new(shape_1), Box::new(shape_2)])
     }
 }
 

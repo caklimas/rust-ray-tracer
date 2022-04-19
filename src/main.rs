@@ -9,7 +9,7 @@ use patterns::{
     Pattern, PatternType,
 };
 use point_light::PointLight;
-use shape::Shape;
+use shape::{Shape, ShapeType};
 use sphere::Sphere;
 use tuple::Tuple;
 use world::World;
@@ -49,14 +49,15 @@ fn canvas_sphere_test() {
     let pixel_size: f64 = wall_size / (canvas_pixels as f64);
     let half = wall_size / 2.0;
     let mut canvas = canvas::Canvas::new(canvas_pixels, canvas_pixels);
-    let mut shape = sphere::Sphere::new();
+    let mut sphere = sphere::Sphere::new();
     let light = PointLight::new(Color::white(), Tuple::point(-50.0, 10.0, -10.0));
     let material = Material {
         color: Color::new(1.0, 0.0, 0.0),
         ..Default::default()
     };
-    shape.material = material;
-    shape.transform = matrix::transformation::scale(1.0, 1.0, 1.0);
+    sphere.material = material;
+    sphere.transform = matrix::transformation::scale(1.0, 1.0, 1.0);
+    let shape = Shape::new(ShapeType::Sphere(sphere));
 
     for y in 0..canvas_pixels {
         let world_y = half - pixel_size * (y as f64);
@@ -135,12 +136,12 @@ fn camera_scene_test() {
     let world = World::new(
         PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0)),
         vec![
-            Box::new(floor),
-            Box::new(left_wall),
-            Box::new(right_wall),
-            Box::new(middle),
-            Box::new(right),
-            Box::new(left),
+            Box::new(Shape::new(ShapeType::Sphere(floor))),
+            Box::new(Shape::new(ShapeType::Sphere(left_wall))),
+            Box::new(Shape::new(ShapeType::Sphere(right_wall))),
+            Box::new(Shape::new(ShapeType::Sphere(middle))),
+            Box::new(Shape::new(ShapeType::Sphere(right))),
+            Box::new(Shape::new(ShapeType::Sphere(left))),
         ],
     );
 
@@ -227,11 +228,11 @@ fn camera_plane_test() {
     let world = World::new(
         PointLight::new(Color::white(), Tuple::point(-10.0, 10.0, -10.0)),
         vec![
-            Box::new(floor),
-            Box::new(wall),
-            Box::new(middle),
-            Box::new(right),
-            Box::new(left),
+            Box::new(Shape::new(ShapeType::Plane(floor))),
+            Box::new(Shape::new(ShapeType::Plane(wall))),
+            Box::new(Shape::new(ShapeType::Sphere(middle))),
+            Box::new(Shape::new(ShapeType::Sphere(right))),
+            Box::new(Shape::new(ShapeType::Sphere(left))),
         ],
     );
 

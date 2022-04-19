@@ -27,7 +27,7 @@ impl Pattern {
         }
     }
 
-    pub fn color_at_object(&self, object: &dyn Shape, point: &Tuple) -> Color {
+    pub fn color_at_object(&self, object: &Shape, point: &Tuple) -> Color {
         let object_space = &object.get_transform().inverse() * point;
         let pattern_space = &self.transform.inverse() * object_space;
         self.color_at(&pattern_space)

@@ -1,7 +1,7 @@
 use crate::{shape::Shape, tuple::Tuple};
 
 pub struct IntersectionComputation<'a> {
-    pub object: &'a dyn Shape,
+    pub object: &'a Shape,
     pub value: f64,
     pub point: Tuple,
     pub eye_v: Tuple,
@@ -27,7 +27,7 @@ pub struct IntersectionComputationConfig {
 }
 
 impl<'a> IntersectionComputation<'a> {
-    pub fn new(object: &'a dyn Shape, value: f64, config: IntersectionComputationConfig) -> Self {
+    pub fn new(object: &'a Shape, value: f64, config: IntersectionComputationConfig) -> Self {
         if !config.point.is_point() {
             panic!("point must be a point");
         }
