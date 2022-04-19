@@ -1,10 +1,8 @@
 use crate::{
     ray::Ray,
-    shapes::{Shape, ShapeType},
+    shapes::{plane::Plane, Shape, ShapeType},
     tuple::Tuple,
 };
-
-use super::Plane;
 
 #[test]
 fn normal_at_test() {
@@ -21,7 +19,7 @@ fn normal_at_test() {
 
 #[test]
 fn intersect_ray_parallel() {
-    let plane: Plane = Default::default();
+    let plane = Plane::default();
     let r = Ray::new(Tuple::point(0.0, 10.0, 0.0), Tuple::vector(0.0, 0.0, 1.0));
 
     let xs = plane.local_intersect(&r);

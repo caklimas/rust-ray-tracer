@@ -9,13 +9,11 @@ use patterns::{
     Pattern, PatternType,
 };
 use point_light::PointLight;
-use shapes::{sphere::Sphere, Shape, ShapeType};
+use shapes::{plane::Plane, sphere::Sphere, Shape, ShapeType};
 use tuple::Tuple;
 use world::World;
 
-use crate::{
-    camera::Camera, matrix::transformation::rotate_y, plane::Plane, world::view_transform,
-};
+use crate::{camera::Camera, matrix::transformation::rotate_y, world::view_transform};
 
 pub mod camera;
 pub mod canvas;
@@ -26,7 +24,6 @@ pub mod intersection;
 pub mod material;
 pub mod matrix;
 pub mod patterns;
-pub mod plane;
 pub mod point_light;
 pub mod ray;
 pub mod shapes;

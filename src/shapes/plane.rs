@@ -1,8 +1,5 @@
 use crate::{floating_point::EPSILON, material::Material, matrix::Matrix, ray::Ray, tuple::Tuple};
 
-#[cfg(test)]
-mod tests;
-
 pub struct Plane {
     pub material: Material,
     pub transform: Matrix,

@@ -1,10 +1,10 @@
 use crate::{
-    intersection::Intersection, material::Material, matrix::Matrix, plane::Plane, ray::Ray,
-    tuple::Tuple,
+    intersection::Intersection, material::Material, matrix::Matrix, ray::Ray, tuple::Tuple,
 };
 
-use self::sphere::Sphere;
+use self::{plane::Plane, sphere::Sphere};
 
+pub mod plane;
 pub mod sphere;
 
 #[cfg(test)]

@@ -1,9 +1,8 @@
 use crate::{
     floating_point::EPSILON,
     matrix::transformation::{scale, translate},
-    plane::Plane,
     ray::Ray,
-    shapes::{sphere::Sphere, Shape, ShapeType},
+    shapes::{plane::Plane, sphere::Sphere, Shape, ShapeType},
     tuple::Tuple,
 };
 

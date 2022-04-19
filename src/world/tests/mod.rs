@@ -9,10 +9,9 @@ use crate::{
         Matrix,
     },
     patterns::{Pattern, PatternType},
-    plane::Plane,
     point_light::PointLight,
     ray::Ray,
-    shapes::{sphere::Sphere, Shape, ShapeType},
+    shapes::{plane::Plane, sphere::Sphere, Shape, ShapeType},
     tuple::Tuple,
     world::DEFAULT_REMAINING,
 };
