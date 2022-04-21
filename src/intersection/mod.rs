@@ -27,7 +27,7 @@ impl<'a> Intersection<'a> {
     pub fn prepare_computations(
         &self,
         ray: &Ray,
-        config: Option<&mut PrepareComputationConfig>,
+        config: Option<&PrepareComputationConfig>,
     ) -> IntersectionComputation<'a> {
         let point = ray.position(self.value);
         let eye_v = ray.direction.negate();
@@ -61,7 +61,7 @@ impl<'a> Intersection<'a> {
     }
 
     #[allow(clippy::vtable_address_comparisons)]
-    fn determine_n1_n2(&self, config: Option<&mut PrepareComputationConfig>) -> (f64, f64) {
+    fn determine_n1_n2(&self, config: Option<&PrepareComputationConfig>) -> (f64, f64) {
         let mut n1 = 0.0;
         let mut n2 = 0.0;
         let mut container: Vec<&Shape> = Vec::new();

@@ -59,6 +59,35 @@ fn shade_hit_from_inside_test() {
 }
 
 #[test]
+fn shade_hit_transparent_material() {
+    let mut world = World::default();
+    let mut plane = Plane::new();
+    plane.transform = translate(0.0, -1.0, 0.0);
+    plane.material.transparency = 0.5;
+    plane.material.refractive_index = 1.5;
+    let floor = Shape::new(ShapeType::Plane(plane));
+    let mut sphere = Sphere::new();
+    sphere.material.color = Color::new(1.0, 0.0, 0.0);
+    sphere.material.ambient = 0.5;
+    sphere.transform = translate(0.0, -3.5, -0.5);
+    let ball = Shape::new(ShapeType::Sphere(sphere));
+    world.objects.push(Box::new(floor));
+    world.objects.push(Box::new(ball));
+    let value = (2.0_f64).sqrt() / 2.0;
+    let r = Ray::new(
+        Tuple::point(0.0, 0.0, -3.0),
+        Tuple::vector(0.0, -value, value),
+    );
+    let xs = Intersections::new(vec![Intersection::new(&world.objects[2], (2.0_f64).sqrt())]);
+    let comps = xs.collection[0]
+        .prepare_computations(&r, Option::Some(&PrepareComputationConfig::new(&xs)));
+
+    let color = world.shade_hit(xs.collection[0].object, &comps, 5);
+
+    assert_eq!(Color::new(0.93642, 0.68642, 0.68642), color);
+}
+
+#[test]
 fn color_at_ray_misses() {
     let world: World = Default::default();
     let ray = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 1.0, 0.0));

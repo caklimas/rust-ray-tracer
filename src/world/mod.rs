@@ -47,7 +47,7 @@ impl World {
             Some(i) => {
                 let comps = i.prepare_computations(
                     ray,
-                    Option::Some(&mut PrepareComputationConfig::new(&intersections)),
+                    Option::Some(&PrepareComputationConfig::new(&intersections)),
                 );
                 self.shade_hit(i.object, &comps, remaining)
             }
@@ -71,8 +71,9 @@ impl World {
         );
 
         let reflected = self.reflected_color(computations, remaining);
+        let refracted = self.refracted_color(computations, remaining);
 
-        surface + reflected
+        surface + reflected + refracted
     }
 
     pub fn is_shadowed(&self, point: &Tuple) -> bool {
