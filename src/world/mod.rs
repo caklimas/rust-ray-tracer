@@ -58,22 +58,28 @@ impl World {
     pub fn shade_hit(
         &self,
         object: &Shape,
-        computations: &IntersectionComputation,
+        comps: &IntersectionComputation,
         remaining: u8,
     ) -> Color {
-        let surface = computations.object.get_material().lighting(
+        let surface = comps.object.get_material().lighting(
             object,
             &self.light,
-            &computations.point,
-            &computations.eye_v,
-            &computations.normal_v,
-            self.is_shadowed(&computations.over_point),
+            &comps.point,
+            &comps.eye_v,
+            &comps.normal_v,
+            self.is_shadowed(&comps.over_point),
         );
 
-        let reflected = self.reflected_color(computations, remaining);
-        let refracted = self.refracted_color(computations, remaining);
+        let reflected = self.reflected_color(comps, remaining);
+        let refracted = self.refracted_color(comps, remaining);
+        let material = comps.object.get_material();
 
-        surface + reflected + refracted
+        return if material.reflective > 0.0 && material.transparency > 0.0 {
+            let reflectance = comps.schlick();
+            surface + reflected * reflectance + refracted * (1.0 - reflectance)
+        } else {
+            surface + reflected + refracted
+        };
     }
 
     pub fn is_shadowed(&self, point: &Tuple) -> bool {

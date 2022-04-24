@@ -3,6 +3,7 @@ use crate::{
     matrix::transformation::{scale, translate},
     ray::Ray,
     shapes::{plane::Plane, sphere::Sphere, Shape, ShapeType},
+    test::sqrt_2_div_2,
     tuple::Tuple,
 };
 
@@ -55,11 +56,11 @@ fn prepare_computations_intersect_occurs_inside() {
 
 #[test]
 fn prepare_computations_reflection_vector() {
-    let v = (2.0_f64).sqrt() / 2.0;
+    let v = sqrt_2_div_2();
     let plane = Plane::default();
     let r = Ray::new(Tuple::point(0.0, 1.0, -1.0), Tuple::vector(0.0, -v, v));
     let shape = Shape::new(ShapeType::Plane(plane));
-    let i = Intersection::new(&shape, (2.0_f64).sqrt());
+    let i = Intersection::new(&shape, sqrt_2_div_2());
 
     let comps = i.prepare_computations(&r, Option::None);
 

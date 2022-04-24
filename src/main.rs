@@ -27,6 +27,7 @@ pub mod patterns;
 pub mod point_light;
 pub mod ray;
 pub mod shapes;
+pub mod test;
 pub mod tuple;
 pub mod world;
 

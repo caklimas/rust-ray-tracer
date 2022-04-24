@@ -3,6 +3,7 @@ use crate::{
     patterns::{stripe::StripePattern, Pattern, PatternType},
     point_light::PointLight,
     shapes::{sphere::Sphere, Shape, ShapeType},
+    test::sqrt_2_div_2,
     tuple::Tuple,
 };
 
@@ -95,7 +96,7 @@ fn lighting_eye_between_light_and_surface_test() {
 
 #[test]
 fn lighting_eye_between_light_and_surface_45_offset_test() {
-    let value = 2.0_f64.sqrt() / 2.0;
+    let value = sqrt_2_div_2();
     let material: Material = Default::default();
     let position = Tuple::point(0.0, 0.0, 0.0);
     let eye = Tuple::vector(0.0, value, -value);
@@ -136,7 +137,7 @@ fn lighting_eye_opposite_surface_light_45_offset_test() {
 
 #[test]
 fn lighting_eye_path_reflection_vector() {
-    let value = 2.0_f64.sqrt() / 2.0;
+    let value = sqrt_2_div_2();
     let material: Material = Default::default();
     let position = Tuple::point(0.0, 0.0, 0.0);
     let eye = Tuple::vector(0.0, -value, -value);

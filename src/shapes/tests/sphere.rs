@@ -4,6 +4,7 @@ use crate::{
     matrix::transformation::{rotate_z, scale, translate},
     ray::Ray,
     shapes::{sphere::Sphere, Shape, ShapeType},
+    test::sqrt_2_div_2,
     tuple::Tuple,
 };
 
@@ -164,7 +165,7 @@ fn normal_translated_sphere_test() {
 fn normal_transformed_sphere_test() {
     let mut sphere = Sphere::new();
     let transformation = scale(1.0, 0.5, 1.0) * rotate_z(PI / 5.0);
-    let value = (2.0_f64).sqrt() / 2.0;
+    let value = sqrt_2_div_2();
     sphere.transform = transformation;
 
     let shape = Shape::new(ShapeType::Sphere(sphere));

@@ -1,5 +1,5 @@
 use super::{Tuple, POINT_W, VECTOR_W};
-use crate::floating_point::FloatingPoint;
+use crate::{floating_point::FloatingPoint, test::sqrt_2_div_2};
 
 #[test]
 fn new_test() {
@@ -255,7 +255,7 @@ fn reflect_45_degrees_test() {
 
 #[test]
 fn reflect_slanted_surface_test() {
-    let value = (2.0_f64).sqrt() / 2.0;
+    let value = sqrt_2_div_2();
     let v = Tuple::vector(0.0, -1.0, 0.0);
     let n = Tuple::vector(value, value, 0.0);
 

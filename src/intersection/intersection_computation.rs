@@ -66,4 +66,24 @@ impl<'a> IntersectionComputation<'a> {
             under_point: config.under_point,
         }
     }
+
+    pub fn schlick(&self) -> f64 {
+        // find the cosine of the angle between the eye and normal vectors​
+        let mut cos = self.eye_v.dot(&self.normal_v);
+
+        // total internal reflection can only occur if n1 > n2​
+        if self.n1 > self.n2 {
+            let n = self.n1 / self.n2;
+            let sin2_t = n.powi(2) * (1.0 - cos.powi(2));
+            if sin2_t > 1.0 {
+                return 1.0;
+            }
+
+            // compute cosine of theta_t using trig identity​
+            cos = (1.0 - sin2_t).sqrt();
+        }
+
+        let r0 = ((self.n1 - self.n2) / (self.n1 + self.n2)).powi(2);
+        r0 + (1.0 - r0) * (1.0 - cos).powi(5)
+    }
 }
