@@ -74,12 +74,12 @@ impl World {
         let refracted = self.refracted_color(comps, remaining);
         let material = comps.object.get_material();
 
-        return if material.reflective > 0.0 && material.transparency > 0.0 {
+        if material.reflective > 0.0 && material.transparency > 0.0 {
             let reflectance = comps.schlick();
             surface + reflected * reflectance + refracted * (1.0 - reflectance)
         } else {
             surface + reflected + refracted
-        };
+        }
     }
 
     pub fn is_shadowed(&self, point: &Tuple) -> bool {
