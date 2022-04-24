@@ -1,5 +1,10 @@
 use crate::{
-    color::Color, patterns::stripe::Stripe, point_light::PointLight, sphere::Sphere, tuple::Tuple,
+    color::Color,
+    patterns::{stripe::StripePattern, Pattern, PatternType},
+    point_light::PointLight,
+    shapes::{sphere::Sphere, Shape, ShapeType},
+    test::sqrt_2_div_2,
+    tuple::Tuple,
 };
 
 use super::Material;
@@ -12,7 +17,7 @@ fn new_test() {
     let specular = 0.3;
     let shininess = 100.0;
 
-    let material = Material::new(color, ambient, diffuse, specular, shininess);
+    let material = Material::new(color, ambient, diffuse, specular, shininess, 0.0);
 
     assert_eq!(color, material.color);
     assert_eq!(ambient, material.ambient);
@@ -30,7 +35,7 @@ fn new_ambient_panic() {
     let specular = 0.3;
     let shininess = 100.0;
 
-    Material::new(color, ambient, diffuse, specular, shininess);
+    Material::new(color, ambient, diffuse, specular, shininess, 0.0);
 }
 
 #[test]
@@ -42,7 +47,7 @@ fn new_diffuse_panic() {
     let specular = 0.3;
     let shininess = 100.0;
 
-    Material::new(color, ambient, diffuse, specular, shininess);
+    Material::new(color, ambient, diffuse, specular, shininess, 0.0);
 }
 
 #[test]
@@ -54,7 +59,7 @@ fn new_specular_panic() {
     let specular = 4.3;
     let shininess = 100.0;
 
-    Material::new(color, ambient, diffuse, specular, shininess);
+    Material::new(color, ambient, diffuse, specular, shininess, 0.0);
 }
 
 #[test]
@@ -77,21 +82,35 @@ fn lighting_eye_between_light_and_surface_test() {
     let normal = Tuple::vector(0.0, 0.0, -1.0);
     let light = PointLight::new(Color::new(1.0, 1.0, 1.0), Tuple::point(0.0, 0.0, -10.0));
 
-    let result = material.lighting(&Sphere::default(), &light, &position, &eye, &normal, false);
+    let result = material.lighting(
+        &Shape::new(ShapeType::Sphere(Sphere::default())),
+        &light,
+        &position,
+        &eye,
+        &normal,
+        false,
+    );
 
     assert_eq!(Color::new(1.9, 1.9, 1.9), result);
 }
 
 #[test]
 fn lighting_eye_between_light_and_surface_45_offset_test() {
-    let value = 2.0_f64.sqrt() / 2.0;
+    let value = sqrt_2_div_2();
     let material: Material = Default::default();
     let position = Tuple::point(0.0, 0.0, 0.0);
     let eye = Tuple::vector(0.0, value, -value);
     let normal = Tuple::vector(0.0, 0.0, -1.0);
     let light = PointLight::new(Color::new(1.0, 1.0, 1.0), Tuple::point(0.0, 0.0, -10.0));
 
-    let result = material.lighting(&Sphere::default(), &light, &position, &eye, &normal, false);
+    let result = material.lighting(
+        &Shape::new(ShapeType::Sphere(Sphere::default())),
+        &light,
+        &position,
+        &eye,
+        &normal,
+        false,
+    );
 
     assert_eq!(Color::new(1.0, 1.0, 1.0), result);
 }
@@ -104,21 +123,35 @@ fn lighting_eye_opposite_surface_light_45_offset_test() {
     let normal = Tuple::vector(0.0, 0.0, -1.0);
     let light = PointLight::new(Color::new(1.0, 1.0, 1.0), Tuple::point(0.0, 10.0, -10.0));
 
-    let result = material.lighting(&Sphere::default(), &light, &position, &eye, &normal, false);
+    let result = material.lighting(
+        &Shape::new(ShapeType::Sphere(Sphere::default())),
+        &light,
+        &position,
+        &eye,
+        &normal,
+        false,
+    );
 
     assert_eq!(Color::new(0.7364, 0.7364, 0.7364), result);
 }
 
 #[test]
 fn lighting_eye_path_reflection_vector() {
-    let value = 2.0_f64.sqrt() / 2.0;
+    let value = sqrt_2_div_2();
     let material: Material = Default::default();
     let position = Tuple::point(0.0, 0.0, 0.0);
     let eye = Tuple::vector(0.0, -value, -value);
     let normal = Tuple::vector(0.0, 0.0, -1.0);
     let light = PointLight::new(Color::new(1.0, 1.0, 1.0), Tuple::point(0.0, 10.0, -10.0));
 
-    let result = material.lighting(&Sphere::default(), &light, &position, &eye, &normal, false);
+    let result = material.lighting(
+        &Shape::new(ShapeType::Sphere(Sphere::default())),
+        &light,
+        &position,
+        &eye,
+        &normal,
+        false,
+    );
 
     assert_eq!(Color::new(1.6364, 1.6364, 1.6364), result);
 }
@@ -131,7 +164,14 @@ fn lighting_light_behind_surface() {
     let normal = Tuple::vector(0.0, 0.0, -1.0);
     let light = PointLight::new(Color::new(1.0, 1.0, 1.0), Tuple::point(0.0, 0.0, 10.0));
 
-    let result = material.lighting(&Sphere::default(), &light, &position, &eye, &normal, false);
+    let result = material.lighting(
+        &Shape::new(ShapeType::Sphere(Sphere::default())),
+        &light,
+        &position,
+        &eye,
+        &normal,
+        false,
+    );
 
     assert_eq!(Color::new(0.1, 0.1, 0.1), result);
 }
@@ -144,7 +184,14 @@ fn lighting_surface_in_shadow_test() {
     let normal = Tuple::vector(0.0, 0.0, -1.0);
     let light = PointLight::new(Color::new(1.0, 1.0, 1.0), Tuple::point(0.0, 0.0, -10.0));
 
-    let result = material.lighting(&Sphere::default(), &light, &position, &eye, &normal, true);
+    let result = material.lighting(
+        &Shape::new(ShapeType::Sphere(Sphere::default())),
+        &light,
+        &position,
+        &eye,
+        &normal,
+        true,
+    );
 
     assert_eq!(Color::new(0.1, 0.1, 0.1), result);
 }
@@ -152,7 +199,10 @@ fn lighting_surface_in_shadow_test() {
 #[test]
 fn lighting_pattern_applied() {
     let mut m: Material = Default::default();
-    m.pattern = Option::Some(Box::new(Stripe::new(Color::white(), Color::black())));
+    m.pattern = Option::Some(Pattern::new(PatternType::Stripe(StripePattern::new(
+        Color::white(),
+        Color::black(),
+    ))));
     m.ambient = 1.0;
     m.diffuse = 0.0;
     m.specular = 0.0;
@@ -162,7 +212,7 @@ fn lighting_pattern_applied() {
     let light = PointLight::new(Color::white(), Tuple::point(0.0, 0.0, -10.0));
 
     let c1 = m.lighting(
-        &Sphere::default(),
+        &Shape::new(ShapeType::Sphere(Sphere::default())),
         &light,
         &Tuple::point(0.9, 0.0, 0.0),
         &eye_v,
@@ -171,7 +221,7 @@ fn lighting_pattern_applied() {
     );
 
     let c2 = m.lighting(
-        &Sphere::default(),
+        &Shape::new(ShapeType::Sphere(Sphere::default())),
         &light,
         &Tuple::point(1.1, 0.0, 0.0),
         &eye_v,

@@ -1,33 +1,16 @@
-use crate::{color::Color, matrix::Matrix};
+use crate::{color::Color, tuple::Tuple};
 
-use super::Pattern;
-
-pub struct Ring {
+pub struct RingPattern {
     a: Color,
     b: Color,
-    transform: Matrix,
 }
 
-impl Ring {
+impl RingPattern {
     pub fn new(a: Color, b: Color) -> Self {
-        Self {
-            a,
-            b,
-            transform: Default::default(),
-        }
-    }
-}
-
-impl Pattern for Ring {
-    fn get_transform(&self) -> &Matrix {
-        &self.transform
+        Self { a, b }
     }
 
-    fn set_transform(&mut self, transform: Matrix) {
-        self.transform = transform;
-    }
-
-    fn color_at(&self, point: &crate::tuple::Tuple) -> Color {
+    pub fn color_at(&self, point: &Tuple) -> Color {
         let n = (point.x().powi(2) + point.z().powi(2)).sqrt().floor();
         if n % 2.0 == 0.0 {
             self.a

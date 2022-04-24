@@ -1,35 +1,18 @@
-use crate::{color::Color, matrix::Matrix};
+use crate::{color::Color, floating_point::FloatingPoint, tuple::Tuple};
 
-use super::Pattern;
-
-pub struct Checker {
+pub struct CheckerPattern {
     a: Color,
     b: Color,
-    transform: Matrix,
 }
 
-impl Checker {
+impl CheckerPattern {
     pub fn new(a: Color, b: Color) -> Self {
-        Self {
-            a,
-            b,
-            transform: Default::default(),
-        }
-    }
-}
-
-impl Pattern for Checker {
-    fn get_transform(&self) -> &Matrix {
-        &self.transform
+        Self { a, b }
     }
 
-    fn set_transform(&mut self, transform: Matrix) {
-        self.transform = transform;
-    }
-
-    fn color_at(&self, point: &crate::tuple::Tuple) -> Color {
+    pub fn color_at(&self, point: &Tuple) -> Color {
         let n = point.x().floor() + point.y().floor() + point.z().floor();
-        if n % 2.0 == 0.0 {
+        if FloatingPoint::equals(n % 2.0, 0.0) {
             self.a
         } else {
             self.b

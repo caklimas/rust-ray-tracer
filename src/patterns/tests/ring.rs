@@ -1,12 +1,15 @@
 use crate::{
     color::Color,
-    patterns::{ring::Ring, Pattern},
+    patterns::{ring::RingPattern, Pattern},
     tuple::Tuple,
 };
 
 #[test]
 fn ring_should_extend_in_x_z_dimensions() {
-    let pattern = Ring::new(Color::white(), Color::black());
+    let pattern = Pattern::new(crate::patterns::PatternType::Ring(RingPattern::new(
+        Color::white(),
+        Color::black(),
+    )));
 
     let a1 = pattern.color_at(&Tuple::point(0.0, 0.0, 0.0));
     let a2 = pattern.color_at(&Tuple::point(1.0, 0.0, 0.0));

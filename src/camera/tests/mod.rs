@@ -4,6 +4,7 @@ use crate::{
     color::Color,
     floating_point::FloatingPoint,
     matrix::transformation::{rotate_y, translate},
+    test::sqrt_2_div_2,
     tuple::Tuple,
     world::{view_transform, World},
 };
@@ -48,7 +49,7 @@ fn ray_for_pixel_corner_of_canvas_test() {
 fn ray_for_pixel_camera_transformed_test() {
     let mut c = Camera::new(201, 101, FRAC_PI_2);
     c.transform = rotate_y(FRAC_PI_4) * translate(0.0, -2.0, 5.0);
-    let x_z_result = (2.0_f64).sqrt() / 2.0;
+    let x_z_result = sqrt_2_div_2();
 
     let r = c.ray_for_pixel(100, 50);
 

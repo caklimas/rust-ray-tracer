@@ -1,8 +1,9 @@
 use crate::{
     color::Color,
+    floating_point::FloatingPoint,
     intersection::{
         intersection_computation::IntersectionComputation, intersections::Intersections,
-        Intersection,
+        prepare_computation::PrepareComputationConfig, Intersection,
     },
     matrix::{
         transformation::{scale, translate},
@@ -10,21 +11,22 @@ use crate::{
     },
     point_light::PointLight,
     ray::Ray,
-    shape::Shape,
-    sphere::Sphere,
+    shapes::{sphere::Sphere, Shape, ShapeType},
     tuple::Tuple,
 };
 
 #[cfg(test)]
 mod tests;
 
+pub const DEFAULT_REMAINING: u8 = 4;
+
 pub struct World {
     pub light: PointLight,
-    pub objects: Vec<Box<dyn Shape>>,
+    pub objects: Vec<Box<Shape>>,
 }
 
 impl World {
-    pub fn new(light: PointLight, objects: Vec<Box<dyn Shape>>) -> Self {
+    pub fn new(light: PointLight, objects: Vec<Box<Shape>>) -> Self {
         Self { light, objects }
     }
 
@@ -38,27 +40,46 @@ impl World {
         intersections
     }
 
-    pub fn color_at(&self, ray: &Ray) -> Color {
+    pub fn color_at(&self, ray: &Ray, remaining: u8) -> Color {
         let intersections = Intersections::new(self.intersect(ray));
         let hit = intersections.hit();
         match hit {
             Some(i) => {
-                let comps = i.prepare_computations(ray);
-                self.shade_hit(i.object, &comps)
+                let comps = i.prepare_computations(
+                    ray,
+                    Option::Some(&PrepareComputationConfig::new(&intersections)),
+                );
+                self.shade_hit(i.object, &comps, remaining)
             }
             None => Color::black(),
         }
     }
 
-    pub fn shade_hit(&self, object: &dyn Shape, computations: &IntersectionComputation) -> Color {
-        computations.object.get_material().lighting(
+    pub fn shade_hit(
+        &self,
+        object: &Shape,
+        comps: &IntersectionComputation,
+        remaining: u8,
+    ) -> Color {
+        let surface = comps.object.get_material().lighting(
             object,
             &self.light,
-            &computations.point,
-            &computations.eye_v,
-            &computations.normal_v,
-            self.is_shadowed(&computations.over_point),
-        )
+            &comps.point,
+            &comps.eye_v,
+            &comps.normal_v,
+            self.is_shadowed(&comps.over_point),
+        );
+
+        let reflected = self.reflected_color(comps, remaining);
+        let refracted = self.refracted_color(comps, remaining);
+        let material = comps.object.get_material();
+
+        if material.reflective > 0.0 && material.transparency > 0.0 {
+            let reflectance = comps.schlick();
+            surface + reflected * reflectance + refracted * (1.0 - reflectance)
+        } else {
+            surface + reflected + refracted
+        }
     }
 
     pub fn is_shadowed(&self, point: &Tuple) -> bool {
@@ -75,6 +96,49 @@ impl World {
             false
         }
     }
+
+    pub fn reflected_color(&self, comps: &IntersectionComputation, remaining: u8) -> Color {
+        if remaining == 0 || FloatingPoint::equals(comps.object.get_material().reflective, 0.0) {
+            return Color::black();
+        }
+
+        let reflect_ray = Ray::new(comps.over_point, comps.reflect_v);
+        let color = self.color_at(&reflect_ray, remaining - 1);
+
+        color * comps.object.get_material().reflective
+    }
+
+    pub fn refracted_color(&self, comps: &IntersectionComputation, remaining: u8) -> Color {
+        if FloatingPoint::equals(comps.object.get_material().transparency, 0.0) || remaining == 0 {
+            return Color::black();
+        }
+
+        // Find the ratio of first index of refraction to the second.​
+        let n_ratio = comps.n1 / comps.n2;
+
+        // cos(theta_i) is the same as the dot product of the two vectors​
+        let cos_i = comps.eye_v.dot(&comps.normal_v);
+
+        // Find sin(theta_t)^2 via trigonometric identity
+        let sin2_t = n_ratio.powi(2) * (1.0 - cos_i.powi(2));
+
+        if sin2_t > 1.0 {
+            return Color::black();
+        }
+
+        // Find cos(theta_t) via trigonometric identity​
+        let cos_t = (1.0 - sin2_t).sqrt();
+
+        // Compute the direction of the refracted ray​
+        let direction = comps.normal_v * (n_ratio * cos_i - cos_t) - comps.eye_v * n_ratio;
+        let refracted_ray = Ray::new(comps.under_point, direction);
+
+        let color = self.color_at(&refracted_ray, remaining - 1);
+        println!("{:?}", color);
+
+        // Find the color of the refracted ray, making sure to multiply​ by the transparency value to account for any opacity​
+        color * comps.object.get_material().transparency
+    }
 }
 
 impl Default for World {
@@ -85,10 +149,14 @@ impl Default for World {
         s1.material.diffuse = 0.7;
         s1.material.specular = 0.2;
 
+        let shape_1 = Shape::new(ShapeType::Sphere(s1));
+
         let mut s2 = Sphere::new();
         s2.transform = scale(0.5, 0.5, 0.5);
 
-        Self::new(light, vec![Box::new(s1), Box::new(s2)])
+        let shape_2 = Shape::new(ShapeType::Sphere(s2));
+
+        Self::new(light, vec![Box::new(shape_1), Box::new(shape_2)])
     }
 }
 

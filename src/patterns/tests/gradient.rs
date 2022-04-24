@@ -1,12 +1,14 @@
 use crate::{
     color::Color,
-    patterns::{gradient::Gradient, Pattern},
+    patterns::{gradient::GradientPattern, Pattern},
     tuple::Tuple,
 };
 
 #[test]
 fn color_at_linearly_interpolates_between_colors() {
-    let gradient = Gradient::new(Color::white(), Color::black());
+    let gradient = Pattern::new(crate::patterns::PatternType::Gradient(
+        GradientPattern::new(Color::white(), Color::black()),
+    ));
 
     let c1 = gradient.color_at(&Tuple::point(0.0, 0.0, 0.0));
     let c2 = gradient.color_at(&Tuple::point(0.25, 0.0, 0.0));
