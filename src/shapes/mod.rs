@@ -22,7 +22,7 @@ impl Shape {
 
     pub fn get_material(&self) -> &Material {
         match &self.shape_type {
-            ShapeType::Cube(_) => todo!(),
+            ShapeType::Cube(shape) => &shape.material,
             ShapeType::Plane(shape) => &shape.material,
             ShapeType::Sphere(shape) => &shape.material,
         }
@@ -30,7 +30,7 @@ impl Shape {
 
     pub fn get_transform(&self) -> &Matrix {
         match &self.shape_type {
-            ShapeType::Cube(_) => todo!(),
+            ShapeType::Cube(shape) => &shape.transform,
             ShapeType::Plane(shape) => &shape.transform,
             ShapeType::Sphere(shape) => &shape.transform,
         }
