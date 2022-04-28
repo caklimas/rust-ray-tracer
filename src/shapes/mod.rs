@@ -2,8 +2,9 @@ use crate::{
     intersection::Intersection, material::Material, matrix::Matrix, ray::Ray, tuple::Tuple,
 };
 
-use self::{plane::Plane, sphere::Sphere};
+use self::{cube::Cube, plane::Plane, sphere::Sphere};
 
+pub mod cube;
 pub mod plane;
 pub mod sphere;
 
@@ -21,6 +22,7 @@ impl Shape {
 
     pub fn get_material(&self) -> &Material {
         match &self.shape_type {
+            ShapeType::Cube(_) => todo!(),
             ShapeType::Plane(shape) => &shape.material,
             ShapeType::Sphere(shape) => &shape.material,
         }
@@ -28,6 +30,7 @@ impl Shape {
 
     pub fn get_transform(&self) -> &Matrix {
         match &self.shape_type {
+            ShapeType::Cube(_) => todo!(),
             ShapeType::Plane(shape) => &shape.transform,
             ShapeType::Sphere(shape) => &shape.transform,
         }
@@ -40,6 +43,7 @@ impl Shape {
 
     pub fn local_intersect(&self, ray: &Ray) -> Vec<Intersection> {
         let value = match &self.shape_type {
+            ShapeType::Cube(shape) => shape.local_intersect(ray),
             ShapeType::Plane(shape) => shape.local_intersect(ray),
             ShapeType::Sphere(shape) => shape.local_intersect(ray),
         };
@@ -63,6 +67,7 @@ impl Shape {
 
     pub fn local_normal(&self, object_point: Tuple) -> Tuple {
         match &self.shape_type {
+            ShapeType::Cube(shape) => shape.local_normal(object_point),
             ShapeType::Plane(shape) => shape.local_normal(object_point),
             ShapeType::Sphere(shape) => shape.local_normal(object_point),
         }
@@ -74,6 +79,7 @@ impl Shape {
 }
 
 pub enum ShapeType {
+    Cube(Cube),
     Plane(Plane),
     Sphere(Sphere),
 }

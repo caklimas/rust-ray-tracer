@@ -14,9 +14,9 @@ pub struct Canvas {
 
 impl Canvas {
     pub fn new(width: usize, height: usize) -> Self {
-        let mut pixels: Vec<Vec<Color>> = Vec::new();
+        let mut pixels: Vec<Vec<Color>> = Vec::with_capacity(height);
         for _h in 0..height {
-            let mut row: Vec<Color> = Vec::new();
+            let mut row: Vec<Color> = Vec::with_capacity(width);
             for _w in 0..width {
                 row.push(Color::black())
             }

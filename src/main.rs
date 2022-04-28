@@ -31,6 +31,8 @@ pub mod test;
 pub mod tuple;
 pub mod world;
 
+const FOLDER_PATH: &str = r"C:\Users\Christopher\Desktop\Files\Rust";
+
 fn main() {
     canvas_sphere_test();
     camera_scene_test();
@@ -77,10 +79,7 @@ fn canvas_sphere_test() {
         }
     }
 
-    write_to_file(
-        &canvas,
-        r"C:\Users\Christopher\Desktop\Files\Rust\sphere.ppm",
-    );
+    write_to_file(&canvas, format!(r"{FOLDER_PATH}\sphere.ppm"));
 }
 
 fn camera_scene_test() {
@@ -149,10 +148,7 @@ fn camera_scene_test() {
     );
 
     let canvas = camera.render(&world);
-    write_to_file(
-        &canvas,
-        r"C:\Users\Christopher\Desktop\Files\Rust\scene.ppm",
-    );
+    write_to_file(&canvas, format!(r"{FOLDER_PATH}\scene.ppm"));
 }
 
 fn camera_plane_test() {
@@ -240,13 +236,10 @@ fn camera_plane_test() {
     );
 
     let canvas = camera.render(&world);
-    write_to_file(
-        &canvas,
-        r"C:\Users\Christopher\Desktop\Files\Rust\plane.ppm",
-    );
+    write_to_file(&canvas, format!(r"{FOLDER_PATH}\plane.ppm"));
 }
 
-fn write_to_file(canvas: &Canvas, path: &str) {
+fn write_to_file(canvas: &Canvas, path: String) {
     let ppm_string = canvas.to_ppm();
     std::fs::write(path, ppm_string.as_str()).unwrap();
 }
